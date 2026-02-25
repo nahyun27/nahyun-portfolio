@@ -9,7 +9,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="noise-overlay min-h-screen flex flex-col justify-between pt-[64px] relative overflow-x-hidden"
+      className="noise-overlay h-[100svh] min-h-[650px] flex flex-col justify-between pt-[64px] relative overflow-hidden"
       style={{ backgroundColor: "#0C0C0F" }}
     >
       {/* Ambient glow — top left */}
