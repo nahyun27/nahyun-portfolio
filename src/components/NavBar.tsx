@@ -84,6 +84,7 @@ export default function NavBar() {
                 color: "#00C9A7",
                 fontFamily: "'Inter', sans-serif",
                 cursor: "none",
+                padding: "6px 20px",
               }}
               onMouseEnter={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "rgba(0,201,167,0.12)";
