@@ -157,12 +157,12 @@ export default function HeroSection() {
         <span className="tracking-[0.3em] uppercase text-xs" style={{ color: "#444", fontFamily: "'Inter', sans-serif" }}>
           Scroll
         </span>
-        <div className="relative w-[1px] h-10 overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
+        <div className="relative w-[1px] h-12 overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
           <motion.div
-            className="absolute top-0 left-0 w-full"
+            className="absolute top-0 left-0 w-full h-1/2"
             style={{ backgroundColor: "#00C9A7" }}
-            animate={{ y: ["0%", "100%", "100%", "0%"], height: ["0%", "100%", "0%", "0%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: ["-100%", "200%"] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           />
         </div>
       </motion.div>
