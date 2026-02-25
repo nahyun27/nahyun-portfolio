@@ -10,8 +10,8 @@ const PROJECTS = [
   { id: "02", emoji: "🎙️", title: "PerSI", subtitle: "Personalized speaker ID for hearing-impaired users with audio ML.", tags: ["wav2vec2", "pyannote", "PyTorch"] },
   { id: "03", emoji: "🎾", title: "TennisTown", subtitle: "Tennis host-guest matching platform — find a court partner across Seoul.", tags: ["React", "Node.js", "Firebase"] },
   { id: "04", emoji: "🛵", title: "Deli-Go", subtitle: "Delivery carpooling app — Grand Prize winner at 아이디어톤.", tags: ["React Native", "Maps API"] },
-  { id: "05", emoji: "🔒", title: "NetTransfer", subtitle: "Privacy-preserving network traffic generation using generative models.", tags: ["Python", "GAN", "Networking"] },
-  { id: "06", emoji: "🤖", title: "PQC-DDS", subtitle: "Post-quantum cryptography in the ROS2 robotics middleware.", tags: ["ROS2", "C++", "PQC"] },
+  // { id: "05", emoji: "🔒", title: "NetTransfer", subtitle: "Privacy-preserving network traffic generation using generative models.", tags: ["Python", "GAN", "Networking"] },
+  // { id: "06", emoji: "🤖", title: "PQC-DDS", subtitle: "Post-quantum cryptography in the ROS2 robotics middleware.", tags: ["ROS2", "C++", "PQC"] },
 ];
 
 export default function ProjectsSection() {

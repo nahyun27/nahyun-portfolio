@@ -10,14 +10,14 @@ const PAPERS = [
     id: "01",
     title: "AdvChameleon",
     subtitle: "Universal adversarial audio attacks that transfer across models & speech recognition systems.",
-    venue: "In submission — USENIX Security 2026",
+    venue: "Patent, In submission",
     tags: ["Audio AI", "Adversarial ML", "Universal"],
   },
   {
     id: "02",
     title: "DPIA",
     subtitle: "Dynamic Perturbation Intensity Attack — a frequency-domain adversarial audio attack.",
-    venue: "Patent + Copyright © 2024",
+    venue: "Patent, In submission",
     tags: ["Patent", "Audio Attack", "Deep Learning"],
   },
   {
