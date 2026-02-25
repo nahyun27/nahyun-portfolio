@@ -12,7 +12,7 @@ export default function AmbientBackground() {
   const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
 
   return (
-    <div ref={ref} className="fixed inset-0 pointer-events-none z-0 overflow-hidden" style={{ minHeight: "100vh" }}>
+    <div ref={ref} className="fixed inset-0 pointer-events-none z-0 overflow-hidden" style={{ minHeight: "100vh", transform: "translateZ(0)", willChange: "transform" }}>
 
       {/* Top right geometric shape (Torus knot / intersecting rings concept) */}
       <motion.div
