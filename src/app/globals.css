@@ -1,16 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
 
 @import "tailwindcss";
 
 :root {
-  --bg: #FAFAF8;
-  --fg: #0D0D0D;
-  --coral: #FF6B6B;
+  --cream: #F5F0E8;
+  --black: #0A0A0A;
   --mint: #00C9A7;
-  --indigo: #5C5FFF;
-  --yellow: #FFD60A;
-  --pink: #FF3CAC;
-  --gold: #FFB400;
+  --white: #FFFFFF;
 }
 
 * {
@@ -22,23 +18,20 @@
 html {
   scroll-behavior: smooth;
   cursor: none;
+  background-color: var(--cream);
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--fg);
+  background-color: var(--cream);
+  color: var(--black);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   cursor: none;
 }
 
-/* Hide cursor on all interactive elements too */
 a,
 button,
-[role="button"],
-input,
-select,
-textarea {
+[role="button"] {
   cursor: none;
 }
 
@@ -46,56 +39,40 @@ h1,
 h2,
 h3,
 h4,
-h5,
-h6 {
+h5 {
   font-family: 'Syne', sans-serif;
 }
 
 ::selection {
-  background: var(--coral);
-  color: white;
+  background: var(--mint);
+  color: var(--white);
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--cream);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ccc;
+  background: var(--mint);
   border-radius: 2px;
 }
 
-/* Utility */
-.font-syne {
-  font-family: 'Syne', sans-serif;
-}
-
-.font-jakarta {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-/* Noise texture overlay */
-.noise {
+/* Noise texture on hero */
+.noise-bg {
   position: relative;
 }
 
-.noise::before {
+.noise-bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 1;
-  border-radius: inherit;
-}
-
-/* Section base */
-section {
-  position: relative;
-  overflow: hidden;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  z-index: 0;
 }

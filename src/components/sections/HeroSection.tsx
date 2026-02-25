@@ -1,144 +1,86 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useAnimate, stagger } from "framer-motion";
-import { useSectionStore } from "@/store/useSectionStore";
+import { motion } from "framer-motion";
 
 const TAGS = ["ENTJ-A", "Hanyang Univ.", "ACE-LAB", "Seoul, KR"];
 
-function AnimatedName() {
-  const letters = "NAHYUN KIM".split("");
-  return (
-    <div className="flex flex-wrap items-baseline gap-0 overflow-hidden">
-      {letters.map((l, i) => (
-        <motion.span
-          key={i}
-          className="inline-block leading-none"
-          initial={{ y: "110%", opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            delay: 0.4 + i * 0.06,
-            duration: 0.7,
-            ease: "easeOut",
-          }}
-          style={{ whiteSpace: l === " " ? "pre" : "normal" }}
-        >
-          {l === " " ? "\u00A0" : l}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
+const WORDS = ["NAHYUN", "KIM"];
 
 export default function HeroSection() {
-  const ref = useRef<HTMLElement>(null);
-  const setSection = useSectionStore((s) => s.setSection);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setSection("hero"); },
-      { threshold: 0.5 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [setSection]);
-
   return (
     <section
       id="hero"
-      ref={ref}
-      className="min-h-screen flex flex-col justify-center relative overflow-hidden noise"
-      style={{ background: "#FAFAF8" }}
+      className="noise-bg min-h-screen flex flex-col justify-between pt-[60px] relative overflow-hidden"
+      style={{ backgroundColor: "#F5F0E8" }}
     >
-      {/* Animated gradient blobs */}
-      <motion.div
-        className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #FF6B6B 0%, #FFD60A 100%)" }}
-        animate={{ scale: [1, 1.15, 1], x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute -bottom-20 -right-20 w-[500px] h-[500px] rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #5C5FFF 0%, #FF3CAC 100%)" }}
-        animate={{ scale: [1, 1.2, 1], x: [0, -20, 0], y: [0, 20, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-20">
-        {/* Eyebrow */}
-        <motion.p
-          className="text-sm font-medium tracking-[0.3em] uppercase mb-6"
-          style={{ color: "#FF6B6B", fontFamily: "'Inter', sans-serif" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          Portfolio — 2025
-        </motion.p>
-
-        {/* Main name */}
+      <div className="flex-1 flex flex-col justify-center max-w-[1400px] mx-auto w-full px-6 md:px-10 py-16">
+        {/* Giant name */}
         <h1
-          className="font-syne font-black overflow-hidden"
+          aria-label="NAHYUN KIM"
           style={{
-            fontSize: "clamp(4rem, 14vw, 14rem)",
-            lineHeight: 0.9,
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 900,
+            lineHeight: 0.92,
             letterSpacing: "-0.03em",
-            color: "#0D0D0D",
+            color: "#0A0A0A",
+            fontSize: "clamp(4rem, 11vw, 11rem)",
           }}
         >
-          <AnimatedName />
+          {WORDS.map((word, wi) => (
+            <span
+              key={word}
+              className="block overflow-hidden"
+              style={{ whiteSpace: "nowrap" }}
+            >
+              {word.split("").map((letter, li) => (
+                <motion.span
+                  key={li}
+                  className="inline-block"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    delay: 0.3 + wi * 0.25 + li * 0.045,
+                    duration: 0.7,
+                    ease: "easeOut",
+                  }}
+                >
+                  {letter}
+                </motion.span>
+              ))}
+            </span>
+          ))}
         </h1>
 
         {/* Subtitle */}
-        <motion.div
-          className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4"
-          initial={{ opacity: 0, y: 30 }}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.7, ease: "easeOut" }}
+          transition={{ delay: 1.0, duration: 0.6 }}
+          className="text-base md:text-xl mb-8 max-w-lg"
+          style={{ fontFamily: "'Inter', sans-serif", color: "#444" }}
         >
-          <div
-            className="h-[2px] w-16 shrink-0"
-            style={{ backgroundColor: "#FF6B6B" }}
-          />
-          <p
-            className="text-lg md:text-2xl font-light"
-            style={{ fontFamily: "'Inter', sans-serif", color: "#555" }}
-          >
-            AI Security Researcher &amp; Creative Developer
-          </p>
-        </motion.div>
+          AI Security Researcher &amp; Creative Developer
+        </motion.p>
 
-        {/* Tag chips */}
+        {/* Tags */}
         <motion.div
-          className="flex flex-wrap gap-3 mt-10"
+          className="flex flex-wrap gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
+          transition={{ delay: 1.2, duration: 0.5 }}
         >
           {TAGS.map((tag, i) => (
             <motion.span
               key={tag}
-              className="px-4 py-2 rounded-full text-sm font-medium border"
-              style={{
-                fontFamily: "'Inter', sans-serif",
-                borderColor: "#FF6B6B",
-                color: "#FF6B6B",
-                backgroundColor: "transparent",
-              }}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{
-                delay: 1.6 + i * 0.1,
-                type: "spring",
-                stiffness: 400,
-                damping: 20,
-              }}
-              whileHover={{
-                backgroundColor: "#FF6B6B",
-                color: "#fff",
-                scale: 1.05,
+              transition={{ delay: 1.3 + i * 0.08, type: "spring", stiffness: 400, damping: 22 }}
+              className="px-3 py-1.5 rounded-full border text-sm font-medium"
+              style={{
+                borderColor: "#0A0A0A",
+                color: "#0A0A0A",
+                fontFamily: "'Inter', sans-serif",
+                backgroundColor: "transparent",
               }}
             >
               {tag}
@@ -147,25 +89,41 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
+      {/* Geometric shape — bottom right */}
+      <motion.div
+        className="absolute bottom-20 right-10 md:right-20 pointer-events-none"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+        style={{ width: 160, height: 160 }}
+      >
+        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="80" r="68" stroke="#00C9A7" strokeWidth="2" strokeDasharray="8 6" />
+          <circle cx="80" cy="80" r="44" stroke="#00C9A7" strokeWidth="1.5" opacity="0.4" />
+          <circle cx="80" cy="12" r="6" fill="#00C9A7" />
+        </svg>
+      </motion.div>
+
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="flex flex-col items-center gap-2 pb-10 z-10 relative"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.6 }}
+        transition={{ delay: 1.8 }}
       >
         <span
-          className="text-xs tracking-widest uppercase"
-          style={{ color: "#999", fontFamily: "'Inter', sans-serif" }}
+          className="tracking-[0.3em] uppercase text-xs"
+          style={{ color: "#888", fontFamily: "'Inter', sans-serif" }}
         >
           Scroll
         </span>
-        <motion.div
-          className="w-[1px] h-12"
-          style={{ backgroundColor: "#FF6B6B" }}
-          animate={{ scaleY: [0, 1, 0], originY: 0 }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <div className="relative w-[1px] h-10 overflow-hidden" style={{ backgroundColor: "#ddd" }}>
+          <motion.div
+            className="absolute top-0 left-0 w-full"
+            style={{ backgroundColor: "#00C9A7" }}
+            animate={{ y: ["0%", "100%", "100%", "0%"], height: ["0%", "100%", "0%", "0%"] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
       </motion.div>
     </section>
   );

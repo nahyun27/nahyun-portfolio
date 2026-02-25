@@ -1,126 +1,88 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { useSectionStore } from "@/store/useSectionStore";
 
 export default function FooterSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10%" });
-  const setSection = useSectionStore((s) => s.setSection);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setSection("footer"); },
-      { threshold: 0.4 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [setSection]);
+  const inView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
     <footer
       id="footer"
       ref={ref}
       className="py-24 relative overflow-hidden"
-      style={{ backgroundColor: "#0D0D0D" }}
+      style={{ backgroundColor: "#0A0A0A" }}
     >
-      {/* Colored blobs */}
-      <div
-        className="absolute -top-32 -right-32 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #FF6B6B, #FF3CAC)" }}
-      />
-      <div
-        className="absolute -bottom-20 -left-20 w-64 h-64 rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ background: "radial-gradient(circle, #5C5FFF, #00C9A7)" }}
-      />
+      <div className="max-w-[1400px] mx-auto px-6 md:px-10">
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 text-center relative z-10">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-sm font-medium tracking-[0.3em] uppercase mb-6"
-          style={{ color: "#FF6B6B", fontFamily: "'Inter', sans-serif" }}
-        >
-          Let&apos;s Connect
-        </motion.p>
-
+        {/* CTA heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 48 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-          className="font-syne font-black leading-none mb-10"
+          transition={{ duration: 0.75, ease: "easeOut" }}
+          className="font-black leading-tight mb-10"
           style={{
-            fontSize: "clamp(3rem, 8vw, 8rem)",
-            color: "#FAFAF8",
+            fontFamily: "'Syne', sans-serif",
+            fontSize: "clamp(2.8rem,6vw,6rem)",
+            color: "#F5F0E8",
             letterSpacing: "-0.03em",
           }}
         >
-          Let&apos;s build<br />something
-          <span style={{ color: "#FF6B6B" }}> together.</span>
+          Let&apos;s build<br />
+          something{" "}
+          <span style={{ color: "#00C9A7" }}>great.</span>
         </motion.h2>
 
+        {/* Links */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="flex flex-wrap justify-center gap-4 mb-16"
+          transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
+          className="flex flex-wrap gap-4 mb-16"
         >
           {[
-            { label: "GitHub", href: "https://github.com/nahyun27", color: "#FF6B6B" },
-            { label: "Email", href: "mailto:ksknh7@hanyang.ac.kr", color: "#00C9A7" },
-            { label: "ACE Lab", href: "https://ace.hanyang.ac.kr", color: "#5C5FFF" },
-          ].map((link) => (
+            { label: "ksknh7@hanyang.ac.kr", href: "mailto:ksknh7@hanyang.ac.kr", underline: true },
+            { label: "GitHub ↗", href: "https://github.com/nahyun27", underline: false },
+            { label: "ACE Lab ↗", href: "https://ace.hanyang.ac.kr", underline: false },
+          ].map((l) => (
             <a
-              key={link.label}
-              href={link.href}
+              key={l.label}
+              href={l.href}
               target="_blank"
               rel="noopener noreferrer"
-              data-hover
-              className="px-6 py-3 rounded-full text-sm font-semibold border-2 transition-all duration-300"
+              data-cursor-hover
+              className="text-base font-medium transition-colors duration-200 hover:opacity-70"
               style={{
-                borderColor: link.color,
-                color: link.color,
+                color: "#00C9A7",
                 fontFamily: "'Inter', sans-serif",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = link.color;
-                (e.currentTarget as HTMLAnchorElement).style.color = "#0D0D0D";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
-                (e.currentTarget as HTMLAnchorElement).style.color = link.color;
+                textDecoration: l.underline ? "underline" : "none",
+                textUnderlineOffset: "4px",
               }}
             >
-              {link.label} ↗
+              {l.label}
             </a>
           ))}
         </motion.div>
 
         {/* Divider */}
         <motion.div
-          initial={{ scaleX: 0 }}
+          initial={{ scaleX: 0, originX: 0 }}
           animate={inView ? { scaleX: 1 } : {}}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="h-[1px] w-full mb-8"
-          style={{ backgroundColor: "#ffffff15" }}
+          transition={{ delay: 0.4, duration: 0.7 }}
+          className="h-[1px] mb-8"
+          style={{ backgroundColor: "rgba(245,240,232,0.12)" }}
         />
 
+        {/* Footer line */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="text-sm"
-          style={{ color: "#555", fontFamily: "'Inter', sans-serif" }}
+          transition={{ delay: 0.55 }}
+          className="text-xs"
+          style={{ color: "rgba(245,240,232,0.35)", fontFamily: "'Inter', sans-serif" }}
         >
-          Made with{" "}
-          <span style={{ color: "#FF6B6B" }}>❤️</span>
-          {" "}by{" "}
-          <span style={{ color: "#FAFAF8" }}>Nahyun Kim</span>
-          {" "}— © {new Date().getFullYear()}
+          © 2025 Nahyun Kim — Built with Next.js &amp; Framer Motion
         </motion.p>
       </div>
     </footer>

@@ -2,78 +2,72 @@
 
 import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useSectionStore } from "@/store/useSectionStore";
-
-const SECTION_COLORS: Record<string, string> = {
-  hero: "#FF6B6B",
-  about: "#00C9A7",
-  research: "#5C5FFF",
-  projects: "#FFD60A",
-  creative: "#FF3CAC",
-  awards: "#FFB400",
-  footer: "#FF6B6B",
-};
 
 export default function CustomCursor() {
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
   const dotX = useMotionValue(-100);
   const dotY = useMotionValue(-100);
 
-  const springX = useSpring(cursorX, { damping: 20, stiffness: 300, mass: 0.5 });
-  const springY = useSpring(cursorY, { damping: 20, stiffness: 300, mass: 0.5 });
+  const ringX = useSpring(mouseX, { stiffness: 200, damping: 18, mass: 0.6 });
+  const ringY = useSpring(mouseY, { stiffness: 200, damping: 18, mass: 0.6 });
 
-  const hovering = useRef(false);
-  const section = useSectionStore((s) => s.activeSection);
-  const color = SECTION_COLORS[section] ?? "#FF6B6B";
+  const isHovering = useRef(false);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const move = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+    const onMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
       dotX.set(e.clientX);
       dotY.set(e.clientY);
     };
 
-    const over = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.closest("a") ||
-        target.closest("button") ||
-        target.closest("[data-hover]")
-      ) {
-        hovering.current = true;
+    const onOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("a,button,[data-cursor-hover]")) {
+        isHovering.current = true;
+        ringRef.current?.style.setProperty("width", "44px");
+        ringRef.current?.style.setProperty("height", "44px");
+        ringRef.current?.style.setProperty("border-color", "#00C9A7");
+        ringRef.current?.style.setProperty("background", "rgba(0,201,167,0.08)");
       }
     };
-    const out = () => { hovering.current = false; };
-
-    window.addEventListener("mousemove", move);
-    window.addEventListener("mouseover", over);
-    window.addEventListener("mouseout", out);
-    return () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mouseover", over);
-      window.removeEventListener("mouseout", out);
+    const onOut = () => {
+      isHovering.current = false;
+      ringRef.current?.style.setProperty("width", "28px");
+      ringRef.current?.style.setProperty("height", "28px");
+      ringRef.current?.style.setProperty("border-color", "#0A0A0A");
+      ringRef.current?.style.setProperty("background", "transparent");
     };
-  }, [cursorX, cursorY, dotX, dotY]);
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseover", onOver);
+    window.addEventListener("mouseout", onOut);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseover", onOver);
+      window.removeEventListener("mouseout", onOut);
+    };
+  }, [mouseX, mouseY, dotX, dotY]);
 
   return (
     <>
-      {/* Trailing ring */}
+      {/* Ring */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border-2 mix-blend-multiply"
+        ref={ringRef}
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border-2"
         style={{
-          x: springX,
-          y: springY,
-          width: 36,
-          height: 36,
+          x: ringX,
+          y: ringY,
+          width: 28,
+          height: 28,
           translateX: "-50%",
           translateY: "-50%",
-          borderColor: color,
-          transition: "border-color 0.4s ease",
+          borderColor: "#0A0A0A",
+          transition: "width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease",
         }}
-        animate={{ scale: hovering.current ? 1.8 : 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
       />
       {/* Dot */}
       <motion.div
@@ -81,12 +75,11 @@ export default function CustomCursor() {
         style={{
           x: dotX,
           y: dotY,
-          width: 6,
-          height: 6,
+          width: 5,
+          height: 5,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: color,
-          transition: "background-color 0.4s ease",
+          backgroundColor: "#0A0A0A",
         }}
       />
     </>
