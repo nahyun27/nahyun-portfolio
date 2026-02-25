@@ -14,7 +14,7 @@ const STATS = [
 const SKILLS = [
   "Python", "PyTorch", "TensorFlow", "scikit-learn",
   "React", "Next.js", "TypeScript", "Three.js",
-  "React Native", "wav2vec2", "YOLOv5/v8", "ROS2", "C/C++", "Docker",
+  "React Native", "wav2vec2", "YOLOv5/v8", "C/C++", "Docker",
 ];
 
 const CERTS = [

@@ -23,6 +23,12 @@
 html {
   cursor: none;
   background-color: var(--bg);
+  scroll-snap-type: y mandatory;
+}
+
+section,
+footer {
+  scroll-snap-align: start;
 }
 
 body {
