@@ -9,12 +9,10 @@ export default function CustomCursor() {
   const dotX = useMotionValue(-100);
   const dotY = useMotionValue(-100);
 
-  const ringX = useSpring(mouseX, { stiffness: 200, damping: 18, mass: 0.6 });
-  const ringY = useSpring(mouseY, { stiffness: 200, damping: 18, mass: 0.6 });
+  const ringX = useSpring(mouseX, { stiffness: 180, damping: 16, mass: 0.6 });
+  const ringY = useSpring(mouseY, { stiffness: 180, damping: 16, mass: 0.6 });
 
-  const isHovering = useRef(false);
   const ringRef = useRef<HTMLDivElement>(null);
-  const dotRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -27,19 +25,21 @@ export default function CustomCursor() {
     const onOver = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
       if (t.closest("a,button,[data-cursor-hover]")) {
-        isHovering.current = true;
-        ringRef.current?.style.setProperty("width", "44px");
-        ringRef.current?.style.setProperty("height", "44px");
-        ringRef.current?.style.setProperty("border-color", "#00C9A7");
-        ringRef.current?.style.setProperty("background", "rgba(0,201,167,0.08)");
+        if (ringRef.current) {
+          ringRef.current.style.width = "48px";
+          ringRef.current.style.height = "48px";
+          ringRef.current.style.borderColor = "#00C9A7";
+          ringRef.current.style.background = "rgba(0,201,167,0.06)";
+        }
       }
     };
     const onOut = () => {
-      isHovering.current = false;
-      ringRef.current?.style.setProperty("width", "28px");
-      ringRef.current?.style.setProperty("height", "28px");
-      ringRef.current?.style.setProperty("border-color", "#0A0A0A");
-      ringRef.current?.style.setProperty("background", "transparent");
+      if (ringRef.current) {
+        ringRef.current.style.width = "28px";
+        ringRef.current.style.height = "28px";
+        ringRef.current.style.borderColor = "rgba(240,237,230,0.5)";
+        ringRef.current.style.background = "transparent";
+      }
     };
 
     window.addEventListener("mousemove", onMove);
@@ -54,10 +54,9 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Ring */}
       <motion.div
         ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border-2"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border"
         style={{
           x: ringX,
           y: ringY,
@@ -65,21 +64,20 @@ export default function CustomCursor() {
           height: 28,
           translateX: "-50%",
           translateY: "-50%",
-          borderColor: "#0A0A0A",
-          transition: "width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease",
+          borderColor: "rgba(240,237,230,0.5)",
+          transition: "width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease",
         }}
       />
-      {/* Dot */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
         style={{
           x: dotX,
           y: dotY,
-          width: 5,
-          height: 5,
+          width: 4,
+          height: 4,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: "#0A0A0A",
+          backgroundColor: "#00C9A7",
         }}
       />
     </>
