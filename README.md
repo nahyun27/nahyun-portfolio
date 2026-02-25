@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NK. — Nahyun Kim Portfolio
 
-## Getting Started
+> Personal portfolio of Nahyun Kim, AI Security Researcher & Creative Developer.
 
-First, run the development server:
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel)](https://nahyun-portfolio.vercel.app)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![License](https://img.shields.io/badge/License-MIT-00C9A7?style=flat-square)](LICENSE)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Overview
+
+A minimal, single-page portfolio built with a strict 3-color palette — **cream, black, and mint** — with smooth scroll animations, drag-to-explore project sliders, and a custom cursor. Designed to be clean, fast, and memorable.
+
+**Live:** [nahyun-portfolio.vercel.app](https://nahyun-portfolio.vercel.app)
+
+---
+
+## 🗂 Sections
+
+| # | Section | Content |
+|---|---------|---------|
+| 01 | **Hero** | Animated name reveal, identity tags |
+| 02 | **About** | Bio, stats, tech stack, contact links |
+| 03 | **Research** | Publications & patents (drag slider) |
+| 04 | **Projects** | Built apps & systems (drag slider) |
+| 05 | **Creative Lab** | Web experiments & games (drag slider) |
+| 06 | **Awards** | Recognitions, certifications, scores |
+| — | **Footer** | Contact CTA |
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework** — Next.js 14 (App Router)
+- **Styling** — Tailwind CSS
+- **Animations** — Framer Motion
+- **Font** — Syne (headings) + Inter (body) via Google Fonts
+- **Deployment** — Vercel
+
+---
+
+## 🎨 Design System
+
+```
+Background  #F5F0E8  Cream
+Text        #0A0A0A  Black
+Accent      #00C9A7  Mint
+Card bg     #FFFFFF  White
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone https://github.com/nahyun27/nahyun-portfolio.git
+cd nahyun-portfolio
+npm install
+npm run dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/
+│   ├── layout.tsx       # Global layout, fonts, cursor
+│   ├── page.tsx         # Main page (all sections)
+│   └── globals.css
+├── components/
+│   ├── Cursor.tsx       # Custom cursor
+│   ├── Navbar.tsx
+│   ├── Hero.tsx
+│   ├── About.tsx
+│   ├── Research.tsx
+│   ├── Projects.tsx
+│   ├── Creative.tsx
+│   ├── Awards.tsx
+│   ├── Footer.tsx
+│   └── DragSlider.tsx   # Horizontal drag-to-scroll
+└── data/
+    └── portfolio.ts     # All project/award data
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📬 Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Nahyun Kim** — AI Security Researcher @ ACE-LAB, Hanyang University (ERICA)
+
+- Email: [ksknh7@hanyang.ac.kr](mailto:ksknh7@hanyang.ac.kr)
+- GitHub: [github.com/nahyun27](https://github.com/nahyun27)
+- Lab: [ace.hanyang.ac.kr](https://ace.hanyang.ac.kr)
+
+---
+
+© 2025 Nahyun Kim. Built with Next.js & Framer Motion.
