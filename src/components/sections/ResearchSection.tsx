@@ -3,12 +3,13 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import HorizontalSlider from "@/components/HorizontalSlider";
+import AnimatedHeading from "@/components/AnimatedHeading";
 
 const PAPERS = [
   {
     id: "01",
     title: "AdvChameleon",
-    subtitle: "Universal adversarial audio attacks that transfer across models and speech recognition systems.",
+    subtitle: "Universal adversarial audio attacks that transfer across models & speech recognition systems.",
     venue: "In submission — USENIX Security 2026",
     tags: ["Audio AI", "Adversarial ML", "Universal"],
   },
@@ -29,7 +30,7 @@ const PAPERS = [
   {
     id: "04",
     title: "Firmware Security",
-    subtitle: "Firmware signing and encryption system for secure embedded device authentication.",
+    subtitle: "Firmware signing & encryption system for secure embedded device authentication.",
     venue: "KIPS ASK 2022",
     tags: ["Firmware", "Cryptography", "IoT"],
   },
@@ -37,38 +38,23 @@ const PAPERS = [
 
 export default function ResearchSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const inView = useInView(ref, { once: true, amount: 0.15 });
 
   return (
-    <section
-      id="research"
-      ref={ref}
-      className="min-h-screen flex items-center py-24"
-      style={{ backgroundColor: "#F5F0E8" }}
-    >
-      <div className="max-w-[1400px] mx-auto px-6 md:px-10 w-full">
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="text-xs tracking-[0.3em] uppercase font-semibold mb-10"
+    <section id="research" ref={ref} className="min-h-screen flex items-center py-28"
+      style={{ backgroundColor: "#0C0C0F" }}>
+      <div className="section-inner w-full">
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
           style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
           02 — Research
         </motion.p>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 36 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.1, duration: 0.65, ease: "easeOut" }}
-          className="font-black leading-tight mb-14"
-          style={{
-            fontFamily: "'Syne', sans-serif",
-            fontSize: "clamp(2.4rem,5vw,4rem)",
-            color: "#0A0A0A",
-            letterSpacing: "-0.02em",
-          }}>
-          Publications<br />&amp; Patents.
-        </motion.h2>
-
+        <AnimatedHeading
+          text="Publications|& Patents."
+          className="mb-14"
+          style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}
+          delay={0.1}
+        />
         <HorizontalSlider cards={PAPERS} />
       </div>
     </section>
