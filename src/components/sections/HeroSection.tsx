@@ -1,16 +1,21 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 const TAGS = ["#ProblemSolver", "#AdversarialML", "#CreativeDeveloper", "#ENTJ"];
 const WORDS = ["NAHYUN", "KIM"];
 
 export default function HeroSection() {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: false, amount: 0.1 });
+
   return (
     <section
       id="hero"
-      className="noise-overlay h-[100svh] min-h-[650px] flex flex-col justify-between pt-[64px] relative overflow-hidden"
-      style={{ backgroundColor: "#0C0C0F" }}
+      ref={ref}
+      className="noise-overlay h-[100svh] min-h-[650px] flex flex-col justify-between pt-[64px] relative overflow-hidden z-10"
+      style={{ backgroundColor: "transparent" }}
     >
       {/* Ambient glow — top left */}
       <div
@@ -36,7 +41,7 @@ export default function HeroSection() {
       <div className="flex-1 flex flex-col justify-center py-20 relative z-10 px-4 sm:px-8 md:px-16">
         {/* Eyebrow */}
         <motion.p
-          initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
           transition={{ delay: 0.2, duration: 0.5 }}
           className="text-xs tracking-[0.35em] uppercase font-medium mb-10"
           style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif", marginLeft: "20px" }}
@@ -64,7 +69,7 @@ export default function HeroSection() {
               {word.split("").map((letter, li) => (
                 <motion.span key={li} className="inline-block"
                   initial={{ y: "110%" }}
-                  animate={{ y: 0 }}
+                  animate={inView ? { y: 0 } : { y: "110%" }}
                   transition={{ delay: 0.35 + wi * 0.22 + li * 0.042, duration: 0.65, ease: "easeOut" }}
                 >
                   {letter}
@@ -76,7 +81,7 @@ export default function HeroSection() {
 
         {/* Divider line + subtitle */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
           transition={{ delay: 1.0, duration: 0.6 }}
           className="flex items-center gap-5 mb-8 ml-5"
         >
@@ -88,13 +93,13 @@ export default function HeroSection() {
 
         {/* Tags */}
         <motion.div className="flex flex-wrap gap-3 ml-5"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ delay: 1.15, duration: 0.5 }}
           style={{ marginLeft: "45px", marginTop: "10px" }}
         >
           {TAGS.map((tag, i) => (
             <motion.span key={tag}
-              initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+              initial={{ scale: 0, opacity: 0 }} animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
               transition={{ delay: 1.25 + i * 0.07, type: "spring", stiffness: 380, damping: 24 }}
               whileHover={{
                 scale: 1.05,
@@ -152,7 +157,7 @@ export default function HeroSection() {
       {/* Scroll indicator */}
       <motion.div
         className="flex flex-col items-center gap-2 pb-10 relative z-10"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.9 }}
+        initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 1.9 }}
       >
         <span className="tracking-[0.3em] uppercase text-xs" style={{ color: "#444", fontFamily: "'Inter', sans-serif" }}>
           Scroll

@@ -12,7 +12,8 @@ const PROJECTS = [
     tags: ["React", "Game Logic", "Web"],
     github: "https://github.com/nahyun27/rise-of-halfmoon",
     demo: "https://rise-of-halfmoon.vercel.app/",
-    color: "#F6C90E"
+    color: "#F6C90E",
+    image: "/images/halfmoon.gif"
   },
   {
     id: "02",
@@ -21,7 +22,8 @@ const PROJECTS = [
     tags: ["Next.js", "Three.js", "3D"],
     github: "https://github.com/nahyun27/stack-tower-3d",
     demo: "https://tower-stacking.vercel.app/",
-    color: "#00E5FF"
+    color: "#00E5FF",
+    image: "/images/tower.gif"
   },
   {
     id: "03",
@@ -30,7 +32,8 @@ const PROJECTS = [
     tags: ["React Three Fiber", "WebGL", "Creative"],
     github: "https://github.com/nahyun27/floating-memories",
     demo: "https://floating-memories.vercel.app/",
-    color: "#B388FF"
+    color: "#B388FF",
+    image: "/images/floating.gif"
   },
   {
     id: "04",
@@ -38,7 +41,8 @@ const PROJECTS = [
     subtitle: "Tense Unity maze escape game. Your vision narrows relentlessly while you collect coins to survive.",
     tags: ["Unity", "C#", "Level Design"],
     github: "https://github.com/nahyun27/Beware-Of-Darkness",
-    color: "#FF5252"
+    color: "#FF5252",
+    image: "/images/beware.gif"
   },
 ];
 
@@ -49,7 +53,7 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
   return (
     <motion.div
       initial={{ opacity: 0, y: 40, scale: 0.95 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+      animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
       transition={{ delay: 0.15 + index * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -83,7 +87,7 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
 
       <div className="relative z-10 flex flex-col h-full">
         {/* Header (ID and Links) */}
-        <div className="flex justify-between items-start mb-8">
+        <div className="flex justify-between items-start mb-6">
           <div className="flex flex-col gap-2 pt-2">
             <span className="text-sm font-black tracking-[0.2em]" style={{ color: project.color, fontFamily: "'Inter', sans-serif" }}>
               {project.id}
@@ -115,6 +119,19 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
             )}
           </div>
         </div>
+
+        {/* Project Image / GIF */}
+        {project.image && (
+          <div className="relative w-full aspect-[16/9] md:aspect-video rounded-xl overflow-hidden mb-6 border z-10 bg-[#0A0A0C]"
+            style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+            <img
+              src={project.image}
+              alt={project.title}
+              loading="lazy"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          </div>
+        )}
 
         {/* Title & Desc */}
         <h3 className="font-bold text-2xl md:text-3xl mb-4 transition-colors duration-300 drop-shadow-lg"
@@ -159,16 +176,16 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
 
 export default function CreativeSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const inView = useInView(ref, { once: false, amount: 0.1 });
 
   return (
-    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-40"
-      style={{ backgroundColor: "#0C0C0F" }}>
+    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
+      style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
         {/* Header */}
         <div className="mb-20">
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             className="text-xs tracking-[0.32em] uppercase font-semibold mb-6"
             style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
             04 — Web & Games

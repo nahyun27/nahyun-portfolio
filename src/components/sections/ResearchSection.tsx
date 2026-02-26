@@ -17,7 +17,7 @@ const PAPERS = [
     id: "02",
     title: "Anonimous Attack",
     // subtitle: "Dynamic Perturbation Intensity Attack — a frequency-domain adversarial audio attack.",
-    subtitle: "",
+    subtitle: "A novel adversarial attack proposing a method to adjust perturbation intensity by exploiting temporal characteristics.",
     venue: "Patent, In Review",
     tags: ["Patent", "Audio Attack", "Deep Learning"],
   },
@@ -39,13 +39,13 @@ const PAPERS = [
 
 export default function ResearchSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const inView = useInView(ref, { once: false, amount: 0.15 });
 
   return (
-    <section id="research" ref={ref} className="min-h-screen flex items-center py-24 md:py-32"
-      style={{ backgroundColor: "#0C0C0F" }}>
+    <section id="research" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
+      style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
           style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
           02 — Research

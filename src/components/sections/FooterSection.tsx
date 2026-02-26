@@ -6,12 +6,12 @@ import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function FooterSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
+  const inView = useInView(ref, { once: false, amount: 0.3 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   return (
-    <footer ref={ref} className="relative pt-40 pb-12 overflow-hidden flex flex-col justify-end"
-      style={{ backgroundColor: "#060608", minHeight: "80vh" }}
+    <footer ref={ref} className="relative pt-40 pb-12 overflow-hidden flex flex-col justify-end z-10"
+      style={{ backgroundColor: "transparent", minHeight: "80vh" }}
       onMouseMove={(e) => {
         if (!ref.current) return;
         const rect = ref.current.getBoundingClientRect();
@@ -39,7 +39,7 @@ export default function FooterSection() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
+            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ delay: 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="mb-12 px-6 py-2 rounded-full border backdrop-blur-md"
             style={{ borderColor: "rgba(0,201,167,0.3)", backgroundColor: "rgba(0,201,167,0.05)" }}

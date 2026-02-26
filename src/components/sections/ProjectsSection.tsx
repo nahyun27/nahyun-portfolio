@@ -16,13 +16,13 @@ const PROJECTS = [
 
 export default function ProjectsSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const inView = useInView(ref, { once: false, amount: 0.15 });
 
   return (
-    <section id="projects" ref={ref} className="min-h-screen flex items-center py-28"
-      style={{ backgroundColor: "#0C0C0F" }}>
+    <section id="projects" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
+      style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
           style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
           03 — Projects
@@ -31,7 +31,7 @@ export default function ProjectsSection() {
           text="What I've|Built."
           highlightWords={["Built."]}
           className="mb-14"
-          style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}
+          style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
           delay={0.1}
         />
         <HorizontalSlider cards={PROJECTS} />
