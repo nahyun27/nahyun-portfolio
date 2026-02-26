@@ -42,7 +42,7 @@ export default function ResearchSection() {
   const inView = useInView(ref, { once: true, amount: 0.15 });
 
   return (
-    <section id="research" ref={ref} className="min-h-screen flex items-center py-28"
+    <section id="research" ref={ref} className="min-h-screen flex items-center py-24 md:py-32"
       style={{ backgroundColor: "#0C0C0F" }}>
       <div className="section-inner w-full">
         <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -53,7 +53,7 @@ export default function ResearchSection() {
         <AnimatedHeading
           text="Publications|& Patents."
           className="mb-14"
-          style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}
+          style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
           delay={0.1}
         />
         <HorizontalSlider cards={PAPERS} />

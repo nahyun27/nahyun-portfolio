@@ -20,10 +20,10 @@ export default function AwardsSection() {
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <section id="awards" ref={ref} className="min-h-screen flex items-center py-32 md:py-40"
+    <section id="awards" ref={ref} className="min-h-screen flex items-center py-24 md:py-40"
       style={{ backgroundColor: "#0C0C0F" }}>
       <div className="section-inner w-full">
-        <div className="flex flex-col md:flex-row gap-16 md:gap-24">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
           <div className="md:w-1/3 shrink-0 relative">
             <div className="sticky top-40">
               <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -34,7 +34,7 @@ export default function AwardsSection() {
               <AnimatedHeading
                 text="Awards &|Experiences."
                 className="mb-8"
-                style={{ fontSize: "clamp(2.2rem, 9vw, 4rem)" }}
+                style={{ fontSize: "clamp(1.8rem, 8vw, 4rem)" }}
                 delay={0.1}
               />
             </div>
@@ -47,7 +47,7 @@ export default function AwardsSection() {
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
                 className="group flex flex-col-reverse sm:flex-row sm:items-center justify-between py-8 pr-4 sm:pr-8 gap-4 sm:gap-10 border-b cursor-default transition-all duration-300"
-                style={{ borderColor: 'rgba(255,255,255,0.05)', paddingLeft: '0px'}}
+                style={{ borderColor: 'rgba(255,255,255,0.05)', padding: '10px' }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
                   el.style.backgroundColor = "rgba(0,201,167,0.04)";
@@ -59,10 +59,10 @@ export default function AwardsSection() {
                   el.style.paddingLeft = "0px";
                 }}
               >
-                <div className="flex items-start gap-4 sm:gap-5">
+                <div className="flex items-start gap-4 sm:gap-5" >
                   <div className="mt-1 shrink-0 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300 hidden sm:block"
-                    style={{ backgroundColor: "#00C9A7"}} />
-                  <div style={{ padding: "10px"}}>
+                    style={{ backgroundColor: "#00C9A7" }} />
+                  <div>
                     <h3 className="font-bold text-lg md:text-xl transition-colors duration-300 group-hover:text-white"
                       style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.3" }}>
                       {ex.title}
