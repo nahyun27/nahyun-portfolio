@@ -117,7 +117,7 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
         </div>
 
         {/* Title & Desc */}
-        <h3 className="font-bold text-3xl mb-4 transition-colors duration-300 drop-shadow-lg"
+        <h3 className="font-bold text-2xl md:text-3xl mb-4 transition-colors duration-300 drop-shadow-lg"
           style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", letterSpacing: "-0.01em" }}>
           {project.title}
         </h3>
@@ -162,7 +162,7 @@ export default function CreativeSection() {
   const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
-    <section id="creative" ref={ref} className="min-h-screen flex items-center py-32"
+    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-40"
       style={{ backgroundColor: "#0C0C0F" }}>
       <div className="section-inner w-full">
 
@@ -176,7 +176,7 @@ export default function CreativeSection() {
           <AnimatedHeading
             text="Interactive|Experiences."
             highlightWords={["Experiences."]}
-            style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)" }}
+            style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)" }}
             delay={0.1}
           />
         </div>

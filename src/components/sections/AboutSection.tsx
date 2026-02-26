@@ -92,7 +92,7 @@ export default function AboutSection() {
   });
 
   return (
-    <section id="about" ref={ref} className="min-h-screen flex items-center py-32"
+    <section id="about" ref={ref} className="min-h-screen flex items-center py-24 md:py-32"
       style={{ backgroundColor: "#0C0C0F" }}>
       <div className="section-inner w-full">
 
@@ -107,7 +107,7 @@ export default function AboutSection() {
             <AnimatedHeading
               text="Hello,|I'm Nahyun."
               highlightWords={["I'm", "Nahyun."]}
-              style={{ fontSize: "clamp(2.6rem, 5vw, 4rem)" }}
+              style={{ fontSize: "clamp(2.2rem, 8vw, 4rem)" }}
               delay={0.07}
             />
 
