@@ -84,16 +84,16 @@ function StatCard({ s, i, inView }: { s: any; i: number; inView: boolean }) {
 
 export default function AboutSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
+  const inView = useInView(ref, { once: false, amount: 0.15 });
   const f = (delay = 0) => ({
     initial: { opacity: 0, y: 32 },
-    animate: inView ? { opacity: 1, y: 0 } : {},
+    animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 },
     transition: { delay, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
   });
 
   return (
-    <section id="about" ref={ref} className="min-h-screen flex items-center py-24 md:py-32"
-      style={{ backgroundColor: "#0C0C0F" }}>
+    <section id="about" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
+      style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
         <motion.p {...f(0)} className="text-xs tracking-[0.4em] uppercase font-semibold mb-16"

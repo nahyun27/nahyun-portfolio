@@ -99,16 +99,14 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
           </p>
         )}
 
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+        <div className="flex flex-wrap gap-3 mt-auto pt-2">
           {card.tags.map((tag) => (
-            <span key={tag} className="text-xs px-2 py-0.5 rounded-full backdrop-blur-sm"
+            <span key={tag} className="text-xs font-medium tracking-wide transition-colors duration-300 hover:text-white"
               style={{
-                backgroundColor: "rgba(0,201,167,0.08)",
-                color: "#00C9A7",
+                color: "rgba(0,201,167,0.8)",
                 fontFamily: "'Inter', sans-serif",
-                border: "1px solid rgba(0,201,167,0.2)",
               }}>
-              {tag}
+              #{tag.replace(/\s+/g, '')}
             </span>
           ))}
         </div>

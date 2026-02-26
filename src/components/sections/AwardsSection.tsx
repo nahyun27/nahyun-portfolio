@@ -17,16 +17,16 @@ const EXPERIENCES = [
 
 export default function AwardsSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const inView = useInView(ref, { once: false, amount: 0.1 });
 
   return (
-    <section id="awards" ref={ref} className="min-h-screen flex items-center py-24 md:py-40"
-      style={{ backgroundColor: "#0C0C0F" }}>
+    <section id="awards" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
+      style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
         <div className="flex flex-col md:flex-row gap-8 md:gap-24">
           <div className="md:w-1/3 shrink-0 relative">
             <div className="sticky top-40">
-              <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+              <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
                 style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
                 05 — Experiences
@@ -44,7 +44,7 @@ export default function AwardsSection() {
             {EXPERIENCES.map((ex, i) => (
               <motion.div key={ex.title + i}
                 initial={{ opacity: 0, x: 20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                 transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
                 className="group flex flex-col-reverse sm:flex-row sm:items-center justify-between py-8 pr-4 sm:pr-8 gap-4 sm:gap-10 border-b cursor-default transition-all duration-300"
                 style={{ borderColor: 'rgba(255,255,255,0.05)', padding: '10px' }}

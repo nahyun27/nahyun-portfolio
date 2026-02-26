@@ -13,7 +13,7 @@ interface AnimatedHeadingProps {
 
 export default function AnimatedHeading({ text, className = "", style = {}, delay = 0.1, highlightWords = [] }: AnimatedHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
+  const inView = useInView(ref, { once: false, amount: 0.2 });
 
   // If the text contains "|", we split by it to create new lines.
   const lines = text.split("|");
@@ -41,7 +41,7 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
                     className="inline-block"
                     style={{ color: isHighlighted ? "#00C9A7" : "inherit" }}
                     initial={{ y: "110%", rotateZ: 2 }}
-                    animate={inView ? { y: 0, rotateZ: 0 } : {}}
+                    animate={inView ? { y: 0, rotateZ: 0 } : { y: "110%", rotateZ: 2 }}
                     transition={{
                       duration: 0.7,
                       ease: [0.16, 1, 0.3, 1],
