@@ -33,7 +33,7 @@ export default function HeroSection() {
         }}
       />
 
-      <div className="flex-1 flex flex-col justify-center py-20 relative z-10 px-8 md:px-16">
+      <div className="flex-1 flex flex-col justify-center py-20 relative z-10 px-4 sm:px-8 md:px-16">
         {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -53,7 +53,7 @@ export default function HeroSection() {
             lineHeight: 0.88,
             letterSpacing: "-0.04em",
             color: "#F0EDE6",
-            fontSize: "clamp(4rem, 11vw, 11rem)",
+            fontSize: "clamp(2.5rem, 11vw, 11rem)",
             marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
             overflow: "visible",
           }}

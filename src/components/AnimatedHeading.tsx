@@ -29,30 +29,33 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
         ...style
       }}
     >
-      {lines.map((line, lineIndex) => (
-        <span key={lineIndex} className="block" style={{ overflow: "clip", padding: "0.1em 0.15em 0.25em", margin: "-0.1em -0.15em" }}>
-          {line.split(" ").map((word, wordIndex) => {
-            const isHighlighted = highlightWords.some(hw => word.includes(hw));
-            return (
-              <span key={wordIndex} className="inline-block" style={{ overflow: "clip", padding: "0.1em 0 0.3em", margin: "0 0.22em -0.3em 0" }}>
-                <motion.span
-                  className="inline-block"
-                  style={{ color: isHighlighted ? "#00C9A7" : "inherit" }}
-                  initial={{ y: "110%", rotateZ: 2 }}
-                  animate={inView ? { y: 0, rotateZ: 0 } : {}}
-                  transition={{
-                    duration: 0.7,
-                    ease: [0.16, 1, 0.3, 1],
-                    delay: delay + (lineIndex * 0.1) + (wordIndex * 0.04)
-                  }}
-                >
-                  {word}
-                </motion.span>
-              </span>
-            );
-          })}
-        </span>
-      ))}
+      {lines.map((line, lineIndex) => {
+        const words = line.split(" ").filter(w => w !== "");
+        return (
+          <span key={lineIndex} className="block" style={{ overflow: "clip", padding: "0.1em 0.15em 0.25em", margin: "-0.1em -0.15em" }}>
+            {words.map((word, wordIndex) => {
+              const isHighlighted = highlightWords.some(hw => word.includes(hw));
+              return (
+                <span key={wordIndex} className="inline-block" style={{ overflow: "clip", padding: "0.1em 0 0.3em", margin: "0 0.22em -0.3em 0" }}>
+                  <motion.span
+                    className="inline-block"
+                    style={{ color: isHighlighted ? "#00C9A7" : "inherit" }}
+                    initial={{ y: "110%", rotateZ: 2 }}
+                    animate={inView ? { y: 0, rotateZ: 0 } : {}}
+                    transition={{
+                      duration: 0.7,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: delay + (lineIndex * 0.1) + (wordIndex * 0.04)
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              );
+            })}
+          </span>
+        );
+      })}
     </h2>
   );
 }
