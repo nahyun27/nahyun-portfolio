@@ -52,12 +52,12 @@ export default function FooterSection() {
 
           <div className="relative mb-16">
             <AnimatedHeading
-              // text="Let's build|something |extraordinary."
-              text="Let's build|something |together."
+              // text="Let's build|something|extraordinary."
+              text="Let's build|something|together."
               // highlightWords={["extraordinary."]}
               highlightWords={["together."]}
               className="leading-[1.1]"
-              style={{ fontSize: "clamp(3.3rem, 7vw, 7.5rem)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(2.5rem, 9vw, 7.5rem)", letterSpacing: "-0.02em" }}
               delay={0.2}
             />
           </div>

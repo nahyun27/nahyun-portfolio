@@ -34,7 +34,7 @@ export default function AwardsSection() {
               <AnimatedHeading
                 text="Awards &|Experiences."
                 className="mb-8"
-                style={{ fontSize: "clamp(2.4rem,5vw,4rem)" }}
+                style={{ fontSize: "clamp(2.2rem, 9vw, 4rem)" }}
                 delay={0.1}
               />
             </div>
@@ -46,8 +46,8 @@ export default function AwardsSection() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-                className="group flex flex-col sm:flex-row sm:items-center justify-between py-6 pr-4 sm:pr-8 gap-4 sm:gap-10 border-b cursor-default transition-all duration-300"
-                style={{ borderColor: 'rgba(255,255,255,0.05)', paddingLeft: '0px' }}
+                className="group flex flex-col-reverse sm:flex-row sm:items-center justify-between py-8 pr-4 sm:pr-8 gap-4 sm:gap-10 border-b cursor-default transition-all duration-300"
+                style={{ borderColor: 'rgba(255,255,255,0.05)', paddingLeft: '0px'}}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLDivElement;
                   el.style.backgroundColor = "rgba(0,201,167,0.04)";
@@ -59,20 +59,20 @@ export default function AwardsSection() {
                   el.style.paddingLeft = "0px";
                 }}
               >
-                <div className="flex items-start gap-5">
-                  <div className="mt-1 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300"
-                    style={{ backgroundColor: "#00C9A7" }} />
-                  <div>
+                <div className="flex items-start gap-4 sm:gap-5">
+                  <div className="mt-1 shrink-0 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300 hidden sm:block"
+                    style={{ backgroundColor: "#00C9A7"}} />
+                  <div style={{ padding: "10px"}}>
                     <h3 className="font-bold text-lg md:text-xl transition-colors duration-300 group-hover:text-white"
-                      style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6" }}>
+                      style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.3" }}>
                       {ex.title}
                     </h3>
-                    <p className="text-sm mt-1" style={{ color: "#666", fontFamily: "'Inter', sans-serif" }}>
+                    <p className="text-sm mt-2" style={{ color: "#777", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
                       {ex.org}
                     </p>
                   </div>
                 </div>
-                <span className="shrink-0 text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
+                <span className="self-start sm:self-auto shrink-0 text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
                   style={{
                     border: "1px solid rgba(0,201,167,0.3)",
                     fontFamily: "'Inter', sans-serif",
