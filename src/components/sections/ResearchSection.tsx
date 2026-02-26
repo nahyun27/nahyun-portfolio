@@ -15,9 +15,10 @@ const PAPERS = [
   },
   {
     id: "02",
-    title: "DPIA",
-    subtitle: "Dynamic Perturbation Intensity Attack — a frequency-domain adversarial audio attack.",
-    venue: "Patent, In submission",
+    title: "Anonimous Attack",
+    // subtitle: "Dynamic Perturbation Intensity Attack — a frequency-domain adversarial audio attack.",
+    subtitle: "",
+    venue: "Patent, In Review",
     tags: ["Patent", "Audio Attack", "Deep Learning"],
   },
   {
