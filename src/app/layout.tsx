@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
-import AmbientBackground from "@/components/AmbientBackground";
-
+import AmbientBackground from "@/components/AmbientBackground"
 export const metadata: Metadata = {
   title: "Nahyun Kim — AI Security Researcher & Creative Developer",
   description:
     "Portfolio of Nahyun Kim — AI security researcher at ACE Lab, Hanyang University. Adversarial ML, audio security, creative development.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
