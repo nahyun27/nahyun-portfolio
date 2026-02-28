@@ -80,8 +80,8 @@ export default function ProjectsSection() {
           03 — Projects
         </motion.p>
         <AnimatedHeading
-          text="What I've|Built."
-          highlightWords={["Built."]}
+          text="Selected|Work."
+          highlightWords={["Work."]}
           className="mb-14"
           style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
           delay={0.1}
