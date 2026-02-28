@@ -11,7 +11,7 @@ const PAPERS = [
     title: "AdvChameleon",
     subtitle: "Universal adversarial audio attacks that transfer across models & speech recognition systems.",
     venue: "Patent, In submission",
-    tags: ["Audio AI", "Adversarial ML", "Universal"],
+    tags: ["Audio Attack", "Adversarial Patch"],
   },
   {
     id: "02",
@@ -19,7 +19,7 @@ const PAPERS = [
     // subtitle: "Dynamic Perturbation Intensity Attack — a frequency-domain adversarial audio attack.",
     subtitle: "A novel adversarial attack proposing a method to adjust perturbation intensity by exploiting temporal characteristics.",
     venue: "Patent, In Review",
-    tags: ["Patent", "Audio Attack", "Deep Learning"],
+    tags: ["Video Attack", "Adversarial Attack"],
   },
   {
     id: "03",

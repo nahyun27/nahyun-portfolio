@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const TAGS = ["#ProblemSolver", "#AdversarialML", "#CreativeDeveloper", "#ENTJ"];
+const TAGS = ["#ProblemSolver", "#EarlyAdopter", "#CreativeDeveloper", "#ENTJ"];
 const WORDS = ["NAHYUN", "KIM"];
 
 export default function HeroSection() {

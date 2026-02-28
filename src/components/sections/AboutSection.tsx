@@ -12,9 +12,9 @@ const STATS = [
 ];
 
 const SKILLS = [
-  "Python", "PyTorch", "TensorFlow", "scikit-learn",
-  "React", "Next.js", "TypeScript", "Three.js",
-  "React Native", "wav2vec2", "YOLOv5/v8", "C/C++", "Docker",
+  "C/C++", "Python", "JAVA", "Javascript", "TypeScript", "PyTorch", "TensorFlow", "scikit-learn",
+  "React", "Next.js", "Three.js", "Node.js", "TailwindCSS", "React Native",
+  "wav2vec2", "YOLOv5/v8", "Docker", "Figma"
 ];
 
 const CERTS = [
@@ -40,7 +40,7 @@ function Counter({ target, suffix, active }: { target: number; suffix: string; a
   return <>{val}{suffix}</>;
 }
 
-function StatCard({ s, i, inView }: { s: any; i: number; inView: boolean }) {
+function StatCard({ s, i, inView }: { s: { num: number; label: string; suffix: string; }; i: number; inView: boolean }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -85,6 +85,7 @@ function StatCard({ s, i, inView }: { s: any; i: number; inView: boolean }) {
 export default function AboutSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: false, amount: 0.15 });
+  const [activeFilter, setActiveFilter] = useState<"ALL" | "RESEARCH" | "DEVELOP">("ALL");
   const f = (delay = 0) => ({
     initial: { opacity: 0, y: 32 },
     animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 },
@@ -173,35 +174,139 @@ export default function AboutSection() {
 
             {/* Tech Stack */}
             <motion.div {...f(0.22)}>
-              <p className="text-xs tracking-[0.28em] uppercase mb-5"
-                style={{ color: "#3a3a3a", fontFamily: "'Inter', sans-serif", marginBottom: "10px" }}>
-                Tech Stack
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {SKILLS.map((sk, i) => (
-                  <motion.span key={sk}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.3 + i * 0.03, type: "spring", stiffness: 300 }}
-                    whileHover={{
-                      y: -5,
-                      scale: 1.05,
-                      backgroundColor: "rgba(0,201,167,0.12)",
-                      borderColor: "rgba(0,201,167,0.5)",
-                      color: "#00C9A7",
-                      boxShadow: "0px 10px 20px -10px rgba(0,201,167,0.5)"
+              <div className="flex justify-between items-center w-full mb-5" style={{ marginBottom: "15px" }}>
+                <p className="text-xs tracking-[0.28em] uppercase m-0"
+                  style={{ color: "#3a3a3a", fontFamily: "'Inter', sans-serif" }}>
+                  Tech Stack
+                </p>
+                <div className="flex items-center gap-4">
+                  <motion.button
+                    onClick={() => setActiveFilter(prev => prev === "RESEARCH" ? "ALL" : "RESEARCH")}
+                    className="flex items-center gap-1.5 transition-all duration-300 outline-none cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    onHoverStart={(e) => {
+                      const target = e.currentTarget as HTMLElement;
+                      if (!target) return;
+                      const dot = target.querySelector('.research-dot') as HTMLElement;
+                      const text = target.querySelector('.research-text') as HTMLElement;
+                      if (dot) { dot.style.backgroundColor = '#00C9A7'; dot.style.boxShadow = '0 0 8px #00C9A7'; }
+                      if (text) { text.style.color = '#00C9A7'; text.style.textShadow = '0 0 10px rgba(0,201,167,0.5)'; }
                     }}
-                    className="text-sm px-6 py-3 rounded-full cursor-default transition-all duration-300"
-                    style={{
-                      backgroundColor: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.06)",
-                      color: "#888",
-                      fontFamily: "'Inter', sans-serif",
-                      padding: "1px 13px",
-                    }}>
-                    {sk}
-                  </motion.span>
-                ))}
+                    onHoverEnd={(e) => {
+                      const target = e.currentTarget as HTMLElement;
+                      if (!target) return;
+                      const dot = target.querySelector('.research-dot') as HTMLElement;
+                      const text = target.querySelector('.research-text') as HTMLElement;
+                      if (activeFilter !== "RESEARCH") {
+                        if (dot) { dot.style.backgroundColor = 'rgba(0,201,167,0.3)'; dot.style.boxShadow = 'none'; }
+                        if (text) { text.style.color = '#555'; text.style.textShadow = 'none'; }
+                      }
+                    }}
+                  >
+                    <span className="research-dot w-[6px] h-[6px] rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor: activeFilter === "RESEARCH" ? "#00C9A7" : "rgba(0,201,167,0.3)",
+                        boxShadow: activeFilter === "RESEARCH" ? "0 0 8px #00C9A7" : "none"
+                      }}
+                    />
+                    <span className="research-text text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-colors duration-300"
+                      style={{
+                        color: activeFilter === "RESEARCH" ? "#00C9A7" : "#555",
+                        fontFamily: "'Inter', sans-serif",
+                        textShadow: activeFilter === "RESEARCH" ? "0 0 10px rgba(0,201,167,0.5)" : "none"
+                      }}>
+                      Research
+                    </span>
+                  </motion.button>
+                  <motion.button
+                    onClick={() => setActiveFilter(prev => prev === "DEVELOP" ? "ALL" : "DEVELOP")}
+                    className="flex items-center gap-1.5 transition-all duration-300 outline-none cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    onHoverStart={(e) => {
+                      const target = e.currentTarget as HTMLElement;
+                      if (!target) return;
+                      const dot = target.querySelector('.develop-dot') as HTMLElement;
+                      const text = target.querySelector('.develop-text') as HTMLElement;
+                      if (dot) { dot.style.backgroundColor = '#B388FF'; dot.style.boxShadow = '0 0 8px #B388FF'; }
+                      if (text) { text.style.color = '#B388FF'; text.style.textShadow = '0 0 10px rgba(179,136,255,0.5)'; }
+                    }}
+                    onHoverEnd={(e) => {
+                      const target = e.currentTarget as HTMLElement;
+                      if (!target) return;
+                      const dot = target.querySelector('.develop-dot') as HTMLElement;
+                      const text = target.querySelector('.develop-text') as HTMLElement;
+                      if (activeFilter !== "DEVELOP") {
+                        if (dot) { dot.style.backgroundColor = 'rgba(179,136,255,0.3)'; dot.style.boxShadow = 'none'; }
+                        if (text) { text.style.color = '#555'; text.style.textShadow = 'none'; }
+                      }
+                    }}
+                  >
+                    <span className="develop-dot w-[6px] h-[6px] rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor: activeFilter === "DEVELOP" ? "#B388FF" : "rgba(179,136,255,0.3)",
+                        boxShadow: activeFilter === "DEVELOP" ? "0 0 8px #B388FF" : "none"
+                      }}
+                    />
+                    <span className="develop-text text-[10px] sm:text-[11px] font-bold tracking-wider uppercase transition-colors duration-300"
+                      style={{
+                        color: activeFilter === "DEVELOP" ? "#B388FF" : "#555",
+                        fontFamily: "'Inter', sans-serif",
+                        textShadow: activeFilter === "DEVELOP" ? "0 0 10px rgba(179,136,255,0.5)" : "none"
+                      }}>
+                      Develop
+                    </span>
+                  </motion.button>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {SKILLS.map((sk, i) => {
+                  const isResearch = ["Python", "PyTorch", "TensorFlow", "scikit-learn", "wav2vec2", "YOLOv5/v8", "Docker", "C/C++"].includes(sk);
+                  const isDevelop = ["React", "Next.js", "TypeScript", "Three.js", "React Native", "JAVA", "Javascript", "Node.js", "TailwindCSS", "Figma"].includes(sk);
+
+                  let isActive = true;
+                  if (activeFilter === "RESEARCH" && !isResearch) isActive = false;
+                  if (activeFilter === "DEVELOP" && !isDevelop) isActive = false;
+
+                  const themeColor = isDevelop ? "#B388FF" : "#00C9A7";
+                  const themeBg = isDevelop ? "rgba(179,136,255,0.12)" : "rgba(0,201,167,0.12)";
+                  const themeBorder = isDevelop ? "rgba(179,136,255,0.5)" : "rgba(0,201,167,0.5)";
+                  const themeShadow = isDevelop ? "0px 10px 20px -10px rgba(179,136,255,0.5)" : "0px 10px 20px -10px rgba(0,201,167,0.5)";
+
+                  const currentBg = activeFilter !== "ALL" && isActive ? themeBg : "rgba(255,255,255,0.03)";
+                  const currentBorderColor = activeFilter !== "ALL" && isActive ? themeBorder : "rgba(255,255,255,0.06)";
+                  const currentColor = activeFilter !== "ALL" && isActive ? themeColor : "#888";
+                  const currentShadow = activeFilter !== "ALL" && isActive ? themeShadow : "none";
+                  const currentOpacity = activeFilter !== "ALL" && !isActive ? 0.15 : 1;
+
+                  return (
+                    <motion.span key={sk}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={inView ? {
+                        opacity: currentOpacity, y: 0,
+                        backgroundColor: currentBg,
+                        borderColor: currentBorderColor,
+                        color: currentColor,
+                        boxShadow: currentShadow
+                      } : { opacity: 0, y: 10 }}
+                      transition={{ delay: activeFilter === "ALL" ? 0.3 + i * 0.03 : 0, type: "spring", stiffness: 300 }}
+                      whileHover={{
+                        y: -5,
+                        scale: 1.05,
+                        backgroundColor: themeBg,
+                        borderColor: themeBorder,
+                        color: themeColor,
+                        boxShadow: themeShadow
+                      }}
+                      className="text-sm px-6 py-3 rounded-full cursor-default transition-all duration-300"
+                      style={{
+                        border: `1px solid ${currentBorderColor}`,
+                        fontFamily: "'Inter', sans-serif",
+                        padding: "1px 13px",
+                      }}>
+                      {sk}
+                    </motion.span>
+                  )
+                })}
               </div>
             </motion.div>
 
