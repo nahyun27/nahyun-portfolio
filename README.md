@@ -3,16 +3,10 @@
 > Personal portfolio of Nahyun Kim, AI Security Researcher & Creative Developer.
 
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel)](https://nahyun.vercel.app)
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
-[![License](https://img.shields.io/badge/License-MIT-00C9A7?style=flat-square)](LICENSE)
-
----
 
 ## ✨ Overview
 
-A minimal, single-page portfolio built with a strict 3-color palette — **cream, black, and mint** — with smooth scroll animations, drag-to-explore project sliders, and a custom cursor. Designed to be clean, fast, and memorable.
-
-**Live:** [nahyun-portfolio.vercel.app](https://nahyun-portfolio.vercel.app)
+A minimal, single-page portfolio built with smooth scroll animations, drag-to-explore project sliders, and a custom cursor. Designed to be clean, fast, and memorable.
 
 ---
 
@@ -51,43 +45,6 @@ Card bg     #FFFFFF  White
 
 ---
 
-## 🚀 Getting Started
-
-```bash
-git clone https://github.com/nahyun27/nahyun-portfolio.git
-cd nahyun-portfolio
-npm install
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000)
-
----
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── layout.tsx       # Global layout, fonts, cursor
-│   ├── page.tsx         # Main page (all sections)
-│   └── globals.css
-├── components/
-│   ├── Cursor.tsx       # Custom cursor
-│   ├── Navbar.tsx
-│   ├── Hero.tsx
-│   ├── About.tsx
-│   ├── Research.tsx
-│   ├── Projects.tsx
-│   ├── Creative.tsx
-│   ├── Awards.tsx
-│   ├── Footer.tsx
-│   └── DragSlider.tsx   # Horizontal drag-to-scroll
-└── data/
-    └── portfolio.ts     # All project/award data
-```
-
----
 
 ## 📬 Contact
 
