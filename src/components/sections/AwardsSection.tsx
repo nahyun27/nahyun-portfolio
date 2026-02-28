@@ -32,7 +32,7 @@ export default function AwardsSection() {
                 05 — Experiences
               </motion.p>
               <AnimatedHeading
-                text="Awards &|Experiences."
+                text="Awards &|Exp."
                 className="mb-8"
                 style={{ fontSize: "clamp(1.8rem, 8vw, 4rem)" }}
                 delay={0.1}

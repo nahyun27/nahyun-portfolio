@@ -2,7 +2,7 @@
 
 > Personal portfolio of Nahyun Kim, AI Security Researcher & Creative Developer.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel)](https://nahyun-portfolio.vercel.app)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel)](https://nahyun.vercel.app)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![License](https://img.shields.io/badge/License-MIT-00C9A7?style=flat-square)](LICENSE)
 
