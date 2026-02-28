@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
@@ -46,9 +46,28 @@ const PROJECTS = [
   },
 ];
 
-function ProjectCard({ project, index, inView }: { project: any, index: number, inView: boolean }) {
+function ProjectCard({ project, index, inView }: { project: { id: string, title: string, subtitle: string, tags: string[], github?: string, demo?: string, color: string, image?: string }, index: number, inView: boolean }) {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    if (project.image && canvasRef.current) {
+      const img = new Image();
+      if (project.image.startsWith('http')) {
+        img.crossOrigin = "anonymous";
+      }
+      img.src = project.image;
+      img.onload = () => {
+        const ctx = canvasRef.current?.getContext("2d");
+        if (ctx && canvasRef.current) {
+          canvasRef.current.width = img.width;
+          canvasRef.current.height = img.height;
+          ctx.drawImage(img, 0, 0);
+        }
+      };
+    }
+  }, [project.image]);
 
   return (
     <motion.div
@@ -124,11 +143,15 @@ function ProjectCard({ project, index, inView }: { project: any, index: number, 
         {project.image && (
           <div className="relative w-full aspect-[16/9] md:aspect-video rounded-xl overflow-hidden mb-6 border z-10 bg-[#0A0A0C]"
             style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+            <canvas
+              ref={canvasRef}
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${isHovered ? 'opacity-0 scale-105' : 'opacity-100 scale-100'}`}
+            />
             <img
               src={project.image}
               alt={project.title}
               loading="lazy"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${isHovered ? 'opacity-100 scale-105' : 'opacity-0 scale-100'}`}
             />
           </div>
         )}

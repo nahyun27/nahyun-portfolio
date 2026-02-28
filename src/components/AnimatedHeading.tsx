@@ -9,9 +9,10 @@ interface AnimatedHeadingProps {
   style?: React.CSSProperties;
   delay?: number;
   highlightWords?: string[];
+  gradientHighlight?: boolean;
 }
 
-export default function AnimatedHeading({ text, className = "", style = {}, delay = 0.1, highlightWords = [] }: AnimatedHeadingProps) {
+export default function AnimatedHeading({ text, className = "", style = {}, delay = 0.1, highlightWords = [], gradientHighlight = false }: AnimatedHeadingProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: false, amount: 0.2 });
 
@@ -39,7 +40,18 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
                 <span key={wordIndex} className="inline-block" style={{ overflow: "clip", padding: "0.1em 0 0.3em", margin: "0 0.22em -0.3em 0" }}>
                   <motion.span
                     className="inline-block"
-                    style={{ color: isHighlighted ? "#00C9A7" : "inherit" }}
+                    style={
+                      isHighlighted
+                        ? (gradientHighlight
+                          ? {
+                            background: "linear-gradient(135deg, #00C9A7 0%, #B388FF 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                          }
+                          : { color: "#00C9A7" })
+                        : { color: "inherit" }
+                    }
                     initial={{ y: "110%", rotateZ: 2 }}
                     animate={inView ? { y: 0, rotateZ: 0 } : { y: "110%", rotateZ: 2 }}
                     transition={{

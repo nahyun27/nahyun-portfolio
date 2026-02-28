@@ -10,7 +10,7 @@ export default function FooterSection() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   return (
-    <footer ref={ref} className="relative pt-40 pb-12 overflow-hidden flex flex-col justify-end z-10"
+    <footer ref={ref} className="relative pt-64 pb-12 overflow-hidden flex flex-col justify-end z-10"
       style={{ backgroundColor: "transparent", minHeight: "80vh" }}
       onMouseMove={(e) => {
         if (!ref.current) return;
@@ -50,15 +50,14 @@ export default function FooterSection() {
             </p>
           </motion.div>
 
-          <div className="relative mb-16">
+          <div className="flex flex-col items-center mb-12">
             <AnimatedHeading
-              // text="Let's build|something|extraordinary."
-              text="Let's build|something|together."
-              // highlightWords={["extraordinary."]}
-              highlightWords={["together."]}
-              className="leading-[1.1]"
-              style={{ fontSize: "clamp(2.5rem, 9vw, 7.5rem)", letterSpacing: "-0.02em" }}
-              delay={0.2}
+              text="Let's build|extraordinary|together."
+              highlightWords={["extraordinary"]}
+              gradientHighlight={true}
+              className="leading-[1.1] z-10"
+              style={{ fontSize: "clamp(2rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
+              delay={0.3}
             />
           </div>
 
