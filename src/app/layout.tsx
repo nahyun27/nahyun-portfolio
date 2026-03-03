@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: "Nahyun Kim Portfolio",
     images: [
       {
-        url: "https://nahyun.vercel.app/og.png",
+        url: "/og.png",
         width: 1200,
         height: 630,
       },
