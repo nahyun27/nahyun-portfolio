@@ -52,11 +52,11 @@ export default function FooterSection() {
 
           <div className="flex flex-col items-center mb-12">
             <AnimatedHeading
-              text="Let's build|extraordinary|together."
+              text="Let's build|something|extraordinary|together."
               highlightWords={["extraordinary"]}
               gradientHighlight={true}
               className="leading-[1.1] z-10"
-              style={{ fontSize: "clamp(2rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(2rem, 6vw, 4rem)", letterSpacing: "-0.02em" }}
               delay={0.3}
             />
           </div>
