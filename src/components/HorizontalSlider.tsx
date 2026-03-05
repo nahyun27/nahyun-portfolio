@@ -36,7 +36,7 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
       onMouseMove={handleMouseMove}
       className="group relative flex flex-col gap-3 shrink-0 rounded-2xl overflow-hidden"
       style={{
-        width: 300,
+        width: 340,
         minHeight: 260,
         padding: "26px",
         backgroundColor: "#141417",
@@ -73,18 +73,16 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
           WebkitMask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
           WebkitMaskComposite: 'xor',
           maskComposite: 'exclude',
+          padding: '1px',
         }}
       />
 
       {/* Content wrapper with relative z-index so it sits above the background gradient */}
       <div className="relative z-10 flex flex-col h-full gap-3">
-        {card.emoji && <span style={{ fontSize: 28, lineHeight: 1 }}>{card.emoji}</span>}
+        {/* Top Row: Emoji and Links */}
+        <div className="flex items-center justify-between gap-4">
+          {card.emoji && <span style={{ fontSize: 28, lineHeight: 1 }}>{card.emoji}</span>}
 
-        <div className="flex items-start justify-between gap-2">
-          <h3 className="font-bold text-lg leading-tight flex-1"
-            style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6" }}>
-            {card.title}
-          </h3>
           <div className="flex items-center gap-2">
             {/* App Store (Apple Logo) */}
             {card.appstore && (
@@ -131,6 +129,12 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
             </span>
           </div>
         </div>
+
+        {/* Title row */}
+        <h3 className="font-bold text-lg leading-tight"
+          style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6" }}>
+          {card.title}
+        </h3>
 
         <div className="text-sm leading-relaxed flex-1"
           style={{ color: "#666", fontFamily: "'Inter', sans-serif" }}>
