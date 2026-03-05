@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import HorizontalSlider from "@/components/HorizontalSlider";
+import InfiniteCarousel from "@/components/InfiniteCarousel";
 import AnimatedHeading from "@/components/AnimatedHeading";
 
 const PROJECTS = [
@@ -142,7 +142,7 @@ export default function ProjectsSection() {
           style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
           delay={0.1}
         />
-        <HorizontalSlider cards={PROJECTS} />
+        <InfiniteCarousel cards={PROJECTS} />
       </div>
     </section>
   );

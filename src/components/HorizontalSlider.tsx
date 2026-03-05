@@ -36,7 +36,7 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
       onMouseMove={handleMouseMove}
       className="group relative flex flex-col gap-3 shrink-0 rounded-2xl overflow-hidden"
       style={{
-        width: 340,
+        width: 280,
         minHeight: 260,
         padding: "26px",
         backgroundColor: "#141417",
