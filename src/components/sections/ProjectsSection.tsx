@@ -113,13 +113,6 @@ const PROJECTS = [
     tags: ["Next.js", "Tailwind CSS", "i18n"],
     demo: "https://ace.hanyang.ac.kr"
   },
-  {
-    id: "09",
-    emoji: "🛵",
-    title: "Deli-Go",
-    subtitle: "Delivery carpooling app — Grand Prize winner at 아이디어톤.",
-    tags: ["React Native", "Maps API"]
-  },
 ];
 
 export default function ProjectsSection() {
