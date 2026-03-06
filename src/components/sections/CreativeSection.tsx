@@ -77,8 +77,8 @@ export default function CreativeSection() {
     }
   };
 
-  return (
-    <section id="creative" ref={ref} className="py-16 md:min-h-screen md:flex md:items-center md:py-40 relative z-10"
+  return ( 
+    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
@@ -100,7 +100,7 @@ export default function CreativeSection() {
         </div>
 
         {/* ── Mobile Tab Navigation (lg:hidden) ── */}
-        <div className="flex lg:hidden gap-2 mb-6 flex-wrap">
+        <div className="flex lg:hidden gap-2 mb-6 flex-wrap" style={{ marginBottom: "20px", marginTop: "20px" }}>
           {PROJECTS.map((project) => {
             const isActive = selectedId === project.id;
             return (
