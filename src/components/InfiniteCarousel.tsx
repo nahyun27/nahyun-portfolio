@@ -221,7 +221,8 @@ export default function InfiniteCarousel({ cards }: { cards: Card[] }) {
       style={{ touchAction: "pan-y" }}>
 
       <motion.div
-        className="w-full h-full relative cursor-grab active:cursor-grabbing"
+        className="w-full h-full relative"
+        style={{ touchAction: "pan-y", cursor: "grab" }}
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={0.1}
