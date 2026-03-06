@@ -84,7 +84,7 @@ function StatCard({ s, i, inView }: { s: { num: number; label: string; suffix: s
 
 export default function AboutSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.15 });
+  const inView = useInView(ref, { once: true, amount: 0.15 });
   const [activeFilter, setActiveFilter] = useState<"ALL" | "RESEARCH" | "DEVELOP">("ALL");
   const f = (delay = 0) => ({
     initial: { opacity: 0, y: 32 },

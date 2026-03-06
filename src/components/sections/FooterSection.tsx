@@ -6,7 +6,7 @@ import AnimatedHeading from "@/components/AnimatedHeading";
 
 export default function FooterSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.3 });
+  const inView = useInView(ref, { once: true, amount: 0.3 });
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   return (

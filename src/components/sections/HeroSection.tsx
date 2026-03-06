@@ -8,7 +8,7 @@ const WORDS = ["NAHYUN", "KIM"];
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.1 });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
     <section
