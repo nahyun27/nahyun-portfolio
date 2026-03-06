@@ -56,7 +56,7 @@ export default function FooterSection() {
               highlightWords={["extraordinary"]}
               gradientHighlight={true}
               className="leading-[1.1] z-10"
-              style={{ fontSize: "clamp(2rem, 6vw, 4rem)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(2rem, 6vw, 4rem)", letterSpacing: "-0.02em", marginBottom: "30px", marginTop: "30px" }}
               delay={0.3}
             />
           </div>
@@ -94,7 +94,7 @@ export default function FooterSection() {
 
         {/* Footer Bottom Setup */}
         <div className="flex flex-col lg:flex-row items-center justify-between gap-10 w-full pt-10 border-t relative"
-          style={{ borderColor: 'rgba(255,255,255,0.06)', marginTop: "100px" }}>
+          style={{ borderColor: 'rgba(255,255,255,0.06)', marginTop: "100px", padding: "20px 0px" }}>
 
           <div className="flex flex-col items-center lg:items-start gap-1">
             <h2 className="text-3xl font-black tracking-tighter" style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6" }}>NK.</h2>

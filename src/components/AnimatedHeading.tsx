@@ -33,11 +33,11 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
       {lines.map((line, lineIndex) => {
         const words = line.split(" ").filter(w => w !== "");
         return (
-          <span key={lineIndex} className="block" style={{ overflow: "clip", padding: "0.1em 0.15em 0.25em", margin: "-0.1em -0.15em" }}>
+          <span key={lineIndex} className="block w-full overflow-hidden" style={{ lineHeight: 1.1, paddingBottom: "0.1em" }}>
             {words.map((word, wordIndex) => {
               const isHighlighted = highlightWords.some(hw => word.includes(hw));
               return (
-                <span key={wordIndex} className="inline-block" style={{ overflow: "clip", padding: "0.1em 0 0.3em", margin: "0 0.22em -0.3em 0" }}>
+                <span key={wordIndex} className="inline-block" style={{ overflow: "hidden", padding: "0.1em 0", margin: "0 0.22em 0 0", verticalAlign: "bottom", lineHeight: 1 }}>
                   <motion.span
                     className="inline-block"
                     style={

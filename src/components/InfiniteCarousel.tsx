@@ -23,11 +23,13 @@ const WEB_SVG = (<svg className="w-[18px] h-[18px] shrink-0" fill="none" stroke=
 function SpotlightCarouselCard({
   card,
   diff,
-  onClick
+  onClick,
+  isMobile
 }: {
   card: Card;
   diff: number;
   onClick: () => void;
+  isMobile: boolean;
 }) {
   const isCenter = diff === 0;
 
@@ -38,20 +40,35 @@ function SpotlightCarouselCard({
   let blur = 0;
   let zIndex = 10;
 
+  // Responsive Variables
+  const baseWidth = isMobile ? 310 : 420;
+  const baseHeight = isMobile ? 350 : 380;
+
+  // Responsive offsets
+  const off1 = isMobile ? 220 : 360;
+  const off2 = isMobile ? 380 : 640;
+  const offOut = isMobile ? 550 : 900;
+
+  // Responsive edge opacities/scales
+  const scale1 = isMobile ? 0.85 : 0.92;
+  const scale2 = isMobile ? 0.75 : 0.82;
+  const opac1 = isMobile ? 0.6 : 0.5;
+  const opac2 = isMobile ? 0.15 : 0.2;
+
   if (diff === 0) {
-    x = 0; scale = 1.05; opacity = 1; blur = 0; zIndex = 10;
+    x = 0; scale = isMobile ? 1 : 1.05; opacity = 1; blur = 0; zIndex = 10;
   } else if (diff === 1) {
-    x = 360; scale = 0.92; opacity = 0.5; blur = 4; zIndex = 5;
+    x = off1; scale = scale1; opacity = opac1; blur = 4; zIndex = 5;
   } else if (diff === -1) {
-    x = -360; scale = 0.92; opacity = 0.5; blur = 4; zIndex = 5;
+    x = -off1; scale = scale1; opacity = opac1; blur = 4; zIndex = 5;
   } else if (diff === 2) {
-    x = 640; scale = 0.82; opacity = 0.2; blur = 8; zIndex = 1;
+    x = off2; scale = scale2; opacity = opac2; blur = 8; zIndex = 1;
   } else if (diff === -2) {
-    x = -640; scale = 0.82; opacity = 0.2; blur = 8; zIndex = 1;
+    x = -off2; scale = scale2; opacity = opac2; blur = 8; zIndex = 1;
   } else if (diff > 2) {
-    x = 900; scale = 0.5; opacity = 0; blur = 12; zIndex = -1;
+    x = offOut; scale = 0.5; opacity = 0; blur = 12; zIndex = -1;
   } else {
-    x = -900; scale = 0.5; opacity = 0; blur = 12; zIndex = -1;
+    x = -offOut; scale = 0.5; opacity = 0; blur = 12; zIndex = -1;
   }
 
   return (
@@ -60,13 +77,13 @@ function SpotlightCarouselCard({
       animate={{ x, scale, opacity, filter: `blur(${blur}px)`, zIndex }}
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
       onClick={onClick}
-      className="absolute top-1/2 left-1/2 flex flex-col gap-4 rounded-3xl overflow-hidden transition-colors duration-500"
+      className={`absolute top-1/2 left-1/2 flex flex-col gap-4 rounded-3xl overflow-hidden transition-colors duration-500`}
       style={{
-        width: 420,  // Base width for the center card before scale
-        height: 380,
-        x: "-50%",
-        y: "-50%",
-        padding: "32px",
+        width: baseWidth,  // Base width for the center card before scale
+        height: baseHeight,
+        marginTop: baseHeight / -2,
+        marginLeft: baseWidth / -2,
+        padding: isMobile ? "24px" : "32px",
         backgroundColor: "#1a1a2e",
         border: isCenter ? "1px solid rgba(0,201,167,0.4)" : "1px solid rgba(255,255,255,0.05)",
         boxShadow: isCenter ? "0 0 50px rgba(0,201,167,0.15), inset 0 0 20px rgba(0,201,167,0.05)" : "none",
@@ -152,7 +169,20 @@ function SpotlightCarouselCard({
 
 export default function InfiniteCarousel({ cards }: { cards: Card[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const numCards = cards.length;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Set initial value
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prev) => prev + 1);
@@ -212,6 +242,7 @@ export default function InfiniteCarousel({ cards }: { cards: Card[] }) {
               key={card.id}
               card={card}
               diff={diff}
+              isMobile={isMobile}
               onClick={() => {
                 if (diff !== 0) {
                   setCurrentIndex((prev) => prev + diff);

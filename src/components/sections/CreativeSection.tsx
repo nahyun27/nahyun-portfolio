@@ -60,10 +60,22 @@ const DEMO_SVG = (
 
 export default function CreativeSection() {
   const ref = useRef<HTMLElement>(null);
+  const detailPanelRef = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: false, amount: 0.1 });
 
   const [selectedId, setSelectedId] = useState(PROJECTS[0].id);
   const selectedProject = PROJECTS.find(p => p.id === selectedId) || PROJECTS[0];
+
+  const handleSelectProject = (id: string) => {
+    setSelectedId(id);
+
+    // On mobile/tablet, smoothly scroll down to the detail panel
+    if (window.innerWidth < 1024) {
+      setTimeout(() => {
+        detailPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
+    }
+  };
 
   return (
     <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
@@ -100,7 +112,7 @@ export default function CreativeSection() {
                   animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
                   whileHover={{ x: 6 }}
                   transition={{ delay: 0.1 + i * 0.08, duration: 0.5, type: "spring", stiffness: 300, damping: 25 }}
-                  onClick={() => setSelectedId(project.id)}
+                  onClick={() => handleSelectProject(project.id)}
                   className="group relative w-full text-left outline-none focus:outline-none"
                 >
                   {/* Row */}
@@ -199,16 +211,16 @@ export default function CreativeSection() {
 
           {/* ── Right: Detail Panel ── */}
           <motion.div
+            ref={detailPanelRef}
             animate={{ borderColor: `${selectedProject.color}30` }}
             whileHover={{ y: -6, boxShadow: `0 40px 100px rgba(0,0,0,0.8), 0 0 100px ${selectedProject.color}15` }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[48%] rounded-3xl flex flex-col overflow-hidden transition-shadow duration-500"
+            className="w-full lg:w-[48%] mt-8 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-shadow duration-500 h-auto"
             style={{
               backgroundColor: "#0D0D10",
               border: `1px solid ${selectedProject.color}20`,
               boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 80px ${selectedProject.color}08`,
-              minHeight: "520px",
-              padding: "1.7rem 2rem",
+              padding: "1.2rem", // Keep reduced padding
             }}
           >
             <AnimatePresence mode="wait">
@@ -222,18 +234,18 @@ export default function CreativeSection() {
               >
 
                 {/* Content */}
-                <div className="flex-1 px-8 pb-8 pt-5 md:px-10 md:pb-10 flex flex-col gap-3">
+                <div className="flex-1 px-4 pb-4 pt-3 md:px-8 md:pb-8 flex flex-col gap-4">
                   {/* Title row */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex-1 min-w-0">
                       <span
-                        className="text-[10px] font-black tracking-[0.2em] uppercase block mb-2"
+                        className="text-[10px] font-black tracking-[0.2em] uppercase block mb-1.5"
                         style={{ color: selectedProject.color, fontFamily: "'Inter', sans-serif" }}
                       >
                         {selectedProject.id} / {PROJECTS.length.toString().padStart(2, "0")}
                       </span>
                       <h3
-                        className="font-black text-2xl md:text-3xl leading-tight"
+                        className="font-black text-[22px] leading-tight break-words pr-2 md:text-3xl"
                         style={{ fontFamily: "'Syne', sans-serif", color: "#F4F1EB", letterSpacing: "-0.02em" }}
                       >
                         {selectedProject.title}
@@ -294,13 +306,13 @@ export default function CreativeSection() {
                   )}
 
                   {/* Description */}
-                  <p className="text-sm md:text-base leading-[1.75] flex-1"
-                    style={{ color: "#666", fontFamily: "'Inter', sans-serif" }}>
+                  <p className="text-[13px] md:text-base mb-1 leading-[1.7] flex-1"
+                    style={{ color: "#777", fontFamily: "'Inter', sans-serif" }}>
                     {selectedProject.subtitle}
                   </p>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-2 pt-2 border-t" style={{ borderColor: "rgba(255,255,255,0.05)", paddingTop: "10px" }}>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                     {selectedProject.tags.map((tag: string) => (
                       <span key={tag}
                         className="px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] rounded-full"

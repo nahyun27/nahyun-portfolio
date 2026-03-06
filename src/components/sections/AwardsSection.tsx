@@ -9,8 +9,8 @@ const EXPERIENCES = [
   { year: "2025", title: "Patent: Audio Misclassification", org: "특허) 배음 구조를 활용한 오디오 오분류 유도 방법 및 이를 위한 컴퓨터 장치" },
   { year: "2024", title: "Program: Adjusting Perturbation Intensity", org: "프로그램 등록) 시간적 변화량을 활용한 섭동 강도 조정 적대적 공격" },
   { year: "2024", title: "NRF Graduate Research Fellowship", org: "한국연구재단 이공분야 석사과정생 연구장려금 선정" },
-  { year: "2021", title: "Excellence Award — SW Startup Ideathon", org: "제7회 한양대학교 ERICA SW 창업 아이디어톤 우수상 - 🛵 Deli-Go (Delivery carpooling app)" },
-  { year: "2020", title: "Grand Prize — SW Startup Makerthon", org: "제2회 한양대학교 ERICA SW 창업 메이커톤 대상" },
+  { year: "2021", title: "Excellence Award — SW Startup Ideathon", org: "제7회 한양대학교 ERICA SW 창업 아이디어톤 우수상" },
+  { year: "2020", title: "Grand Prize — SW Startup Makerthon", org: "제2회 한양대학교 ERICA SW 창업 메이커톤 대상 - 🛵 Deli-Go (Delivery carpooling app)" },
   { year: "2020", title: "Research Participant — SW Convergence R&D", org: "한양대학교 ERICA SW융합연구개발 과제 참여" },
   { year: "2020", title: "Mentor — Science Gifted SW Hackathon", org: "대학부설 과학영재 교육원 SW 해커톤 대회 멘토 활동" },
 ];
