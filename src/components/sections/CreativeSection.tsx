@@ -78,7 +78,7 @@ export default function CreativeSection() {
   };
 
   return (
-    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
+    <section id="creative" ref={ref} className="py-16 md:min-h-screen md:flex md:items-center md:py-40 relative z-10"
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
@@ -99,10 +99,36 @@ export default function CreativeSection() {
           />
         </div>
 
+        {/* ── Mobile Tab Navigation (lg:hidden) ── */}
+        <div className="flex lg:hidden gap-2 mb-6 flex-wrap">
+          {PROJECTS.map((project) => {
+            const isActive = selectedId === project.id;
+            return (
+              <button
+                key={project.id}
+                onClick={() => setSelectedId(project.id)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition-all duration-300"
+                style={{
+                  padding: "2px 7px",
+                  fontFamily: "'Inter', sans-serif",
+                  color: isActive ? project.color : "rgba(255,255,255,0.25)",
+                  border: `1px solid ${isActive ? project.color + "60" : "rgba(255,255,255,0.08)"}`,
+                  backgroundColor: isActive ? project.color + "12" : "transparent",
+                }}
+              >
+                <span>{project.id}</span>
+                <span className="font-medium" style={{ color: isActive ? "#E0D9D0" : "rgba(255,255,255,0.25)", fontSize: "11px" }}>
+                  {project.title.split(" ").slice(0, 3).join(" ")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Master-Detail Grid */}
         <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 items-stretch">
-          {/* ── Left: Project List ── */}
-          <div className="w-full lg:w-[40%] flex flex-col">
+          {/* ── Left: Project List (Desktop only) ── */}
+          <div className="w-full lg:w-[40%] flex-col hidden lg:flex">
             {PROJECTS.map((project, i) => {
               const isActive = selectedId === project.id;
               return (
@@ -215,7 +241,7 @@ export default function CreativeSection() {
             animate={{ borderColor: `${selectedProject.color}30` }}
             whileHover={{ y: -6, boxShadow: `0 40px 100px rgba(0,0,0,0.8), 0 0 100px ${selectedProject.color}15` }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[48%] mt-8 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-shadow duration-500 h-auto"
+            className="w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-shadow duration-500 h-auto"
             style={{
               backgroundColor: "#0D0D10",
               border: `1px solid ${selectedProject.color}20`,
