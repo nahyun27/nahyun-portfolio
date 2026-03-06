@@ -46,33 +46,53 @@ export default function AwardsSection() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                 transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-                className="group flex flex-col-reverse sm:flex-row sm:items-center justify-between py-8 pr-4 sm:pr-8 gap-4 sm:gap-10 border-b cursor-default transition-all duration-300"
+                className="group flex flex-row sm:flex-row sm:items-center justify-between py-2 sm:py-3 pr-4 sm:pr-8 gap-2 sm:gap-10 border-b cursor-default transition-all duration-300"
                 style={{ borderColor: 'rgba(255,255,255,0.05)', padding: '10px' }}
                 onMouseEnter={(e) => {
+                  if ('ontouchstart' in window) return;
                   const el = e.currentTarget as HTMLDivElement;
                   el.style.backgroundColor = "rgba(0,201,167,0.04)";
                   el.style.paddingLeft = "24px";
                 }}
                 onMouseLeave={(e) => {
+                  if ('ontouchstart' in window) return;
                   const el = e.currentTarget as HTMLDivElement;
                   el.style.backgroundColor = "transparent";
                   el.style.paddingLeft = "0px";
                 }}
               >
-                <div className="flex items-start gap-4 sm:gap-5" >
+                <div className="flex items-start gap-3 sm:gap-5 flex-1 min-w-0">
                   <div className="mt-1 shrink-0 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300 hidden sm:block"
                     style={{ backgroundColor: "#00C9A7" }} />
-                  <div>
-                    <h3 className="font-bold text-lg md:text-xl transition-colors duration-300 group-hover:text-white"
+                  <div className="min-w-0 flex-1">
+                    {/* Mobile: title on left, year on right */}
+                    <div className="flex items-start justify-between gap-2 sm:hidden">
+                      <h3 className="font-bold text-base transition-colors duration-300 group-hover:text-white"
+                        style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.4" }}>
+                        {ex.title}
+                      </h3>
+                      <span className="shrink-0 text-[10px] font-bold rounded-full text-[#00C9A7] mt-0.5"
+                        style={{
+                          border: "1px solid rgba(0,201,167,0.3)",
+                          fontFamily: "'Inter', sans-serif",
+                          letterSpacing: "0.05em",
+                          padding: "2px 7px",
+                        }}>
+                        {ex.year}
+                      </span>
+                    </div>
+                    {/* Desktop: title without inline badge */}
+                    <h3 className="font-bold text-xl transition-colors duration-300 group-hover:text-white hidden sm:block"
                       style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.3" }}>
                       {ex.title}
                     </h3>
-                    <p className="text-sm mt-2" style={{ color: "#777", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
+                    <p className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: "#777", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
                       {ex.org}
                     </p>
                   </div>
                 </div>
-                <span className="self-start sm:self-auto shrink-0 text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
+                {/* Desktop: badge on right */}
+                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
                   style={{
                     border: "1px solid rgba(0,201,167,0.3)",
                     fontFamily: "'Inter', sans-serif",

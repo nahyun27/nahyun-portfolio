@@ -10,7 +10,7 @@ export default function FooterSection() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   return (
-    <footer ref={ref} className="relative pt-64 pb-12 overflow-hidden flex flex-col justify-end z-10"
+    <footer ref={ref} className="relative pt-20 pb-8 w-full overflow-hidden flex flex-col items-center z-10"
       style={{ backgroundColor: "transparent", minHeight: "80vh" }}
       onMouseMove={(e) => {
         if (!ref.current) return;
@@ -28,14 +28,14 @@ export default function FooterSection() {
 
       <div className="absolute -top-[20%] left-1/2 -translate-x-1/2 pointer-events-none z-0"
         style={{
-          width: "120%", height: "600px",
+          width: "120%",
           background: "radial-gradient(ellipse at top, rgba(0,201,167,0.1) 0%, transparent 60%)",
           filter: "blur(80px)",
         }}
       />
 
-      <div className="section-inner w-full relative z-10 flex flex-col items-center">
-        <div className="flex flex-col items-center text-center max-w-5xl mx-auto mb-32">
+      <div className="section-inner w-full relative z-10 flex flex-col items-center flex-1 h-full">
+        <div className="flex-1 flex flex-col justify-center items-center text-center max-w-5xl mx-auto w-full py-10">
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -93,8 +93,8 @@ export default function FooterSection() {
         </div>
 
         {/* Footer Bottom Setup */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 w-full pt-10 border-t relative"
-          style={{ borderColor: 'rgba(255,255,255,0.06)', marginTop: "100px", padding: "20px 0px" }}>
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10 w-full border-t relative mt-auto"
+          style={{ borderColor: 'rgba(255,255,255,0.06)', paddingTop: "30px" }}>
 
           <div className="flex flex-col items-center lg:items-start gap-1">
             <h2 className="text-3xl font-black tracking-tighter" style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6" }}>NK.</h2>
