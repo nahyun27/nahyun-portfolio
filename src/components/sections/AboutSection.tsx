@@ -323,26 +323,26 @@ export default function AboutSection() {
                     animate={inView ? { opacity: 1, x: 0 } : {}}
                     transition={{ delay: 0.38 + i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.04)", borderColor: "rgba(0,201,167,0.3)" }}
-                    className="group flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:px-8 sm:py-6 rounded-3xl cursor-pointer transition-all duration-300 gap-4"
+                    className="group flex flex-row items-center justify-between p-4 sm:px-6 sm:py-5 rounded-2xl sm:rounded-3xl cursor-pointer transition-all duration-300 gap-3 sm:gap-4"
                     style={{ backgroundColor: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)", padding: "6px 19px" }}
                   >
-                    <div className="flex items-center gap-5 sm:gap-6">
-                      <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-[#00C9A7]"
+                    <div className="flex items-center gap-4 sm:gap-5 min-w-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-[#00C9A7]"
                         style={{ backgroundColor: "rgba(255,255,255,0.04)" }}>
-                        <svg className="w-5 h-5 text-[#00C9A7] group-hover:text-[#0C0C0F] transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00C9A7] group-hover:text-[#0C0C0F] transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <div>
-                        <p className="font-bold text-base sm:text-lg transition-colors duration-300 group-hover:text-white" style={{ color: "#E0DDD6", fontFamily: "'Inter', sans-serif" }}>
+                      <div className="min-w-0">
+                        <p className="font-bold text-sm sm:text-lg transition-colors duration-300 group-hover:text-white truncate" style={{ color: "#E0DDD6", fontFamily: "'Inter', sans-serif" }}>
                           {cert.title}
                         </p>
-                        <p className="text-sm mt-1" style={{ color: "#777", fontFamily: "'Inter', sans-serif" }}>
+                        <p className="text-xs sm:text-sm mt-0.5 sm:mt-1 truncate" style={{ color: "#777", fontFamily: "'Inter', sans-serif" }}>
                           {cert.org}
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 text-sm font-bold px-5 py-2 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)] self-start sm:self-auto"
+                    <span className="shrink-0 text-[11px] sm:text-sm font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
                       style={{ border: "1px solid rgba(0,201,167,0.3)", fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", padding: "4px 8px" }}>
                       {cert.year}
                     </span>

@@ -65,15 +65,17 @@ export default function HeroSection() {
         >
           {WORDS.map((word, wi) => (
             // No overflow:hidden — remove the clip that was cutting the letter
-            <div key={word} style={{ display: "block", overflow: "visible", whiteSpace: "nowrap", paddingBottom: "0.08em" }}>
+            <div key={word} className="flex flex-wrap" style={{ overflow: "visible", paddingBottom: "0.08em" }}>
               {word.split("").map((letter, li) => (
-                <motion.span key={li} className="inline-block"
-                  initial={{ y: "110%" }}
-                  animate={inView ? { y: 0 } : { y: "110%" }}
-                  transition={{ delay: 0.35 + wi * 0.22 + li * 0.042, duration: 0.65, ease: "easeOut" }}
-                >
-                  {letter}
-                </motion.span>
+                <div key={li} style={{ overflow: "hidden", display: "inline-flex", lineHeight: 1 }}>
+                  <motion.span className="inline-block"
+                    initial={{ y: "110%" }}
+                    animate={inView ? { y: 0 } : { y: "110%" }}
+                    transition={{ delay: 0.35 + wi * 0.22 + li * 0.042, duration: 0.65, ease: "easeOut" }}
+                  >
+                    {letter}
+                  </motion.span>
+                </div>
               ))}
             </div>
           ))}
