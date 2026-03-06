@@ -117,7 +117,7 @@ const PROJECTS = [
 
 export default function ProjectsSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.15 });
+  const inView = useInView(ref, { once: true, amount: 0.15 });
 
   return (
     <section id="projects" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"

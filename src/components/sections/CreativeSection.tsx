@@ -61,7 +61,7 @@ const DEMO_SVG = (
 export default function CreativeSection() {
   const ref = useRef<HTMLElement>(null);
   const detailPanelRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.1 });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   const [selectedId, setSelectedId] = useState(PROJECTS[0].id);
   const selectedProject = PROJECTS.find(p => p.id === selectedId) || PROJECTS[0];

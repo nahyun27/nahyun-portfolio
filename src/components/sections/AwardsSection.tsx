@@ -17,7 +17,7 @@ const EXPERIENCES = [
 
 export default function AwardsSection() {
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: false, amount: 0.1 });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
 
   return (
     <section id="awards" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
