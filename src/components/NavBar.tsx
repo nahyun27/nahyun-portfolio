@@ -60,17 +60,20 @@ export default function NavBar() {
             NK.
           </button>
 
-          {NAV_LINKS.map((l) => (
-            <button
-              key={l.id}
-              onClick={() => scrollTo(l.id)}
-              className="text-sm font-medium transition-colors duration-200 hover:text-[#00C9A7]"
-              style={{ fontFamily: "'Inter', sans-serif", color: "#888", cursor: "none" }}
-              data-cursor-hover
-            >
-              {l.label}
-            </button>
-          ))}
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((l) => (
+              <button
+                key={l.id}
+                onClick={() => scrollTo(l.id)}
+                className="text-sm font-medium transition-colors duration-200 hover:text-[#00C9A7]"
+                style={{ fontFamily: "'Inter', sans-serif", color: "#888", cursor: "none" }}
+                data-cursor-hover
+              >
+                {l.label}
+              </button>
+            ))}
+          </div>
 
           {/* CTA */}
           <div className="flex items-center gap-4">
