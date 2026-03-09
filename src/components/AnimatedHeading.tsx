@@ -37,7 +37,7 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
             {words.map((word, wordIndex) => {
               const isHighlighted = highlightWords.some(hw => word.includes(hw));
               return (
-                <span key={wordIndex} className="inline-block" style={{ overflow: "hidden", padding: "0.1em 0", margin: "0 0.22em 0 0", verticalAlign: "bottom", lineHeight: 1 }}>
+                <span key={wordIndex} className="inline-block" style={{ overflow: "hidden", padding: "0.2em 0", margin: "-0.2em 0.22em 0 0", verticalAlign: "bottom", lineHeight: 1 }}>
                   <motion.span
                     className="inline-block"
                     style={
