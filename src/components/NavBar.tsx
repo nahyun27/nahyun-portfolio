@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
+import Link from "next/link";
 
 const NAV_LINKS = [
   { id: "about", label: "About" },
@@ -9,6 +10,7 @@ const NAV_LINKS = [
   { id: "projects", label: "Projects" },
   { id: "creative", label: "Creative" },
   { id: "awards", label: "Awards" },
+  { id: "blog", label: "Blog" },
 ];
 
 export default function NavBar() {
@@ -58,20 +60,17 @@ export default function NavBar() {
             NK.
           </button>
 
-          {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => scrollTo(l.id)}
-                className="text-sm font-medium transition-colors duration-200 hover:text-[#00C9A7]"
-                style={{ fontFamily: "'Inter', sans-serif", color: "#888", cursor: "none" }}
-                data-cursor-hover
-              >
-                {l.label}
-              </button>
-            ))}
-          </div>
+          {NAV_LINKS.map((l) => (
+            <button
+              key={l.id}
+              onClick={() => scrollTo(l.id)}
+              className="text-sm font-medium transition-colors duration-200 hover:text-[#00C9A7]"
+              style={{ fontFamily: "'Inter', sans-serif", color: "#888", cursor: "none" }}
+              data-cursor-hover
+            >
+              {l.label}
+            </button>
+          ))}
 
           {/* CTA */}
           <div className="flex items-center gap-4">
