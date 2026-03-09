@@ -108,6 +108,7 @@ export default function FooterSection() {
               { label: "Email", href: "mailto:ksknh7@hanyang.ac.kr" },
               { label: "GitHub", href: "https://github.com/nahyun27" },
               { label: "Instagram", href: "https://www.instagram.com/im__string" },
+              { label: "Blog ↗", href: "https://nahyun27.github.io/", color: "#F0EDE6" },
               { label: "ACE Lab", href: "https://ace.hanyang.ac.kr" }
             ].map((link, i) => (
               <motion.a
