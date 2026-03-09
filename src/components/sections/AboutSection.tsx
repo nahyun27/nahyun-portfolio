@@ -136,7 +136,7 @@ export default function AboutSection() {
                 { label: "Email ↗", href: "mailto:ksknh7@hanyang.ac.kr", color: "#00C9A7" },
                 { label: "GitHub ↗", href: "https://github.com/nahyun27", color: "#F0EDE6" },
                 { label: "Instagram ↗", href: "https://www.instagram.com/im__string", color: "#F0EDE6" },
-                { label: "ACE Lab ↗", href: "https://ace.hanyang.ac.kr", color: "#F0EDE6" },
+                { label: "Blog ↗", href: "https://nahyun27.github.io/", color: "#F0EDE6" },
               ].map((l) => (
                 <motion.a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer"
                   data-cursor-hover
