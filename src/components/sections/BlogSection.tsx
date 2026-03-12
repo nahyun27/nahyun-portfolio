@@ -39,13 +39,13 @@ const SERIES = [
 ];
 
 const POSTS = [
+  { title: "AI 시대, 개발자에게 필요한 것", desc: "AI 도구 활용과 본질적 사고의 균형", category: "Perspective", url: "https://nahyun27.github.io/posts/ai-era-developer/" },
   { title: "MasterKey - ASR 백도어 공격 분석", desc: "음성 인식 시스템 취약점을 이용한 백도어 공격 메커니즘", category: "Security", url: "https://nahyun27.github.io/posts/masterkey-paper-review/" },
   { title: "VOAPI² - API 취약점 자동 테스팅", desc: "Voice API 보안 취약점 자동 검증 프레임워크", category: "Security", url: "https://nahyun27.github.io/posts/voapi2-paper-review/" },
   { title: "HTLC와 Lightning Network의 핵심", desc: "Hash Time-Locked Contract로 보는 Layer 2 결제 메커니즘", category: "Blockchain", url: "https://nahyun27.github.io/posts/htlc-lightning-network/" },
   { title: "Paperprobe: RAG 기반 논문 Q&A 시스템", desc: "LangChain + FAISS로 논문 읽기 자동화", category: "Projects", url: "https://nahyun27.github.io/posts/paperprobe/" },
   { title: "Rise of the Half Moon: 달 위상 전략 게임", desc: "D3-Force 그래프 보드 + 3단계 AI 구현", category: "Projects", url: "https://nahyun27.github.io/posts/rise-of-halfmoon-development/" },
   { title: "Stack Tower: 3D 타이밍 게임", desc: "Three.js + Cannon.js 물리 엔진 최적화", category: "Projects", url: "https://nahyun27.github.io/posts/stack-tower-3d-physics-game/" },
-  { title: "AI 시대, 개발자에게 필요한 것", desc: "AI 도구 활용과 본질적 사고의 균형", category: "Perspective", url: "https://nahyun27.github.io/posts/ai-era-developer-balance/" },
   { title: "GitHub 프로필 README 꾸미기", desc: "깃허브 스탯, 뱃지, Solved.ac 프로필 활용법", category: "Development", url: "https://nahyun27.github.io/posts/github-profile-readme-guide/" },
 ];
 
