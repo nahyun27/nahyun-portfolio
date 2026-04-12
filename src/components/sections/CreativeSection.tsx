@@ -44,6 +44,16 @@ const PROJECTS = [
     color: "#FF5252",
     image: "/images/beware.gif"
   },
+  {
+    id: "05",
+    title: "AlgoTrace",
+    subtitle: "Interactive visualization platform for understanding complex algorithms step by step. Control playback, watch real-time visualization, and build intuitive understanding.",
+    tags: ["React", "TypeScript", "Vite", "Framer Motion"],
+    github: "https://github.com/nahyun27/algotrace",
+    demo: "https://algorithm-trace.vercel.app/",
+    color: "#4ECDC4",
+    image: "/images/demo.gif"
+  },
 ];
 
 const GH_SVG = (
