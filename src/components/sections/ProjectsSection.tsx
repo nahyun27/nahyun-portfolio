@@ -113,6 +113,23 @@ const PROJECTS = [
     tags: ["Next.js", "Tailwind CSS", "i18n"],
     demo: "https://ace.hanyang.ac.kr"
   },
+  {
+    id: "09",
+    emoji: "⚖️",
+    title: "KCPEC Platform",
+    subtitle: (
+      <span>
+        Live court-mandated crime-prevention education platform, built and operated as a freelance full-stack developer.{" "}
+        <strong style={{ color: "#00C9A7" }}>Toss Payments</strong> with virtual-account webhooks,{" "}
+        <strong style={{ color: "#00C9A7" }}>OAuth login</strong>,{" "}
+        <strong style={{ color: "#00C9A7" }}>auto-issued PDF certificates</strong>,{" "}
+        <strong style={{ color: "#00C9A7" }}>Gemini-drafted counseling reports</strong>, legacy data migration, and AWS/Nginx/Cloudflare infra.
+      </span>
+    ),
+    tags: ["FastAPI", "PostgreSQL", "Next.js", "TypeScript", "Tailwind CSS", "AWS EC2", "Nginx"],
+    github: "https://github.com/nahyun27/kcpec-platform",
+    demo: "https://kcpec.co.kr"
+  },
 ];
 
 export default function ProjectsSection() {
