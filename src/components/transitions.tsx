@@ -21,10 +21,13 @@ export const COVER_AT: Record<TransitionKind, number> = {
   bars: 1.15,
   pills: 1.15,
   photos: 1.15,
-  stamp: 0.9,
+  stamp: 1.35,
   eclipse: 1.05,
   darkness: 1.1,
 };
+
+/** when the scene content starts fading in; by default a little before the cover completes */
+export const contentDelay = (kind: TransitionKind) => (kind === "stamp" ? COVER_AT.stamp - 0.1 : Math.max(0.5, COVER_AT[kind] - 0.3));
 
 interface Props {
   kind: TransitionKind;
@@ -240,32 +243,110 @@ function Flyers({ accent, accent2, W, H, shape }: Props & { shape: "pill" | "pho
   );
 }
 
-// ------------------------------------------------------------------ gavel seal stamps down, then the ripple takes the screen
-function Stamp({ bg, accent, x, y, R }: Props) {
-  const seal = 200;
+// ------------------------------------------------------------------ a seal stamp drops, prints, and the ink spreads
+const SEAL = 190; // imprint diameter
+const TOOL_W = 150;
+const TOOL_H = 250;
+
+function Stamp({ bg, accent, accent2, x, y, R }: Props) {
+  const T_HIT = 0.34; // when the stamp meets the paper
+  const splats = useMemo(() => {
+    const r = rng(5);
+    return Array.from({ length: 12 }, (_, i) => {
+      const ang = (i / 12) * Math.PI * 2 + r() * 0.4;
+      const dist = SEAL * (0.62 + r() * 0.5);
+      return { dx: Math.cos(ang) * dist, dy: Math.sin(ang) * dist, s: 4 + r() * 9 };
+    });
+  }, []);
+
   return (
-    <>
+    <motion.div
+      className={fill}
+      // the whole page takes the hit
+      animate={{ x: [0, -7, 6, -3, 1, 0], y: [0, 6, -5, 2, -1, 0], transition: { delay: T_HIT, duration: 0.3, ease: "easeOut" } }}
+    >
+      <svg width="0" height="0" aria-hidden style={{ position: "absolute" }}>
+        <defs>
+          {/* rubber stamps never print clean edges */}
+          <filter id="stamp-rough" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" seed="4" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="5" />
+          </filter>
+        </defs>
+      </svg>
+
+      {/* ink spreading out of the imprint until the screen is covered */}
       <motion.div
         className={fill}
         style={{ background: bg }}
-        initial={{ clipPath: `circle(0px at ${x}px ${y}px)` }}
-        animate={{ clipPath: `circle(${R}px at ${x}px ${y}px)`, transition: { delay: 0.28, duration: 0.6, ease: [0.6, 0.05, 0.3, 1] } }}
+        initial={{ clipPath: `circle(${SEAL / 2}px at ${x}px ${y}px)`, opacity: 0 }}
+        animate={{ clipPath: `circle(${R}px at ${x}px ${y}px)`, opacity: [0, 1, 1], transition: { delay: T_HIT + 0.28, duration: 0.7, times: [0, 0.05, 1], ease: [0.5, 0.05, 0.3, 1] } }}
       />
+
+      {/* shockwave */}
       <motion.div
         className="absolute rounded-full"
-        style={{ left: x - seal / 2, top: y - seal / 2, width: seal, height: seal, border: `4px solid ${accent}` }}
-        initial={{ scale: 0.6, opacity: 0 }}
-        animate={{ scale: 12, opacity: [0, 0.9, 0], transition: { delay: 0.24, duration: 0.65, ease: "easeOut" } }}
+        style={{ left: x - SEAL / 2, top: y - SEAL / 2, width: SEAL, height: SEAL, border: `3px solid ${accent}` }}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: [0.8, 9], opacity: [0.85, 0], transition: { delay: T_HIT, duration: 0.6, ease: "easeOut" } }}
       />
+
+      {/* ink flecks thrown out on impact */}
+      {splats.map((sp, i) => (
+        <motion.span
+          key={i}
+          className="absolute rounded-full"
+          style={{ left: x - sp.s / 2, top: y - sp.s / 2, width: sp.s, height: sp.s, background: i % 3 ? accent : accent2 }}
+          initial={{ x: 0, y: 0, opacity: 0, scale: 0.3 }}
+          animate={{ x: sp.dx, y: sp.dy, opacity: [0, 1, 1, 0], scale: [0.3, 1, 1, 0.6], transition: { delay: T_HIT, duration: 0.55, times: [0, 0.15, 0.7, 1], ease: "easeOut" } }}
+        />
+      ))}
+
+      {/* the imprint stays behind after the stamp lifts */}
       <motion.div
-        className="absolute grid place-items-center rounded-full"
-        style={{ left: x - seal / 2, top: y - seal / 2, width: seal, height: seal, border: `8px solid ${accent}`, background: rgba(bg, 0.96), color: accent, boxShadow: `0 20px 50px -10px rgba(0,0,0,0.6), inset 0 0 0 6px ${rgba(accent, 0.25)}` }}
-        initial={{ scale: 3.2, opacity: 0, rotate: -28 }}
-        animate={{ scale: [3.2, 1, 1], opacity: [0, 1, 1], rotate: [-28, -10, -10], transition: { duration: 0.42, times: [0, 0.6, 1], ease: "easeIn" } }}
+        className="absolute grid place-items-center"
+        style={{ left: x - SEAL / 2, top: y - SEAL / 2, width: SEAL, height: SEAL, color: accent, filter: "url(#stamp-rough)" }}
+        initial={{ opacity: 0, scale: 1.08 }}
+        animate={{ opacity: [0, 1], scale: [1.08, 1], transition: { delay: T_HIT, duration: 0.1, ease: "easeOut" } }}
       >
-        <Icon name="scale" size={96} strokeWidth={1.3} />
+        <svg viewBox="0 0 200 200" width="100%" height="100%" fill="none" aria-hidden style={{ position: "absolute", inset: 0 }}>
+          <circle cx="100" cy="100" r="92" stroke="currentColor" strokeWidth="9" />
+          <circle cx="100" cy="100" r="77" stroke="currentColor" strokeWidth="2.5" />
+          {Array.from({ length: 24 }, (_, i) => {
+            const a = (i / 24) * Math.PI * 2;
+            return <line key={i} x1={100 + Math.cos(a) * 82} y1={100 + Math.sin(a) * 82} x2={100 + Math.cos(a) * 89} y2={100 + Math.sin(a) * 89} stroke="currentColor" strokeWidth="2.5" />;
+          })}
+        </svg>
+        <Icon name="scale" size={92} strokeWidth={1.5} />
       </motion.div>
-    </>
+
+      {/* the stamp itself: winds up, slams down, presses, lifts away */}
+      <motion.div
+        className="absolute"
+        style={{ left: x - TOOL_W / 2, top: y - TOOL_H + 24, width: TOOL_W, height: TOOL_H, transformOrigin: "50% 100%" }}
+        initial={{ y: -(y + TOOL_H), scale: 1.35, rotate: -7, opacity: 1 }}
+        animate={{
+          y: [-(y + TOOL_H), -(y + TOOL_H) * 0.9, 0, 6, 0, -(y + TOOL_H) * 0.6],
+          scale: [1.35, 1.4, 1, 0.94, 0.94, 1.3],
+          rotate: [-7, -9, 0, 0, 0, 4],
+          opacity: [1, 1, 1, 1, 1, 0],
+          transition: { duration: 0.95, times: [0, 0.1, 0.36, 0.42, 0.55, 1], ease: ["easeOut", "easeIn", "easeOut", "linear", "easeIn"] },
+        }}
+      >
+        <svg viewBox="0 0 150 250" width="100%" height="100%" aria-hidden>
+          <ellipse cx="75" cy="232" rx="60" ry="9" fill="rgba(0,0,0,0.28)" />
+          {/* knob and handle */}
+          <rect x="52" y="6" width="46" height="26" rx="13" fill="#7A5230" />
+          <rect x="62" y="24" width="26" height="128" rx="9" fill="#8B5E34" />
+          <rect x="66" y="30" width="6" height="116" rx="3" fill="rgba(255,255,255,0.22)" />
+          {/* collar and base */}
+          <rect x="34" y="148" width="82" height="22" rx="6" fill="#C9CDD6" />
+          <rect x="30" y="166" width="90" height="34" rx="8" fill="#9EA4B0" />
+          <rect x="34" y="196" width="82" height="22" rx="10" fill={accent} />
+          <rect x="34" y="196" width="82" height="7" rx="3.5" fill="rgba(255,255,255,0.35)" />
+        </svg>
+      </motion.div>
+    </motion.div>
   );
 }
 
