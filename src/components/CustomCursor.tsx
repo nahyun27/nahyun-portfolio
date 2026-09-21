@@ -45,8 +45,8 @@ export default function CustomCursor() {
         if (ringRef.current) {
           ringRef.current.style.width = "48px";
           ringRef.current.style.height = "48px";
-          ringRef.current.style.borderColor = "var(--mint)";
-          ringRef.current.style.background = "rgba(var(--mint-rgb),0.06)";
+          ringRef.current.style.borderColor = "var(--cursor-dot, var(--mint))";
+          ringRef.current.style.background = "color-mix(in srgb, var(--cursor-dot, var(--mint)) 14%, transparent)";
         }
       }
     };
@@ -54,7 +54,7 @@ export default function CustomCursor() {
       if (ringRef.current) {
         ringRef.current.style.width = "28px";
         ringRef.current.style.height = "28px";
-        ringRef.current.style.borderColor = "color-mix(in srgb, var(--text) 50%, transparent)";
+        ringRef.current.style.borderColor = "color-mix(in srgb, var(--cursor-ring, var(--text)) 60%, transparent)";
         ringRef.current.style.background = "transparent";
       }
     };
@@ -87,8 +87,10 @@ export default function CustomCursor() {
           rotate: angle,
           scaleX: stretch,
           scaleY: squash,
-          borderColor: "color-mix(in srgb, var(--text) 50%, transparent)",
-          transition: "width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease",
+          borderColor: "color-mix(in srgb, var(--cursor-ring, var(--text)) 60%, transparent)",
+          // the halo is the local background colour, so the ring stays readable over similar shapes
+          boxShadow: "0 0 0 1px var(--cursor-halo, transparent)",
+          transition: "width 0.18s ease, height 0.18s ease, border-color 0.3s ease, background 0.18s ease, box-shadow 0.3s ease",
         }}
       />
       <motion.div
@@ -96,11 +98,13 @@ export default function CustomCursor() {
         style={{
           x: dotX,
           y: dotY,
-          width: 4,
-          height: 4,
+          width: 5,
+          height: 5,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: "var(--mint)",
+          backgroundColor: "var(--cursor-dot, var(--mint))",
+          boxShadow: "0 0 0 1.5px var(--cursor-halo, transparent)",
+          transition: "background-color 0.3s ease, box-shadow 0.3s ease",
         }}
       />
     </>
