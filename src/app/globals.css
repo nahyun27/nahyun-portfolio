@@ -46,6 +46,7 @@
   --mint-rgb: 0, 201, 167;
   --on-mint: #0C0C0F;
   --fill-brand: linear-gradient(#00C9A7, #00C9A7);
+  --drop-o: 0.3;
   --sel-bg: #00C9A7;
   --sel-fg: #0C0C0F;
   --hl-fill: linear-gradient(#00C9A7, #00C9A7);
@@ -128,6 +129,7 @@
   --mint-rgb: 0, 196, 166;
   --on-mint: #032B2F;
   --fill-brand: linear-gradient(120deg, #19E3C0 0%, #3FB8FF 100%);
+  --drop-o: 0.34;
   --sel-bg: rgba(25, 227, 192, 0.3);
   --sel-fg: #0E1A2B;
   --hl-fill: linear-gradient(100deg, #00A98F 0%, #2E7DF6 100%);
