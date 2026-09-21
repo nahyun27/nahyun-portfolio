@@ -15,6 +15,7 @@ const DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#062B2B", fg: "#E6FFFB", accent: "#4ECDC4", accent2: "#7DD3FC" },
     stage: "media",
+    transition: "bars",
   },
   {
     icon: "moon",
@@ -29,6 +30,7 @@ const DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#16140A", fg: "#FFF8DC", accent: "#F6C90E", accent2: "#FFE58A" },
     stage: "media",
+    transition: "eclipse",
   },
   {
     icon: "layers",
@@ -43,6 +45,7 @@ const DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#04212B", fg: "#E0FAFF", accent: "#00E5FF", accent2: "#7BF0FF" },
     stage: "media",
+    transition: "stack",
   },
   {
     icon: "image",
@@ -57,6 +60,7 @@ const DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#0B1230", fg: "#E8EEFF", accent: "#7FA6FF", accent2: "#A5D8FF" },
     stage: "media",
+    transition: "photos",
   },
   {
     icon: "eyeoff",
@@ -68,6 +72,7 @@ const DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/Beware-Of-Darkness", kind: "github" }],
     theme: { bg: "#1B0A0A", fg: "#FFE9E9", accent: "#FF5252", accent2: "#FF9B7A" },
     stage: "media",
+    transition: "darkness",
   },
 ];
 

@@ -7,10 +7,11 @@ import { Icon } from "@/components/ProjectIcon";
 import { LINK_ICONS, ARROW_ICON } from "@/components/LinkIcons";
 import LiquidStage from "@/components/scenes/LiquidStage";
 import MediaClip from "@/components/MediaClip";
+import { Transition, COVER_AT } from "@/components/transitions";
 import SsdScene from "@/components/scenes/SsdScene";
 import PapersScene from "@/components/scenes/PapersScene";
 import NshTerminal from "@/components/scenes/NshTerminal";
-import type { Project, ProjectMedia, SceneTheme } from "@/data/projects";
+import type { Project, ProjectMedia, SceneTheme, TransitionKind } from "@/data/projects";
 
 export interface SceneOrigin {
   x: number;
@@ -28,28 +29,6 @@ function on(hex: string) {
   const n = parseInt(hex.slice(1), 16);
   const lum = (0.2126 * ((n >> 16) & 255) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
   return lum > 0.6 ? "#0B0D10" : "#FFFFFF";
-}
-
-const OFFSETS: [number, number][] = [[0, 0], [-70, 30], [60, -40], [-40, -70], [80, 50], [-90, -20], [30, 80], [-20, 60], [50, -90]];
-
-/** Liquid fill: circles swell from the click point and a gooey filter fuses them into one lumpy tide. */
-function Flood({ color, x, y, R, duration = 0.95, fast }: { color: string; x: number; y: number; R: number; duration?: number; fast?: boolean }) {
-  const d = fast ? 0.01 : duration;
-  return (
-    <motion.svg className="absolute inset-0 w-full h-full" style={{ filter: "url(#flood-goo)", overflow: "visible" }} aria-hidden>
-      {OFFSETS.map(([dx, dy], i) => (
-        <motion.circle
-          key={i}
-          cx={x + dx}
-          cy={y + dy}
-          fill={color}
-          initial={{ r: 0 }}
-          animate={{ r: R, transition: { duration: d, delay: fast ? 0 : i * (duration * 0.03), ease: [0.55, 0.05, 0.25, 1] } }}
-          exit={{ r: 0, transition: { duration: fast ? 0.01 : 0.65, delay: fast ? 0 : (OFFSETS.length - i) * 0.02, ease: [0.5, 0, 0.75, 0] } }}
-        />
-      ))}
-    </motion.svg>
-  );
 }
 
 function StageTabs({ tabs, theme }: { tabs: { label: string; node: React.ReactNode }[]; theme: SceneTheme }) {
@@ -92,34 +71,49 @@ function SceneMedia({ media, theme }: { media: ProjectMedia[]; theme: SceneTheme
   const [i, setI] = useState(0);
   const item = media[i];
   if (!item) return null;
+
+  const frame: React.CSSProperties = {
+    position: "relative",
+    width: "100%",
+    borderRadius: 24,
+    overflow: "hidden",
+    background: item.bg ?? rgba(theme.fg, 0.06),
+    border: `1px solid ${rgba(theme.fg, 0.14)}`,
+  };
+
   return (
     <div>
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          paddingBottom: "62%",
-          borderRadius: 24,
-          overflow: "hidden",
-          background: item.bg ?? rgba(theme.fg, 0.06),
-          border: `1px solid ${rgba(theme.fg, 0.14)}`,
-        }}
-      >
-        {item.video ? (
-          <div style={{ position: "absolute", inset: 0 }}>
-            <MediaClip key={item.video} src={item.video} poster={item.src} label={item.label} fit={item.fit ?? "cover"} />
-          </div>
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            key={item.src}
-            src={item.src}
-            alt={item.label}
-            loading="lazy"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
+      {item.portrait && item.video ? (
+        <div style={{ ...frame, display: "grid", placeItems: "center", padding: 18 }}>
+          <video
+            key={item.video}
+            src={item.video}
+            poster={item.src}
+            controls
+            playsInline
+            preload="none"
+            aria-label={item.label}
+            style={{ maxHeight: "68vh", maxWidth: "100%", width: "auto", aspectRatio: "342 / 720", borderRadius: 26, background: "#000", boxShadow: "0 30px 60px -24px rgba(0,0,0,0.6)" }}
           />
-        )}
-      </div>
+        </div>
+      ) : (
+        <div style={{ ...frame, paddingBottom: `${item.aspect ?? 62}%` }}>
+          {item.video ? (
+            <div style={{ position: "absolute", inset: 0 }}>
+              <MediaClip key={item.video} src={item.video} poster={item.src} label={item.label} fit={item.fit ?? "cover"} />
+            </div>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={item.src}
+              src={item.src}
+              alt={item.label}
+              loading="lazy"
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
+            />
+          )}
+        </div>
+      )}
       {media.length > 1 && (
         <div className="flex flex-wrap" style={{ gap: 8, marginTop: 14 }}>
           {media.map((m, k) => (
@@ -148,6 +142,17 @@ function SceneMedia({ media, theme }: { media: ProjectMedia[]; theme: SceneTheme
         </div>
       )}
       {item.caption && <p style={{ marginTop: 12, fontSize: 13, lineHeight: 1.6, color: rgba(theme.fg, 0.65) }}>{item.caption}</p>}
+      {item.fit === "contain" && !item.video && (
+        <a
+          href={item.src}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cursor-hover
+          style={{ display: "inline-block", marginTop: 8, fontSize: 12, fontWeight: 700, letterSpacing: "0.06em", color: theme.fg, textDecoration: "underline", textUnderlineOffset: 4, cursor: "none" }}
+        >
+          Open full size
+        </a>
+      )}
     </div>
   );
 }
@@ -167,7 +172,7 @@ const SHELL_CHIPS = [
 function Stage({ p }: { p: Project }) {
   const t = p.theme;
   const media = p.media ?? [];
-  const screens = media.length ? { label: p.stage === "ssd" ? "Measured on FEMU" : p.stage === "shell" ? "Screenshot" : "Screens", node: <SceneMedia media={media} theme={t} /> } : null;
+  const screens = media.length ? { label: p.stage === "ssd" ? "Measured on FEMU" : p.stage === "shell" ? "Screenshot" : media.length === 1 ? media[0].label : "Screens", node: <SceneMedia media={media} theme={t} /> } : null;
   if (p.stage === "ssd") return <StageTabs theme={t} tabs={[{ label: "Live model", node: <SsdScene theme={t} /> }, ...(screens ? [screens] : [])]} />;
   if (p.stage === "papers") return <StageTabs theme={t} tabs={[{ label: "Live graph", node: <PapersScene theme={t} /> }, ...(screens ? [{ ...screens, label: "Real demos" }] : [])]} />;
   if (p.stage === "shell")
@@ -196,7 +201,10 @@ interface Props {
 export default function ProjectScene({ projects, startIndex, origin, onClose, backLabel = "Work" }: Props) {
   const reduce = useReducedMotion();
   const [idx, setIdx] = useState(startIndex);
-  const [wave, setWave] = useState<{ key: number; color: string; x: number; y: number } | null>(null);
+  const [wave, setWave] = useState<{ key: number; kind: TransitionKind; theme: SceneTheme; x: number; y: number } | null>(null);
+  const [view] = useState(() => ({ W: window.innerWidth, H: window.innerHeight }));
+  const [first] = useState(startIndex);
+  const firstKind = projects[first].transition;
   const waving = useRef(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const p = projects[idx];
@@ -226,12 +234,14 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
         return;
       }
       waving.current = true;
-      setWave({ key: Date.now(), color: projects[next].theme.bg, x: cx, y: cy });
-      window.setTimeout(() => setIdx(next), 880);
+      const kind = projects[next].transition;
+      const cover = COVER_AT[kind] * 1000;
+      setWave({ key: Date.now(), kind, theme: projects[next].theme, x: cx, y: cy });
+      window.setTimeout(() => setIdx(next), cover + 90);
       window.setTimeout(() => {
         setWave(null);
         waving.current = false;
-      }, 960);
+      }, cover + 380);
     },
     [idx, projects, reduce]
   );
@@ -244,8 +254,9 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
       else if (!typing && e.key === "ArrowRight") go(1);
       else if (!typing && e.key === "ArrowLeft") go(-1);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // capture phase, so focused media controls cannot swallow Escape and the arrows
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
   }, [go, onClose]);
 
   const center = (e: React.MouseEvent<HTMLElement>) => {
@@ -292,14 +303,26 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
 
       {/* base tide, fixed behind everything so the scene can scroll over it */}
       <div className="fixed inset-0" style={{ zIndex: 0 }}>
-        <Flood color={t.bg} x={origin.x} y={origin.y} R={origin.R} fast={!!reduce} />
+        <Transition
+          kind={firstKind}
+          bg={projects[first].theme.bg}
+          solidBg={t.bg}
+          accent={projects[first].theme.accent}
+          accent2={projects[first].theme.accent2}
+          x={origin.x}
+          y={origin.y}
+          W={view.W}
+          H={view.H}
+          R={origin.R}
+          fast={!!reduce}
+        />
       </div>
 
       <motion.div
         className="relative"
         style={{ zIndex: 10, minHeight: "100%" }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { delay: reduce ? 0 : 0.7, duration: 0.45 } }}
+        animate={{ opacity: 1, transition: { delay: reduce ? 0 : Math.max(0.5, COVER_AT[firstKind] - 0.3), duration: 0.45 } }}
         exit={{ opacity: 0, transition: { duration: 0.2 } }}
       >
         {/* top bar */}
@@ -444,7 +467,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
       {/* tide for switching projects, sweeps over the content and is gone once the new scene is under it */}
       {wave && (
         <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 40 }}>
-          <Flood key={wave.key} color={wave.color} x={wave.x} y={wave.y} R={origin.R} duration={0.7} />
+          <Transition key={wave.key} kind={wave.kind} bg={wave.theme.bg} accent={wave.theme.accent} accent2={wave.theme.accent2} x={wave.x} y={wave.y} W={view.W} H={view.H} R={origin.R} />
         </div>
       )}
     </motion.div>,

@@ -52,14 +52,6 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
             <MediaClip src={media.video} poster={media.src} label={p.title} />
           </div>
         )}
-        {/* glass sheen and colour wash so the clip feels like it sits under water */}
-        <span
-          aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(90% 70% at 12% 0%, rgba(255,255,255,0.22), transparent 55%), linear-gradient(to top, ${p.theme.bg}CC 0%, transparent 42%)`,
-          }}
-        />
         <span
           className="glass-chip absolute grid place-items-center"
           style={{ left: 16, top: 16, height: 30, padding: "0 12px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#fff", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)" }}
