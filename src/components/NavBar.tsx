@@ -22,37 +22,46 @@ export default function NavBar() {
 
   useEffect(() => {
     const root = document.documentElement;
+    const ids = NAV_LINKS.map((l) => l.id);
     let timer: number | undefined;
-    const fn = () => {
+    let raf = 0;
+
+    // active section = the one that spans a line 40% down the viewport (no observer latency)
+    const update = () => {
+      raf = 0;
       setScrolled(window.scrollY > 40);
+      const line = window.innerHeight * 0.4;
+      let current = "";
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        if (r.top <= line && r.bottom > line) {
+          current = id;
+          break;
+        }
+      }
+      setActive(current);
+    };
+
+    const onScroll = () => {
       // pause the ambient animation while scrolling, resume shortly after it stops
       root.classList.add("is-scrolling");
       window.clearTimeout(timer);
       timer = window.setTimeout(() => root.classList.remove("is-scrolling"), 160);
+      if (!raf) raf = window.requestAnimationFrame(update);
     };
-    window.addEventListener("scroll", fn, { passive: true });
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    raf = window.requestAnimationFrame(update);
     return () => {
-      window.removeEventListener("scroll", fn);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       window.clearTimeout(timer);
+      window.cancelAnimationFrame(raf);
       root.classList.remove("is-scrolling");
     };
-  }, []);
-
-  // highlight the section that currently crosses the middle of the viewport
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    [...NAV_LINKS.map((l) => l.id), "hero"].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id: string) => {
@@ -112,7 +121,8 @@ export default function NavBar() {
                   className="relative text-sm font-medium transition-colors duration-200"
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    color: isActive ? "var(--text)" : "var(--t3)",
+                    color: isActive ? "var(--mint)" : "var(--t3)",
+                    fontWeight: isActive ? 600 : 500,
                     cursor: "none",
                     padding: "8px 14px",
                     borderRadius: 999,
@@ -123,7 +133,11 @@ export default function NavBar() {
                     <motion.span
                       layoutId="nav-active-pill"
                       className="absolute inset-0"
-                      style={{ borderRadius: 999, backgroundColor: "var(--w60)" }}
+                      style={{
+                        borderRadius: 999,
+                        backgroundColor: "rgba(var(--mint-rgb),0.14)",
+                        boxShadow: "inset 0 0 0 1px rgba(var(--mint-rgb),0.3)",
+                      }}
                       transition={{ type: "spring", stiffness: 420, damping: 34 }}
                     />
                   )}
@@ -191,7 +205,7 @@ export default function NavBar() {
                 transition={{ delay: i * 0.07 }}
                 onClick={() => scrollTo(l.id)}
                 className="font-extrabold text-4xl hover:text-[color:var(--mint)] transition-colors"
-                style={{ fontFamily: "var(--font-display)", color: "var(--text)", cursor: "none" }}
+                style={{ fontFamily: "var(--font-display)", color: active === l.id ? "var(--mint)" : "var(--text)", cursor: "none" }}
                 data-cursor-hover
               >
                 {l.label}
