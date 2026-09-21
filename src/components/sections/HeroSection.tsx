@@ -30,21 +30,15 @@ export default function HeroSection() {
         className="absolute pointer-events-none opacity-30"
         style={{ right: "-12vw", top: "14%", width: "72vw", height: "72vw", maxWidth: 820, maxHeight: 820, transform: "translateZ(0)" }}
       >
-        <motion.svg
-          viewBox="0 0 800 800"
-          fill="none"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 160, repeat: Infinity, ease: "linear" }}
-          className="w-full h-full"
-          style={{ transformOrigin: "center center", willChange: "transform" }}
-        >
+        <svg viewBox="0 0 800 800" fill="none" className="hero-orbit w-full h-full">
           <circle cx="400" cy="400" r="380" stroke="var(--mint)" strokeWidth="0.6" strokeDasharray="4 12" />
           <circle cx="400" cy="400" r="260" stroke="var(--text)" strokeWidth="0.5" opacity="0.35" />
           <circle cx="400" cy="400" r="150" stroke="var(--mint)" strokeWidth="2" strokeDasharray="1 15" strokeLinecap="round" opacity="0.8" />
           <ellipse cx="400" cy="400" rx="360" ry="120" stroke="var(--mint)" strokeWidth="0.6" opacity="0.5" transform="rotate(30 400 400)" />
-          <circle cx="400" cy="20" r="6" fill="var(--mint)" style={{ filter: "drop-shadow(0 0 10px var(--mint))" }} />
+          <circle cx="400" cy="20" r="16" fill="var(--mint)" opacity="0.22" />
+          <circle cx="400" cy="20" r="6" fill="var(--mint)" />
           <circle cx="250" cy="400" r="4" fill="var(--mint)" />
-        </motion.svg>
+        </svg>
       </div>
 
       <div className="section-inner w-full flex-1 flex flex-col justify-center relative z-10" style={{ paddingTop: 96, paddingBottom: 48 }}>

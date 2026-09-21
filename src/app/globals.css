@@ -397,3 +397,116 @@ section[id]:not(#hero) {
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
+
+/* ---------- ambient backdrop (compositor-only animation, see AmbientBackground.tsx) ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--bg);
+  contain: strict;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.orb-a {
+  top: -10%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(circle, var(--orb-a) 0%, transparent 68%);
+  opacity: var(--orb-a-o);
+  animation-name: orb-drift-a;
+  animation-duration: 18s;
+}
+
+.orb-b {
+  top: 35%;
+  left: -20%;
+  width: 70vw;
+  height: 70vw;
+  max-width: 900px;
+  max-height: 900px;
+  background: radial-gradient(circle, var(--orb-b) 0%, transparent 70%);
+  opacity: var(--orb-b-o);
+  animation-name: orb-drift-b;
+  animation-duration: 22s;
+}
+
+.orb-c {
+  bottom: -20%;
+  left: 10%;
+  width: 80vw;
+  height: 50vw;
+  max-width: 1200px;
+  max-height: 800px;
+  background: radial-gradient(circle, var(--orb-c) 0%, transparent 60%);
+  opacity: var(--orb-c-o);
+  animation-name: orb-drift-c;
+  animation-duration: 25s;
+}
+
+.orb-d {
+  top: 8%;
+  left: -10%;
+  width: 45vw;
+  height: 45vw;
+  max-width: 640px;
+  max-height: 640px;
+  background: radial-gradient(circle, var(--orb-d) 0%, transparent 70%);
+  opacity: var(--orb-d-o);
+  animation-name: orb-drift-d;
+  animation-duration: 20s;
+}
+
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(50px, -40px, 0) scale(1.15); }
+  66% { transform: translate3d(-30px, 30px, 0) scale(0.9); }
+}
+
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(-60px, 50px, 0) scale(1.25); }
+  66% { transform: translate3d(40px, -30px, 0) scale(0.85); }
+}
+
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(70px, 0, 0) scale(1.4); }
+  66% { transform: translate3d(-70px, 0, 0) scale(0.9); }
+}
+
+@keyframes orb-drift-d {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(40px, 30px, 0) scale(1.2); }
+  66% { transform: translate3d(-20px, -20px, 0) scale(0.95); }
+}
+
+/* hero orbit spins in CSS too, so no per frame JS or filter repaint */
+.hero-orbit {
+  transform-origin: center center;
+  will-change: transform;
+  animation: hero-spin 160s linear infinite;
+}
+
+@keyframes hero-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .hero-orbit {
+    animation: none;
+  }
+}
