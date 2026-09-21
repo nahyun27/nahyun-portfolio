@@ -30,7 +30,6 @@ export default function FooterSection() {
         style={{
           width: "120%",
           background: "radial-gradient(ellipse at top, rgba(var(--mint-rgb),0.1) 0%, transparent 60%)",
-          filter: "blur(80px)",
         }}
       />
 

@@ -34,13 +34,11 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
       transition={{ delay, duration: 0.5 }}
       whileHover={{ y: -6, transition: { duration: 0.2 } }}
       onMouseMove={handleMouseMove}
-      className="group relative flex flex-col gap-3 shrink-0 rounded-2xl overflow-hidden"
+      className="glass glass-ring group flex flex-col gap-3 shrink-0 rounded-2xl overflow-hidden"
       style={{
         width: 280,
         minHeight: 260,
         padding: "26px",
-        backgroundColor: "var(--surface)",
-        border: "1px solid var(--w70)",
         userSelect: "none",
       }}
     >

@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import { Eyebrow } from "@/components/SectionHeader";
 
 const STATS = [
   { num: 2, label: "Patents", suffix: "" },
@@ -56,8 +57,8 @@ function StatCard({ s, i, inView }: { s: { num: number; label: string; suffix: s
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ y: -6, scale: 1.02 }}
-      className="relative flex flex-col p-8 md:p-10 rounded-3xl overflow-hidden group cursor-default transition-all duration-300"
-      style={{ padding: "6px 19px", backgroundColor: "var(--surface-2)", border: "1px solid var(--w60)" }}
+      className="glass glass-ring flex flex-col p-8 md:p-10 rounded-3xl overflow-hidden group cursor-default transition-all duration-300"
+      style={{ padding: "6px 19px" }}
     >
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
@@ -97,18 +98,17 @@ export default function AboutSection() {
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
-        <motion.p {...f(0)} className="text-xs tracking-[0.4em] uppercase font-semibold mb-16"
-          style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
-          01 / About
-        </motion.p>
+        <div style={{ marginBottom: 56 }}>
+          <Eyebrow index="01" label="About" />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 xl:gap-32 items-start">
           {/* ── Left ── */}
           <div className="flex flex-col gap-10">
             <AnimatedHeading
-              text="Hello,|I'm Nahyun."
+              text="Hello, I'm Nahyun."
               highlightWords={["I'm", "Nahyun."]}
-              style={{ fontSize: "clamp(2.2rem, 8vw, 4rem)" }}
+              style={{ fontSize: "clamp(2.2rem, 5.4vw, 3.75rem)", fontWeight: 800, letterSpacing: "-0.035em" }}
               delay={0.07}
             />
 
@@ -319,8 +319,8 @@ export default function AboutSection() {
                     animate={inView ? { opacity: 1, x: 0 } : {}}
                     transition={{ delay: 0.38 + i * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     whileHover={{ scale: 1.02 }}
-                    className="hv-card group flex flex-row items-center justify-between p-4 sm:px-6 sm:py-5 rounded-2xl sm:rounded-3xl cursor-pointer transition-all duration-300 gap-3 sm:gap-4"
-                    style={{ backgroundColor: "var(--w15)", border: "1px solid var(--w50)", padding: "6px 19px" }}
+                    className="glass hv-card group flex flex-row items-center justify-between p-4 sm:px-6 sm:py-5 rounded-2xl sm:rounded-3xl cursor-pointer transition-all duration-300 gap-3 sm:gap-4"
+                    style={{ padding: "6px 19px" }}
                   >
                     <div className="flex items-center gap-4 sm:gap-5 min-w-0">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-[image:var(--fill-brand)]"

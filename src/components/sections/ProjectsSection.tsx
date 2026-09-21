@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import AnimatedHeading from "@/components/AnimatedHeading";
+import SectionHeader from "@/components/SectionHeader";
 import { tint } from "@/lib/color";
+import { Icon, type IconName } from "@/components/ProjectIcon";
 
 const ACCENT = "var(--mint)";
 
@@ -28,7 +29,7 @@ interface ProjectMedia {
 
 interface Project {
   id: string;
-  emoji: string;
+  icon: IconName;
   title: string;
   badge?: string;
   summary: string;
@@ -41,7 +42,7 @@ interface Project {
 
 const PROJECT_DATA: Omit<Project, "id">[] = [
   {
-    emoji: "💽",
+    icon: "drive",
     title: "SSD WAF Optimization",
     summary:
       "Hot/Cold data separation inside the FEMU blackbox SSD emulator, so garbage collection stops shuffling frequently rewritten pages together with long lived ones.",
@@ -76,7 +77,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/femu-hotcold-ftl", kind: "github" }],
   },
   {
-    emoji: "🎾",
+    icon: "tennis",
     title: "TennisTown",
     badge: "Live",
     summary:
@@ -104,7 +105,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     ],
   },
   {
-    emoji: "⚖️",
+    icon: "scale",
     title: "KCPEC Platform",
     badge: "In production",
     summary:
@@ -129,7 +130,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     ],
   },
   {
-    emoji: "🔍",
+    icon: "search",
     title: "Paperprobe",
     summary:
       "Upload academic PDFs and ask questions grounded in their content, compare several papers side by side, and see how they relate in an interactive similarity graph.",
@@ -154,7 +155,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/paperprobe", kind: "github" }],
   },
   {
-    emoji: "🐚",
+    icon: "terminal",
     title: "nsh> Nahyun Shell",
     summary:
       "A Unix shell written in C, covering process creation, pipes, redirection and a hand rolled line editor.",
@@ -178,7 +179,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/linux-study-minishell", kind: "github" }],
   },
   {
-    emoji: "🎙️",
+    icon: "mic",
     title: "PerSI",
     summary:
       "A speaker identification app for hearing impaired users. Register the voices of people you know, then see who is talking in real time as a chat.",
@@ -192,7 +193,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/PerSI-Org/PerSI_FrontEnd", kind: "github" }],
   },
   {
-    emoji: "💊",
+    icon: "pill",
     title: "ToFindPill",
     summary:
       "A pill recognition app for clinicians. Photograph several pills at once and get each one identified in seconds.",
@@ -210,7 +211,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/ToFindPill", kind: "github" }],
   },
   {
-    emoji: "💻",
+    icon: "branch",
     title: "Software Dev Practices",
     summary:
       "A team project built around the way software is actually shipped: agile process, automated pipelines and tests.",
@@ -223,7 +224,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" }],
   },
   {
-    emoji: "🔬",
+    icon: "flask",
     title: "ACE Lab Website",
     badge: "Live",
     summary:
@@ -378,19 +379,7 @@ export default function ProjectsSection() {
       <div className="section-inner w-full">
 
         {/* Header */}
-        <div className="mb-16">
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            className="text-xs tracking-[0.32em] uppercase font-semibold mb-6"
-            style={{ color: ACCENT, fontFamily: "'Inter', sans-serif" }}>
-            03 / Projects
-          </motion.p>
-          <AnimatedHeading
-            text="Selected|Work."
-            highlightWords={["Work."]}
-            style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
-            delay={0.1}
-          />
-        </div>
+        <SectionHeader index="03" label="Projects" title="Selected Work." highlightWords={["Work."]} />
 
         {/* Mobile tabs */}
         <div className="flex lg:hidden gap-2 flex-wrap" style={{ marginBottom: "20px", marginTop: "20px" }}>
@@ -459,9 +448,16 @@ export default function ProjectsSection() {
                       {project.id}
                     </span>
 
-                    <span className="text-2xl shrink-0 transition-all duration-300"
-                      style={{ opacity: isActive ? 1 : 0.35, filter: isActive ? "none" : "grayscale(1)" }}>
-                      {project.emoji}
+                    <span className="grid place-items-center shrink-0 transition-all duration-300"
+                      style={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: 12,
+                        color: isActive ? ACCENT : "var(--t5)",
+                        backgroundColor: isActive ? tint(ACCENT, 14) : "var(--w40)",
+                        border: `1px solid ${isActive ? tint(ACCENT, 30) : "transparent"}`,
+                      }}>
+                      <Icon name={project.icon} size={18} />
                     </span>
 
                     <div className="flex-1 min-w-0">
@@ -512,16 +508,13 @@ export default function ProjectsSection() {
           <motion.div
             whileHover={{ y: -6 }}
             transition={{ duration: 0.6 }}
-            className="relative w-full lg:w-[58%] rounded-3xl flex flex-col overflow-hidden h-auto"
+            className="glass glass-ring w-full lg:w-[58%] rounded-3xl flex flex-col overflow-hidden h-auto"
             style={{
-              backgroundColor: "var(--surface)",
-              border: `1px solid ${tint(ACCENT, 15)}`,
-              boxShadow: `0 30px 80px rgba(var(--shadow-rgb),calc(0.6 * var(--shadow-k))), 0 0 80px ${tint(ACCENT, 3)}`,
               padding: "1.2rem",
             }}
           >
             <div ref={scrollRef}
-              className="thin-scroll scroll-fade relative z-10 lg:max-h-[max(440px,calc(100vh-200px))] lg:overflow-y-auto">
+              className="thin-scroll scroll-fade relative z-10 lg:max-h-[max(440px,calc(100vh-330px))] lg:overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selected.id}
@@ -555,7 +548,17 @@ export default function ProjectsSection() {
 
                 {/* Title */}
                 <div className="flex items-center gap-4">
-                  <span className="text-4xl md:text-5xl leading-none">{selected.emoji}</span>
+                  <span className="grid place-items-center shrink-0"
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: 18,
+                      background: "var(--fill-brand)",
+                      color: "var(--on-mint)",
+                      boxShadow: "0 10px 28px -8px rgba(var(--mint-rgb),0.55)",
+                    }}>
+                    <Icon name={selected.icon} size={26} strokeWidth={1.9} />
+                  </span>
                   <h3 className="font-black text-2xl md:text-4xl leading-tight break-words"
                     style={{ fontFamily: "var(--font-display)", color: "var(--text)", letterSpacing: "-0.02em" }}>
                     {selected.title}

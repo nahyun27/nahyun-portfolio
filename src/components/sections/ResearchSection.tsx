@@ -1,14 +1,12 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
 import HorizontalSlider from "@/components/HorizontalSlider";
-import AnimatedHeading from "@/components/AnimatedHeading";
+import SectionHeader from "@/components/SectionHeader";
 
 const PAPERS = [
   {
     id: "01",
-    title: "AdvChameleon",
+    title: "Anonymous",
     subtitle: "Universal adversarial audio attacks that transfer across models & speech recognition systems.",
     venue: "Patent, In submission",
     tags: ["Audio Attack", "Adversarial Patch"],
@@ -38,24 +36,11 @@ const PAPERS = [
 ];
 
 export default function ResearchSection() {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.15 });
-
   return (
-    <section id="research" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
+    <section id="research" className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
-          style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
-          02 / Research
-        </motion.p>
-        <AnimatedHeading
-          text="Publications|& Patents."
-          className="mb-14"
-          style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
-          delay={0.1}
-        />
+        <SectionHeader index="02" label="Research" title="Publications & Patents." highlightWords={["Patents."]} />
         <HorizontalSlider cards={PAPERS} />
       </div>
     </section>
