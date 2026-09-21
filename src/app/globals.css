@@ -527,3 +527,21 @@ html.is-scrolling .orb,
 html.is-scrolling .hero-orbit {
   animation-play-state: paused;
 }
+
+/* ---------- project scene droplets ---------- */
+@keyframes drop-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+@keyframes blob-morph {
+  0%, 100% { border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%; }
+  50% { border-radius: 42% 58% 46% 54% / 58% 44% 56% 42%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop-float,
+  .blob-morph {
+    animation: none !important;
+  }
+}
