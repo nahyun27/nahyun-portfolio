@@ -378,8 +378,10 @@ export default function ProjectsSection() {
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
 
-        {/* Header */}
-        <SectionHeader index="03" label="Projects" title="Selected Work." highlightWords={["Work."]} />
+        {/* Heading, tabs and list share the left column so the detail panel starts at the top of the section */}
+        <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 items-start">
+          <div className="w-full lg:w-[38%] flex flex-col">
+        <SectionHeader index="03" label="Projects" title="Selected Work." highlightWords={["Work."]} size="clamp(2rem, 4.2vw, 3.25rem)" marginBottom={36} />
 
         {/* Mobile tabs */}
         <div className="flex lg:hidden gap-2 flex-wrap" style={{ marginBottom: "20px", marginTop: "20px" }}>
@@ -408,11 +410,8 @@ export default function ProjectsSection() {
           })}
         </div>
 
-        {/* Master / detail */}
-        <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 items-stretch">
-
           {/* Left: project list (desktop) */}
-          <div className="w-full lg:w-[38%] flex-col hidden lg:flex">
+          <div className="w-full flex-col hidden lg:flex">
             {PROJECTS.map((project, i) => {
               const isActive = selectedId === project.id;
               return (
@@ -495,9 +494,10 @@ export default function ProjectsSection() {
               );
             })}
           </div>
+          </div>
 
           {/* Connector */}
-          <div className="hidden lg:flex flex-col items-center justify-center w-[4%] relative">
+          <div className="hidden lg:flex flex-col items-center justify-center w-[4%] relative self-stretch">
             <div className="w-px h-full max-h-40 mx-auto"
               style={{ background: `linear-gradient(180deg, transparent 0%, ${ACCENT} 50%, transparent 100%)`, opacity: 0.35 }} />
             <div className="absolute w-2 h-2 rounded-full"
@@ -514,7 +514,7 @@ export default function ProjectsSection() {
             }}
           >
             <div ref={scrollRef}
-              className="thin-scroll scroll-fade relative z-10 lg:max-h-[max(440px,calc(100vh-330px))] lg:overflow-y-auto">
+              className="thin-scroll scroll-fade relative z-10 lg:max-h-[max(440px,calc(100vh-200px))] lg:overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selected.id}
