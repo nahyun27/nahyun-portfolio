@@ -126,6 +126,18 @@ export default function FooterSection() {
                 <span className="absolute -bottom-2 left-0 w-0 h-[2px] rounded-full bg-[color:var(--mint)] transition-all duration-300 ease-out group-hover:w-full" />
               </motion.a>
             ))}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event("open-terminal"))}
+              data-cursor-hover
+              aria-label="Open the site terminal"
+              className="text-sm font-semibold tracking-widest transition-colors duration-300 relative group uppercase"
+              style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif", cursor: "none" }}
+              title="or press the ` key"
+            >
+              {">_"} Terminal
+              <span className="absolute -bottom-2 left-0 w-0 h-[2px] rounded-full bg-[color:var(--mint)] transition-all duration-300 ease-out group-hover:w-full" />
+            </button>
           </div>
         </div>
       </div>

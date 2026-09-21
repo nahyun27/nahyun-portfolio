@@ -1,365 +1,203 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
-import { tint } from "@/lib/color";
+import ProjectScene, { type SceneOrigin } from "@/components/ProjectScene";
+import MediaClip from "@/components/MediaClip";
+import { Icon } from "@/components/ProjectIcon";
+import { LINK_ICONS, ARROW_ICON } from "@/components/LinkIcons";
+import { SIDE_PROJECTS } from "@/data/sideProjects";
+import type { Project } from "@/data/projects";
 
-const PROJECT_DATA = [
-  {
-    title: "AlgoTrace",
-    subtitle: "Interactive visualization platform for understanding complex algorithms step by step. Control playback, watch real-time visualization, and build intuitive understanding.",
-    tags: ["React", "TypeScript", "Vite", "Framer Motion"],
-    github: "https://github.com/nahyun27/algotrace",
-    demo: "https://algorithm-trace.vercel.app/",
-    color: "var(--c-teal)",
-    image: "/images/demo.gif"
-  },
-  {
-    title: "Rise of Halfmoon",
-    subtitle: "Strategic moon phase card game. Match phases, create lunar cycles, and outsmart your opponent.",
-    tags: ["React", "Game Logic", "Web"],
-    github: "https://github.com/nahyun27/rise-of-halfmoon",
-    demo: "https://rise-of-halfmoon.vercel.app/",
-    color: "var(--c-yellow)",
-    image: "/images/halfmoon.gif"
-  },
-  {
-    title: "Stack Tower 3D",
-    subtitle: "Addictive 3D stacking game. Click at the perfect moment to stack blocks and reach for the sky.",
-    tags: ["Next.js", "Three.js", "3D"],
-    github: "https://github.com/nahyun27/stack-tower-3d",
-    demo: "https://tower-stacking.vercel.app/",
-    color: "var(--c-cyan)",
-    image: "/images/tower.gif"
-  },
-  {
-    title: "Floating Memories",
-    subtitle: "Immersive 3D interactive photo gallery. Navigate through the cosmos of your life's moments in zero gravity.",
-    tags: ["React Three Fiber", "WebGL", "Creative"],
-    github: "https://github.com/nahyun27/floating-memories",
-    demo: "https://floating-memories.vercel.app/",
-    color: "var(--violet)",
-    image: "/images/floating.gif"
-  },
-  {
-    title: "Beware Of Darkness",
-    subtitle: "Tense Unity maze escape game. Your vision narrows relentlessly while you collect coins to survive.",
-    tags: ["Unity", "C#", "Level Design"],
-    github: "https://github.com/nahyun27/Beware-Of-Darkness",
-    color: "var(--c-red)",
-    image: "/images/beware.gif"
-  },
-];
+function Card({ p, index, featured, onOpen }: { p: Project; index: number; featured: boolean; onOpen: (index: number, e: React.MouseEvent<HTMLElement>) => void }) {
+  const media = p.media?.[0];
+  const [primary, ...rest] = p.links;
 
-// ids follow the array order, so reordering the list needs no renumbering
-const PROJECTS = PROJECT_DATA.map((p, i) => ({ ...p, id: String(i + 1).padStart(2, "0") }));
-
-const GH_SVG = (
-  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-    <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-  </svg>
-);
-
-const DEMO_SVG = (
-  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-  </svg>
-);
-
-export default function CreativeSection() {
-  const ref = useRef<HTMLElement>(null);
-  const detailPanelRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
-
-  const [selectedId, setSelectedId] = useState(PROJECTS[0].id);
-  const selectedProject = PROJECTS.find(p => p.id === selectedId) || PROJECTS[0];
-
-  const handleSelectProject = (id: string) => {
-    setSelectedId(id);
-
-    // On mobile/tablet, smoothly scroll down to the detail panel
-    if (window.innerWidth < 1024) {
-      setTimeout(() => {
-        detailPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 50);
-    }
+  const track = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
   };
 
-  return ( 
-    <section id="creative" ref={ref} className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
-      style={{ backgroundColor: "transparent" }}>
-      <div className="section-inner w-full">
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      whileHover={{ y: -6 }}
+      transition={{ delay: (index % 3) * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      onMouseMove={track}
+      className={`glass glass-ring group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
+      style={{ borderRadius: 30, ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
+    >
+      {/* the project's own colour blooms under the cursor */}
+      <span
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ zIndex: 1, background: `radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, ${p.theme.accent} 20%, transparent), transparent 62%)` }}
+      />
 
-        {/* Header */}
-        <SectionHeader index="04" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} />
-
-        {/* ── Mobile Tab Navigation (lg:hidden) ── */}
-        <div className="flex lg:hidden gap-2 mb-6 flex-wrap" style={{ marginBottom: "20px", marginTop: "20px" }}>
-          {PROJECTS.map((project) => {
-            const isActive = selectedId === project.id;
-            return (
-              <button
-                key={project.id}
-                onClick={() => setSelectedId(project.id)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black tracking-wider transition-all duration-300"
-                style={{
-                  padding: "2px 7px",
-                  fontFamily: "'Inter', sans-serif",
-                  color: isActive ? project.color : "var(--w250)",
-                  border: `1px solid ${isActive ? tint(project.color, 38) : "var(--w80)"}`,
-                  backgroundColor: isActive ? tint(project.color, 7) : "transparent",
-                }}
-              >
-                <span>{project.id}</span>
-                <span className="font-medium" style={{ color: isActive ? "var(--text-soft)" : "var(--w250)", fontSize: "11px" }}>
-                  {project.title.split(" ").slice(0, 3).join(" ")}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Master-Detail Grid */}
-        <div className="flex flex-col lg:flex-row gap-2 lg:gap-0 items-stretch">
-          {/* ── Left: Project List (Desktop only) ── */}
-          <div className="w-full lg:w-[40%] flex-col hidden lg:flex">
-            {PROJECTS.map((project, i) => {
-              const isActive = selectedId === project.id;
-              return (
-                <motion.button
-                  key={project.id}
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
-                  whileHover={{ x: 6 }}
-                  transition={{ delay: 0.1 + i * 0.08, duration: 0.5, type: "spring", stiffness: 300, damping: 25 }}
-                  onClick={() => handleSelectProject(project.id)}
-                  className="group relative w-full text-left outline-none focus:outline-none"
-                >
-                  {/* Row */}
-                  <div
-                    className="relative flex items-center gap-5 px-8 py-7 transition-all duration-400 border-b"
-                    style={{
-                      borderColor: "var(--w50)",
-                      backgroundColor: isActive ? "var(--w25)" : "transparent",
-                      padding: "7px 14px"
-                    }}
-                  >
-                    {/* Active left accent bar */}
-                    <motion.div
-                      animate={{ scaleY: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute left-0 top-0 bottom-0 w-[3px] origin-top rounded-r-full"
-                      style={{ backgroundColor: project.color }}
-                    />
-
-                    {/* Number */}
-                    <span
-                      className="text-[14px] font-black tracking-widest shrink-0 transition-colors duration-300"
-                      style={{ fontFamily: "'Inter', sans-serif", color: isActive ? project.color : "var(--w150)" }}
-                    >
-                      {project.id}
-                    </span>
-
-                    {/* Text */}
-                    <div className="flex-1 min-w-0">
-                      <h4
-                        className="font-bold text-xl md:text-2xl leading-tight transition-colors duration-300 mb-2 truncate group-hover:text-[color:var(--text)]"
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          color: isActive ? "var(--text)" : "var(--t4)"
-                        }}
-                      >
-                        {project.title}
-                      </h4>
-                      <div className="flex flex-wrap gap-x-3 gap-y-1">
-                        {project.tags.map(tag => (
-                          <span key={tag}
-                            className="text-[13px] uppercase tracking-[0.15em] font-bold transition-colors duration-300"
-                            style={{ fontFamily: "'Inter', sans-serif", color: isActive ? "var(--w400)" : "var(--w120)" }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Arrow / connector hint */}
-                    <motion.div
-                      animate={{ x: isActive ? 0 : -4, opacity: isActive ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="shrink-0 flex items-center transition-transform duration-300 group-hover:translate-x-1.5"
-                      style={{ color: project.color }}
-                    >
-                      <svg width="30" height="30" viewBox="0 0 20 20" fill="none">
-                        <path d="M5 10h10M11 6l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </motion.div>
-
-                    {/* Hover shimmer */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      whileHover={{ opacity: 1 }}
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background: `linear-gradient(90deg, ${tint(project.color, 2)} 0%, transparent 70%)`,
-                      }}
-                    />
-                  </div>
-                </motion.button>
-              );
-            })}
+      {/* preview, opens the scene */}
+      <button
+        type="button"
+        onClick={(e) => onOpen(index, e)}
+        data-cursor-hover
+        aria-label={`Open ${p.title}`}
+        className="relative block w-full overflow-hidden"
+        style={{ aspectRatio: featured ? "16 / 8" : "16 / 10", flex: "1 1 auto", background: p.theme.bg, cursor: "none", zIndex: 2 }}
+      >
+        {media?.video && (
+          <div className="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]">
+            <MediaClip src={media.video} poster={media.src} label={p.title} />
           </div>
+        )}
+        {/* glass sheen and colour wash so the clip feels like it sits under water */}
+        <span
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: `radial-gradient(90% 70% at 12% 0%, rgba(255,255,255,0.22), transparent 55%), linear-gradient(to top, ${p.theme.bg}CC 0%, transparent 42%)`,
+          }}
+        />
+        <span
+          className="glass-chip absolute grid place-items-center"
+          style={{ left: 16, top: 16, height: 30, padding: "0 12px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#fff", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)" }}
+        >
+          {p.id}
+        </span>
+        <span
+          aria-hidden
+          className="absolute grid place-items-center opacity-0 scale-75 transition-all duration-500 group-hover:opacity-100 group-hover:scale-100"
+          style={{
+            left: "50%",
+            top: "50%",
+            width: 92,
+            height: 92,
+            marginLeft: -46,
+            marginTop: -46,
+            borderRadius: "50%",
+            color: "#fff",
+            background: "radial-gradient(circle at 30% 24%, rgba(255,255,255,0.5), rgba(255,255,255,0.12) 55%), rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.5)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 12,
+            fontWeight: 800,
+            letterSpacing: "0.14em",
+          }}
+        >
+          OPEN
+        </span>
+      </button>
 
-          {/* ── Connector Bridge ── */}
-          <div className="hidden lg:flex flex-col items-center justify-center w-[6%] relative">
-            <div
-              className="w-px h-full max-h-40 mx-auto"
-              style={{
-                background: `linear-gradient(180deg, transparent 0%, ${selectedProject.color} 50%, transparent 100%)`,
-                opacity: 0.35,
-              }}
-            />
-            <div
-              className="absolute w-2 h-2 rounded-full"
-              style={{
-                backgroundColor: selectedProject.color,
-                boxShadow: `0 0 10px ${selectedProject.color}`,
-                transition: "background-color 0.5s ease, box-shadow 0.5s ease",
-              }}
-            />
-          </div>
-
-          {/* ── Right: Detail Panel ── */}
-          <motion.div
-            ref={detailPanelRef}
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.6 }}
-            className="glass glass-ring w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden h-auto"
+      {/* body */}
+      <div className="relative flex flex-col flex-1" style={{ padding: featured ? "28px 30px 30px" : "24px 26px 26px", gap: 16, zIndex: 2 }}>
+        <div className="flex items-center" style={{ gap: 14 }}>
+          <span
+            className="blob-morph grid place-items-center shrink-0"
             style={{
-              ["--ring-color" as string]: selectedProject.color,
-              padding: "1.2rem", // Keep reduced padding
+              width: 46,
+              height: 46,
+              color: "#0B0D10",
+              background: `radial-gradient(circle at 28% 22%, rgba(255,255,255,0.6), transparent 45%), linear-gradient(140deg, ${p.theme.accent}, ${p.theme.accent2})`,
+              boxShadow: `0 12px 24px -10px ${p.theme.accent}`,
+              animation: "blob-morph 8s ease-in-out infinite",
             }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedProject.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="relative flex flex-col h-full"
-              >
+            <Icon name={p.icon} size={20} strokeWidth={1.9} />
+          </span>
+          <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: featured ? "clamp(1.7rem, 3vw, 2.3rem)" : "clamp(1.35rem, 2vw, 1.6rem)", letterSpacing: "-0.03em", lineHeight: 1.1, color: "var(--text)" }}>
+            {p.title}
+          </h3>
+        </div>
 
-                {/* Content */}
-                <div className="flex-1 px-4 pb-4 pt-3 md:px-8 md:pb-8 flex flex-col gap-4">
-                  {/* Title row */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <span
-                        className="text-[10px] font-black tracking-[0.2em] uppercase block mb-1.5"
-                        style={{ color: selectedProject.color, fontFamily: "'Inter', sans-serif" }}
-                      >
-                        {selectedProject.id} / {PROJECTS.length.toString().padStart(2, "0")}
-                      </span>
-                      <h3
-                        className="font-black text-[22px] leading-tight break-words pr-2 md:text-3xl"
-                        style={{ fontFamily: "var(--font-display)", color: "var(--text)", letterSpacing: "-0.02em" }}
-                      >
-                        {selectedProject.title}
-                      </h3>
-                    </div>
+        <p
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 15,
+            lineHeight: 1.65,
+            color: "var(--t3)",
+            display: "-webkit-box",
+            WebkitLineClamp: featured ? 3 : 2,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {p.summary}
+        </p>
 
-                    {/* Link buttons */}
-                    <div className="flex gap-2 shrink-0 pt-1">
-                      {selectedProject.github && (
-                        <a
-                          href={selectedProject.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-lg"
-                          style={{ backgroundColor: "var(--w50)", border: "1px solid var(--w80)", color: "var(--t2)" }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${tint(selectedProject.color, 25)}`; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--t2)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--w80)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
-                          title="GitHub"
-                        >
-                          {GH_SVG}
-                        </a>
-                      )}
-                      {selectedProject.demo && (
-                        <a
-                          href={selectedProject.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-lg"
-                          style={{ backgroundColor: "var(--w50)", border: "1px solid var(--w80)", color: "var(--t2)" }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${tint(selectedProject.color, 25)}`; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--t2)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--w80)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
-                          title="Live Demo"
-                        >
-                          {DEMO_SVG}
-                        </a>
-                      )}
-                    </div>
-                  </div>
+        <div className="flex flex-wrap" style={{ gap: 6 }}>
+          {p.tags.map((t) => (
+            <span key={t} style={{ padding: "4px 11px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--t3)", background: "var(--w40)", border: "1px solid var(--w80)" }}>
+              {t}
+            </span>
+          ))}
+        </div>
 
-                  {/* Image block */}
-                  {selectedProject.image && (
-                    <div className="relative w-full rounded-2xl overflow-hidden group shadow-xl" style={{ paddingBottom: "55%", border: "1px solid var(--w40)" }}>
-                      <img
-                        src={selectedProject.image}
-                        alt={selectedProject.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                      />
-                      {/* Interactive hover glow over the image */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                        style={{ boxShadow: `inset 0 0 50px ${tint(selectedProject.color, 25)}, inset 0 0 10px ${tint(selectedProject.color, 13)}` }} />
-
-                      {/* Color overlay fade at bottom */}
-                      <div
-                        className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none transition-opacity duration-700 group-hover:opacity-70"
-                        style={{ background: `linear-gradient(to top, var(--surface), transparent)` }}
-                      />
-                    </div>
-                  )}
-
-                  {/* Description */}
-                  <p className="text-[13px] md:text-base mb-1 leading-[1.7] flex-1"
-                    style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif" }}>
-                    {selectedProject.subtitle}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t" style={{ borderColor: "var(--w50)" }}>
-                    {selectedProject.tags.map((tag: string) => (
-                      <span key={tag}
-                        className="px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] rounded-full"
-                        style={{
-                          backgroundColor: `${tint(selectedProject.color, 8)}`,
-                          border: `1px solid ${tint(selectedProject.color, 19)}`,
-                          color: selectedProject.color,
-                          fontFamily: "'Inter', sans-serif", padding: "5px 10px"
-                        }}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* BG glow */}
-            <div
-              className="absolute inset-0 pointer-events-none z-0"
-              style={{
-                background: `radial-gradient(ellipse at 80% 120%, ${tint(selectedProject.color, 6)} 0%, transparent 60%)`,
-                transition: "background 0.8s ease",
-              }}
-            />
-          </motion.div>
-
+        {/* the way out to the real thing: big, labelled, impossible to miss */}
+        <div className="flex flex-wrap" style={{ gap: 10, marginTop: "auto", paddingTop: 6 }}>
+          <a
+            href={primary.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-cursor-hover
+            className="inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-8px_rgba(var(--mint-rgb),0.6)]"
+            style={{ gap: 10, height: 52, padding: "0 28px", borderRadius: 999, background: "var(--fill-brand)", color: "var(--on-mint)", fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 800, cursor: "none", flex: featured ? "0 0 auto" : "1 1 auto" }}
+          >
+            {LINK_ICONS[primary.kind]}
+            {primary.label}
+            {ARROW_ICON}
+          </a>
+          {rest.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor-hover
+              className="glass-chip hv-mint inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5"
+              style={{ gap: 10, height: 52, padding: "0 24px", borderRadius: 999, color: "var(--text)", fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 700, cursor: "none" }}
+            >
+              {LINK_ICONS[l.kind]}
+              {l.label}
+            </a>
+          ))}
         </div>
       </div>
+    </motion.article>
+  );
+}
+
+export default function CreativeSection() {
+  const [open, setOpen] = useState<{ index: number; origin: SceneOrigin } | null>(null);
+
+  const openScene = (index: number, e: React.MouseEvent<HTMLElement>) => {
+    let { clientX: x, clientY: y } = e;
+    if (x === 0 && y === 0) {
+      const r = e.currentTarget.getBoundingClientRect();
+      x = r.left + r.width / 2;
+      y = r.top + r.height / 2;
+    }
+    setOpen({ index, origin: { x, y, R: Math.hypot(window.innerWidth, window.innerHeight) + 180 } });
+  };
+
+  return (
+    <section id="creative" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
+      <div className="section-inner w-full">
+        <SectionHeader index="04" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} marginBottom={36} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
+          {SIDE_PROJECTS.map((p, i) => (
+            <Card key={p.id} p={p} index={i} featured={i === 0} onOpen={openScene} />
+          ))}
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {open && <ProjectScene projects={SIDE_PROJECTS} startIndex={open.index} origin={open.origin} onClose={() => setOpen(null)} backLabel="Back" />}
+      </AnimatePresence>
     </section>
   );
 }

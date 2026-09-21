@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import AdversarialName from "@/components/AdversarialName";
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
 const WORDS = ["Nahyun", "Kim"];
@@ -61,7 +62,8 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Name */}
+        {/* Name, wrapped so hovering it can fool a pretend classifier */}
+        <AdversarialName>
         <h1
           aria-label="Nahyun Kim"
           className="flex flex-wrap"
@@ -106,6 +108,7 @@ export default function HeroSection() {
             </span>
           ))}
         </h1>
+        </AdversarialName>
 
         {/* Role */}
         <motion.p

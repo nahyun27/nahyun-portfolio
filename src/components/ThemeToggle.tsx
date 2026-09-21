@@ -1,22 +1,13 @@
 "use client";
 
+import { applyTheme, currentTheme } from "@/lib/theme";
+
 /**
  * Theme lives on <html data-theme>. The inline script in layout.tsx sets it before first paint,
  * and both icons are always rendered so CSS decides which one shows (no hydration mismatch).
  */
 export default function ThemeToggle() {
-  const toggle = () => {
-    const root = document.documentElement;
-    const next = root.dataset.theme === "light" ? "dark" : "light";
-    root.classList.add("theme-anim");
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("theme", next);
-    } catch {
-      // storage can be blocked, the toggle still works for this visit
-    }
-    window.setTimeout(() => root.classList.remove("theme-anim"), 450);
-  };
+  const toggle = () => applyTheme(currentTheme() === "light" ? "dark" : "light");
 
   return (
     <button
