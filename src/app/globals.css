@@ -357,15 +357,15 @@ section[id]:not(#hero) {
 .glass,
 .glass-chip {
   background: radial-gradient(120% 90% at 0% 0%, var(--glass-sheen), transparent 55%), var(--glass-bg);
-  -webkit-backdrop-filter: blur(22px) saturate(1.6);
-  backdrop-filter: blur(22px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--glass-line);
   box-shadow: var(--glass-hi), var(--glass-shadow);
 }
 
 .glass-chip {
-  -webkit-backdrop-filter: blur(14px) saturate(1.5);
-  backdrop-filter: blur(14px) saturate(1.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   box-shadow: var(--glass-hi);
 }
 
@@ -509,4 +509,10 @@ section[id]:not(#hero) {
   .hero-orbit {
     animation: none;
   }
+}
+
+/* while scrolling, hold the backdrop still so glass cards do not re-blur a moving background every frame */
+html.is-scrolling .orb,
+html.is-scrolling .hero-orbit {
+  animation-play-state: paused;
 }
