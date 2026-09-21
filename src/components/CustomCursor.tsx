@@ -37,8 +37,8 @@ export default function CustomCursor() {
         if (ringRef.current) {
           ringRef.current.style.width = "48px";
           ringRef.current.style.height = "48px";
-          ringRef.current.style.borderColor = "#00C9A7";
-          ringRef.current.style.background = "rgba(0,201,167,0.06)";
+          ringRef.current.style.borderColor = "var(--mint)";
+          ringRef.current.style.background = "rgba(var(--mint-rgb),0.06)";
         }
       }
     };
@@ -46,7 +46,7 @@ export default function CustomCursor() {
       if (ringRef.current) {
         ringRef.current.style.width = "28px";
         ringRef.current.style.height = "28px";
-        ringRef.current.style.borderColor = "rgba(240,237,230,0.5)";
+        ringRef.current.style.borderColor = "color-mix(in srgb, var(--text) 50%, transparent)";
         ringRef.current.style.background = "transparent";
       }
     };
@@ -76,7 +76,7 @@ export default function CustomCursor() {
           height: 28,
           translateX: "-50%",
           translateY: "-50%",
-          borderColor: "rgba(240,237,230,0.5)",
+          borderColor: "color-mix(in srgb, var(--text) 50%, transparent)",
           transition: "width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease",
         }}
       />
@@ -89,7 +89,7 @@ export default function CustomCursor() {
           height: 4,
           translateX: "-50%",
           translateY: "-50%",
-          backgroundColor: "#00C9A7",
+          backgroundColor: "var(--mint)",
         }}
       />
     </>

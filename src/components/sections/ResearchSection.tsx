@@ -47,8 +47,8 @@ export default function ResearchSection() {
       <div className="section-inner w-full">
         <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
-          style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
-          02 — Research
+          style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
+          02 / Research
         </motion.p>
         <AnimatedHeading
           text="Publications|& Patents."

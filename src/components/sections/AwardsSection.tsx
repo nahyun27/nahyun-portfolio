@@ -9,10 +9,10 @@ const EXPERIENCES = [
   { year: "2025", title: "Patent: Audio Misclassification", org: "특허) 배음 구조를 활용한 오디오 오분류 유도 방법 및 이를 위한 컴퓨터 장치" },
   { year: "2024", title: "Program: Adjusting Perturbation Intensity", org: "프로그램 등록) 시간적 변화량을 활용한 섭동 강도 조정 적대적 공격" },
   { year: "2024", title: "NRF Graduate Research Fellowship", org: "한국연구재단 이공분야 석사과정생 연구장려금 선정" },
-  { year: "2021", title: "Excellence Award — SW Startup Ideathon", org: "제7회 한양대학교 ERICA SW 창업 아이디어톤 우수상" },
-  { year: "2020", title: "Grand Prize — SW Startup Makerthon", org: "제2회 한양대학교 ERICA SW 창업 메이커톤 대상 - 🛵 Deli-Go (Delivery carpooling app)" },
-  { year: "2020", title: "Research Participant — SW Convergence R&D", org: "한양대학교 ERICA SW융합연구개발 과제 참여" },
-  { year: "2020", title: "Mentor — Science Gifted SW Hackathon", org: "대학부설 과학영재 교육원 SW 해커톤 대회 멘토 활동" },
+  { year: "2021", title: "Excellence Award, SW Startup Ideathon", org: "제7회 한양대학교 ERICA SW 창업 아이디어톤 우수상" },
+  { year: "2020", title: "Grand Prize, SW Startup Makerthon", org: "제2회 한양대학교 ERICA SW 창업 메이커톤 대상 🛵 Deli-Go (Delivery carpooling app)" },
+  { year: "2020", title: "Research Participant, SW Convergence R&D", org: "한양대학교 ERICA SW융합연구개발 과제 참여" },
+  { year: "2020", title: "Mentor, Science Gifted SW Hackathon", org: "대학부설 과학영재 교육원 SW 해커톤 대회 멘토 활동" },
 ];
 
 export default function AwardsSection() {
@@ -28,8 +28,8 @@ export default function AwardsSection() {
             <div className="sticky top-40">
               <motion.p initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
-                style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
-                05 — Experiences
+                style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
+                05 / Experiences
               </motion.p>
               <AnimatedHeading
                 text="Awards &|Exp."
@@ -40,18 +40,18 @@ export default function AwardsSection() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col gap-0 border-t" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+          <div className="flex-1 flex flex-col gap-0 border-t" style={{ borderColor: 'var(--w50)' }}>
             {EXPERIENCES.map((ex, i) => (
               <motion.div key={ex.title + i}
                 initial={{ opacity: 0, x: 20 }}
                 animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                 transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
                 className="group flex flex-row sm:flex-row sm:items-center justify-between py-2 sm:py-3 pr-4 sm:pr-8 gap-2 sm:gap-10 border-b cursor-default transition-all duration-300"
-                style={{ borderColor: 'rgba(255,255,255,0.05)', padding: '10px' }}
+                style={{ borderColor: 'var(--w50)', padding: '10px' }}
                 onMouseEnter={(e) => {
                   if ('ontouchstart' in window) return;
                   const el = e.currentTarget as HTMLDivElement;
-                  el.style.backgroundColor = "rgba(0,201,167,0.04)";
+                  el.style.backgroundColor = "rgba(var(--mint-rgb),0.04)";
                   el.style.paddingLeft = "24px";
                 }}
                 onMouseLeave={(e) => {
@@ -63,17 +63,17 @@ export default function AwardsSection() {
               >
                 <div className="flex items-start gap-3 sm:gap-5 flex-1 min-w-0">
                   <div className="mt-1 shrink-0 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300 hidden sm:block"
-                    style={{ backgroundColor: "#00C9A7" }} />
+                    style={{ backgroundColor: "var(--mint)" }} />
                   <div className="min-w-0 flex-1">
                     {/* Mobile: title on left, year on right */}
                     <div className="flex items-start justify-between gap-2 sm:hidden">
-                      <h3 className="font-bold text-base transition-colors duration-300 group-hover:text-white"
-                        style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.4" }}>
+                      <h3 className="font-bold text-base transition-colors duration-300 group-hover:text-[color:var(--text)]"
+                        style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", lineHeight: "1.4" }}>
                         {ex.title}
                       </h3>
-                      <span className="shrink-0 text-[10px] font-bold rounded-full text-[#00C9A7] mt-0.5"
+                      <span className="shrink-0 text-[10px] font-bold rounded-full text-[color:var(--mint)] mt-0.5"
                         style={{
-                          border: "1px solid rgba(0,201,167,0.3)",
+                          border: "1px solid rgba(var(--mint-rgb),0.3)",
                           fontFamily: "'Inter', sans-serif",
                           letterSpacing: "0.05em",
                           padding: "2px 7px",
@@ -82,19 +82,19 @@ export default function AwardsSection() {
                       </span>
                     </div>
                     {/* Desktop: title without inline badge */}
-                    <h3 className="font-bold text-xl transition-colors duration-300 group-hover:text-white hidden sm:block"
-                      style={{ fontFamily: "'Syne', sans-serif", color: "#F0EDE6", lineHeight: "1.3" }}>
+                    <h3 className="font-bold text-xl transition-colors duration-300 group-hover:text-[color:var(--text)] hidden sm:block"
+                      style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", lineHeight: "1.3" }}>
                       {ex.title}
                     </h3>
-                    <p className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: "#777", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
+                    <p className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
                       {ex.org}
                     </p>
                   </div>
                 </div>
                 {/* Desktop: badge on right */}
-                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[#00C9A7] group-hover:bg-[#00C9A7] group-hover:text-[#0C0C0F] group-hover:shadow-[0_0_12px_rgba(0,201,167,0.6)]"
+                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[color:var(--mint)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
                   style={{
-                    border: "1px solid rgba(0,201,167,0.3)",
+                    border: "1px solid rgba(var(--mint-rgb),0.3)",
                     fontFamily: "'Inter', sans-serif",
                     letterSpacing: "0.05em",
                     padding: "4px 8px",

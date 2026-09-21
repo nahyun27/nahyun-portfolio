@@ -23,7 +23,7 @@ export default function HeroSection() {
         style={{
           top: "-20%", left: "-10%",
           width: "50vw", height: "50vw",
-          background: "radial-gradient(circle, rgba(0,201,167,0.12) 0%, transparent 65%)",
+          background: "radial-gradient(circle, rgba(var(--mint-rgb),0.12) 0%, transparent 65%)",
           transform: "translateZ(0)",
         }}
       />
@@ -33,7 +33,7 @@ export default function HeroSection() {
         style={{
           bottom: "-10%", right: "-5%",
           width: "40vw", height: "40vw",
-          background: "radial-gradient(circle, rgba(0,201,167,0.08) 0%, transparent 65%)",
+          background: "radial-gradient(circle, rgba(var(--mint-rgb),0.08) 0%, transparent 65%)",
           transform: "translateZ(0)",
         }}
       />
@@ -44,7 +44,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 12 }} animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
           transition={{ delay: 0.2, duration: 0.5 }}
           className="text-xs tracking-[0.35em] uppercase font-medium mb-10"
-          style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif", marginLeft: "20px" }}
+          style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif", marginLeft: "20px" }}
         >
           Portfolio · 2026
         </motion.p>
@@ -57,7 +57,7 @@ export default function HeroSection() {
             fontWeight: 900,
             lineHeight: 0.88,
             letterSpacing: "-0.04em",
-            color: "#F0EDE6",
+            color: "var(--text)",
             fontSize: "clamp(2.5rem, 11vw, 11rem)",
             marginBottom: "clamp(1.5rem, 3vw, 2.5rem)",
             overflow: "visible",
@@ -87,8 +87,8 @@ export default function HeroSection() {
           transition={{ delay: 1.0, duration: 0.6 }}
           className="flex items-center gap-5 mb-8 ml-5"
         >
-          <div className="w-10 h-[1px]" style={{ backgroundColor: "#00C9A7" }} />
-          <p className="text-base md:text-lg" style={{ color: "#888", fontFamily: "'Inter', sans-serif" }}>
+          <div className="w-10 h-[1px]" style={{ backgroundColor: "var(--mint)" }} />
+          <p className="text-base md:text-lg" style={{ color: "var(--t2)", fontFamily: "'Inter', sans-serif" }}>
             AI Security Researcher &amp; Creative Developer
           </p>
         </motion.div>
@@ -103,18 +103,13 @@ export default function HeroSection() {
             <motion.span key={tag}
               initial={{ scale: 0, opacity: 0 }} animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
               transition={{ delay: 1.25 + i * 0.07, type: "spring", stiffness: 380, damping: 24 }}
-              whileHover={{
-                scale: 1.05,
-                color: "#00C9A7",
-                borderColor: "rgba(0,201,167,0.4)",
-                backgroundColor: "rgba(0,201,167,0.08)"
-              }}
-              className="px-4 py-2 rounded-full text-xs font-bold tracking-[0.05em] cursor-default transition-all duration-300"
+              whileHover={{ scale: 1.05 }}
+              className="hv-mint px-4 py-2 rounded-full text-xs font-bold tracking-[0.05em] cursor-default transition-all duration-300"
               style={{
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "#777",
+                border: "1px solid var(--w80)",
+                color: "var(--t3)",
                 fontFamily: "'Inter', sans-serif",
-                backgroundColor: "rgba(255,255,255,0.02)",
+                backgroundColor: "var(--w20)",
                 backdropFilter: "blur(8px)",
                 padding: "4px 10px"
               }}
@@ -136,23 +131,23 @@ export default function HeroSection() {
           style={{ transformOrigin: "center center", transform: "translateZ(0)", willChange: "transform" }}
         >
           {/* Outer dashed ring */}
-          <circle cx="400" cy="400" r="380" stroke="#00C9A7" strokeWidth="0.5" strokeDasharray="4 12" />
+          <circle cx="400" cy="400" r="380" stroke="var(--mint)" strokeWidth="0.5" strokeDasharray="4 12" />
           {/* Inner solid ring */}
-          <circle cx="400" cy="400" r="280" stroke="#F0EDE6" strokeWidth="0.5" opacity="0.3" />
+          <circle cx="400" cy="400" r="280" stroke="var(--text)" strokeWidth="0.5" opacity="0.3" />
           {/* Inner dotted ring */}
-          <circle cx="400" cy="400" r="180" stroke="#00C9A7" strokeWidth="2" strokeDasharray="1 15" strokeLinecap="round" opacity="0.8" />
+          <circle cx="400" cy="400" r="180" stroke="var(--mint)" strokeWidth="2" strokeDasharray="1 15" strokeLinecap="round" opacity="0.8" />
 
           {/* Orbiting ellipses */}
-          <ellipse cx="400" cy="400" rx="360" ry="120" stroke="#00C9A7" strokeWidth="0.5" opacity="0.5" transform="rotate(30 400 400)" />
-          <ellipse cx="400" cy="400" rx="360" ry="120" stroke="#F0EDE6" strokeWidth="0.5" opacity="0.3" transform="rotate(-60 400 400)" />
+          <ellipse cx="400" cy="400" rx="360" ry="120" stroke="var(--mint)" strokeWidth="0.5" opacity="0.5" transform="rotate(30 400 400)" />
+          <ellipse cx="400" cy="400" rx="360" ry="120" stroke="var(--text)" strokeWidth="0.5" opacity="0.3" transform="rotate(-60 400 400)" />
 
           {/* Abstract connecting lines */}
-          <path d="M400 20 L780 400 L400 780 L20 400 Z" stroke="#F0EDE6" strokeWidth="0.5" opacity="0.15" />
+          <path d="M400 20 L780 400 L400 780 L20 400 Z" stroke="var(--text)" strokeWidth="0.5" opacity="0.15" />
 
           {/* Glowing Accents */}
-          <circle cx="400" cy="20" r="6" fill="#00C9A7" style={{ filter: "drop-shadow(0 0 10px #00C9A7)" }} />
-          <circle cx="780" cy="400" r="4" fill="#F0EDE6" />
-          <circle cx="220" cy="400" r="4" fill="#00C9A7" />
+          <circle cx="400" cy="20" r="6" fill="var(--mint)" style={{ filter: "drop-shadow(0 0 10px var(--mint))" }} />
+          <circle cx="780" cy="400" r="4" fill="var(--text)" />
+          <circle cx="220" cy="400" r="4" fill="var(--mint)" />
         </motion.svg>
       </div>
 
@@ -161,13 +156,13 @@ export default function HeroSection() {
         className="flex flex-col items-center gap-2 pb-10 relative z-10"
         initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : { opacity: 0 }} transition={{ delay: 1.9 }}
       >
-        <span className="tracking-[0.3em] uppercase text-xs" style={{ color: "#444", fontFamily: "'Inter', sans-serif" }}>
+        <span className="tracking-[0.3em] uppercase text-xs" style={{ color: "var(--t6)", fontFamily: "'Inter', sans-serif" }}>
           Scroll
         </span>
-        <div className="relative w-[1px] h-12 overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.06)" }}>
+        <div className="relative w-[1px] h-12 overflow-hidden" style={{ backgroundColor: "var(--w60)" }}>
           <motion.div
             className="absolute top-0 left-0 w-full h-1/2"
-            style={{ backgroundColor: "#00C9A7" }}
+            style={{ backgroundColor: "var(--mint)" }}
             animate={{ y: ["-100%", "200%"] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           />
