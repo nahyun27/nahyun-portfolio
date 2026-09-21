@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+import NavDroplet, { type DropRect } from "@/components/NavDroplet";
 
 const NAV_LINKS = [
   { id: "about", label: "About" },
@@ -17,6 +18,8 @@ export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("");
+  const [rect, setRect] = useState<DropRect>({ x: 0, w: 0 });
+  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
@@ -42,6 +45,14 @@ export default function NavBar() {
         }
       }
       setActive(current);
+
+      // droplet follows the active tab; while no tab is active it stays where it last was and fades out
+      const measure = (id: string) => {
+        const el = itemRefs.current[id];
+        return el ? { x: el.offsetLeft, w: el.offsetWidth } : null;
+      };
+      const next = measure(current || ids[0]);
+      if (next) setRect((prev) => (current || prev.w === 0 ? next : prev));
     };
 
     const onScroll = () => {
@@ -55,6 +66,10 @@ export default function NavBar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     raf = window.requestAnimationFrame(update);
+    // tab widths change once the web font is in
+    document.fonts?.ready.then(() => {
+      raf = window.requestAnimationFrame(update);
+    });
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
@@ -111,12 +126,16 @@ export default function NavBar() {
           </button>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center" style={{ gap: 2 }}>
+          <div className="hidden md:flex items-center relative" style={{ gap: 2 }}>
+            <NavDroplet rect={rect} visible={active !== ""} />
             {NAV_LINKS.map((l) => {
               const isActive = active === l.id;
               return (
                 <button
                   key={l.id}
+                  ref={(el) => {
+                    itemRefs.current[l.id] = el;
+                  }}
                   onClick={() => scrollTo(l.id)}
                   className="relative text-sm font-medium transition-colors duration-200"
                   style={{
@@ -129,18 +148,6 @@ export default function NavBar() {
                   }}
                   data-cursor-hover
                 >
-                  {isActive && (
-                    <motion.span
-                      layoutId="nav-active-pill"
-                      className="absolute inset-0"
-                      style={{
-                        borderRadius: 999,
-                        backgroundColor: "rgba(var(--mint-rgb),0.14)",
-                        boxShadow: "inset 0 0 0 1px rgba(var(--mint-rgb),0.3)",
-                      }}
-                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                    />
-                  )}
                   <span className="relative">{l.label}</span>
                 </button>
               );
