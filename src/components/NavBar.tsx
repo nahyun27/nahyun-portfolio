@@ -21,9 +21,21 @@ export default function NavBar() {
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+    const root = document.documentElement;
+    let timer: number | undefined;
+    const fn = () => {
+      setScrolled(window.scrollY > 40);
+      // pause the ambient animation while scrolling, resume shortly after it stops
+      root.classList.add("is-scrolling");
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => root.classList.remove("is-scrolling"), 160);
+    };
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", fn);
+      window.clearTimeout(timer);
+      root.classList.remove("is-scrolling");
+    };
   }, []);
 
   // highlight the section that currently crosses the middle of the viewport
@@ -69,8 +81,8 @@ export default function NavBar() {
             padding: "0 8px 0 22px",
             borderRadius: 999,
             backgroundColor: scrolled ? "rgba(var(--bg-rgb),0.78)" : "rgba(var(--bg-rgb),0.5)",
-            backdropFilter: "blur(20px) saturate(1.5)",
-            WebkitBackdropFilter: "blur(20px) saturate(1.5)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
             border: "1px solid var(--w80)",
             boxShadow: scrolled
               ? "var(--glass-hi), 0 12px 40px rgba(var(--shadow-rgb),calc(0.35 * var(--shadow-k)))"
