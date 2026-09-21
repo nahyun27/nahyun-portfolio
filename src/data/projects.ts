@@ -292,17 +292,46 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     icon: "branch",
     title: "Software Dev Practices",
     summary:
-      "A team project built around the way software is actually shipped: agile process, automated pipelines and tests.",
-    highlights: [
-      "Worked as a team with agile methodology.",
-      "Automated build and delivery through CI/CD pipelines.",
-      "Testing built into the workflow.",
+      "A team project that redesigned how a fictional outsourcing company, SETB, builds software. We replaced its waterfall process with a lightweight agile one and wired up review, testing and CI/CD around a real Java project.",
+    media: [
+      {
+        src: "/images/projects/swdev-cicd.png",
+        label: "CI / CD",
+        caption:
+          "A PR to develop triggers Jenkins through a webhook. Jenkins builds in a Docker container with Gradle, runs the JUnit tests, reports to Slack, and a push to master publishes a JAR as a GitHub release.",
+        fit: "contain",
+        bg: "#FFFFFF",
+        aspect: 60,
+      },
+      {
+        src: "/images/projects/swdev-gitflow.png",
+        label: "Git flow",
+        caption: "Git flow without a release branch: master, develop, feature and hotfix, with the issue number in every branch and commit.",
+        fit: "contain",
+        bg: "#FFFFFF",
+        aspect: 62,
+      },
     ],
-    tags: ["Agile", "CI/CD", "Testing"],
-    links: [{ label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" }],
+    metrics: [
+      { value: "6", label: "people, five defined roles" },
+      { value: "1 day", label: "code review limit" },
+      { value: "1,000", label: "lines max per pull request" },
+    ],
+    highlights: [
+      "Kanban over Scrum, because the company had never done agile and one developer had to be able to work on several projects. To cover Kanban's weak spots we added lead time distributions for realistic deadlines and asynchronous pair programming.",
+      "Git flow without the release branch, since SETB hands work over instead of running a service. Branches and commits carry the Jira issue number, and commit messages follow a fixed header format.",
+      "Review rules: small PRs, low context communication, a one day turnaround and an emoji vocabulary for comments. Sub feature PRs are reviewed by the pair partner, feature PRs by the tech leader.",
+      "Static analysis with SonarQube, UML diagrams kept per project as reusable templates, and unit tests written after the code. We tried TDD first, dropped it when test writing pushed the schedule back, and kept unit tests over integration tests for cost and debugging speed.",
+      "CI/CD on Jenkins, Docker and Gradle with Slack notifications, demonstrated end to end on a Java game: PR, tests, master merge, tagged release and downloadable jar (v1.1.0).",
+    ],
+    tags: ["Agile", "Kanban", "Jenkins", "Docker", "Gradle", "JUnit", "SonarQube", "GitHub"],
+    links: [
+      { label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" },
+      { label: "Release v1.1.0", href: "https://github.com/Software-Development-Practices/gradle-invaders/releases/tag/v1.1.0", kind: "github" },
+    ],
     theme: { bg: "#17181C", fg: "#EDEDED", accent: "#7EE787", accent2: "#79C0FF" },
-    stage: "liquid",
-    transition: "liquid",
+    stage: "media",
+    transition: "stack",
   },
   {
     icon: "flask",
