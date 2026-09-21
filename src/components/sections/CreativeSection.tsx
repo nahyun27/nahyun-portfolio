@@ -13,6 +13,8 @@ import type { Project } from "@/data/projects";
 function Card({ p, index, featured, onOpen }: { p: Project; index: number; featured: boolean; onOpen: (index: number, e: React.MouseEvent<HTMLElement>) => void }) {
   const media = p.media?.[0];
   const [primary, ...rest] = p.links;
+  // only the card under the cursor (or holding keyboard focus) plays its clip
+  const [live, setLive] = useState(false);
 
   const track = (e: React.MouseEvent<HTMLElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -28,6 +30,10 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       whileHover={{ y: -6 }}
       transition={{ delay: (index % 3) * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={track}
+      onMouseEnter={() => setLive(true)}
+      onMouseLeave={() => setLive(false)}
+      onFocusCapture={() => setLive(true)}
+      onBlurCapture={() => setLive(false)}
       className={`glass glass-ring group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
       style={{ borderRadius: 30, ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
     >
@@ -49,7 +55,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       >
         {media?.video && (
           <div className="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]">
-            <MediaClip src={media.video} poster={media.src} label={p.title} />
+            <MediaClip src={media.video} poster={media.src} label={p.title} active={live} />
           </div>
         )}
         <span
