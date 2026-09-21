@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
 import { Icon } from "@/components/ProjectIcon";
 import { tint } from "@/lib/color";
@@ -63,279 +63,221 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 // ── Series Card ──────────────────────────────────────────────────────────────
 
-function SeriesCard({ series, index, inView }: { series: typeof SERIES[0]; index: number; inView: boolean }) {
-  const [expanded, setExpanded] = useState(false);
+const track = (e: React.MouseEvent<HTMLElement>) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+};
+
+const ArrowUpRight = ({ size = 18 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <path d="M7 17 17 7M8 7h9v9" />
+  </svg>
+);
+
+// ── Series ───────────────────────────────────────────────────────────────────
+
+function SeriesCard({ series, index }: { series: typeof SERIES[0]; index: number }) {
   const isDone = series.status === "완결";
-  const pct = Math.round((series.current / series.total) * 100);
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-      transition={{ delay: index * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="glass glass-ring rounded-2xl overflow-hidden group cursor-pointer"
-      style={{
-        ["--ring-color" as string]: series.color,
-        padding: "15px",
-      }}
-      onClick={() => setExpanded(!expanded)}
+    <motion.article
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ delay: index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="glass glass-ring flex flex-col"
+      style={{ borderRadius: 28, padding: "28px 28px 18px", ["--ring-color" as string]: series.color, gap: 18 }}
     >
-      {/* Card Header */}
-      <div className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="flex-1 min-w-0" >
-            {/* Status badge */}
-            <span
-              className="inline-flex items-center text-[10px] font-black tracking-[0.18em] uppercase px-2.5 py-1 rounded-full mb-3"
-              style={{
-                backgroundColor: tint(series.color, 8),
-                color: series.color,
-                border: `1px solid ${tint(series.color, 25)}`,
-                padding: "3px 6px",
-                marginBottom: "10px",
-              }}
-            >
-              {isDone ? (
-                <span className="inline-flex items-center" style={{ gap: 4 }}><Icon name="check" size={11} strokeWidth={3} />완결</span>
-              ) : (
-                <span className="inline-flex items-center" style={{ gap: 5 }}>
-                  <span className="rounded-full" style={{ width: 5, height: 5, backgroundColor: "currentColor" }} />
-                  {series.current}/{series.total} 진행 중
-                </span>
-              )}
-            </span>
-            <h3 className="font-black text-xl leading-tight mb-1.5" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
-              {series.title}
-            </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--t4)", fontFamily: "'Inter', sans-serif" }}>
-              {series.description}
-            </p>
-          </div>
-          <motion.div
-            animate={{ rotate: expanded ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="shrink-0 mt-1"
-            style={{ color: "var(--t5)"}}
+      <div className="flex items-start justify-between" style={{ gap: 16 }}>
+        <div className="min-w-0">
+          <span
+            className="inline-flex items-center"
+            style={{ gap: 7, padding: "4px 12px", borderRadius: 999, marginBottom: 14, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: series.color, background: tint(series.color, 12), border: `1px solid ${tint(series.color, 30)}` }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m6 9 6 6 6-6" />
-            </svg>
-          </motion.div>
+            {isDone ? <Icon name="check" size={11} strokeWidth={3} /> : <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: 999, background: "currentColor" }} />}
+            {isDone ? "Completed" : "In progress"}
+          </span>
+          <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(1.4rem, 2.2vw, 1.8rem)", letterSpacing: "-0.03em", lineHeight: 1.1, color: "var(--text)" }}>{series.title}</h3>
+          <p style={{ marginTop: 8, fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.6, color: "var(--t3)" }}>{series.description}</p>
         </div>
-
-        {/* Progress bar */}
-        <div className="mt-5" style={{marginTop: "5px"}}>
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: "var(--t6)", fontFamily: "'Inter', sans-serif" }}>
-              Progress
-            </span>
-            <span className="text-[10px] font-bold" style={{ color: series.color, fontFamily: "'Inter', sans-serif" }}>
-              {pct}%
-            </span>
+        <div className="shrink-0 text-right" style={{ fontFamily: "var(--font-display)" }}>
+          <div style={{ fontWeight: 800, fontSize: 30, lineHeight: 1, letterSpacing: "-0.03em", color: "var(--text)", fontVariantNumeric: "tabular-nums" }}>
+            {series.current}
+            <span style={{ color: "var(--t5)", fontSize: 18 }}>/{series.total}</span>
           </div>
-          <div className="w-full h-[3px] rounded-full" style={{ backgroundColor: "var(--w50)" }}>
-            <motion.div
-              initial={{ width: 0 }}
-              animate={inView ? { width: `${pct}%` } : { width: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: index * 0.1 + 0.3 }}
-              className="h-full rounded-full"
-              style={{ backgroundColor: series.color }}
-            />
-          </div>
+          <div style={{ marginTop: 4, fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--t5)" }}>parts</div>
         </div>
       </div>
 
-      {/* Expandable Post List */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="border-t px-6 pb-4 pt-4 flex flex-col gap-1" style={{ borderColor: "var(--w40)" }}>
-              {series.posts.map((post, pi) => (
-                post.done ? (
-                  <a
-                    key={pi}
-                    href={post.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-3 py-2.5 px-3 rounded-xl group/post transition-all duration-200"
-                    style={{ textDecoration: "none" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = tint(series.color, 4); }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent"; }}
-                  >
-                    <span className="shrink-0 w-4 h-4 rounded-full flex items-center justify-center" style={{ backgroundColor: tint(series.color, 13) }}>
-                      <svg width="8" height="8" viewBox="0 0 10 10" fill={series.color}><path d="M1.5 5l2.5 2.5L8.5 2" stroke={series.color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" /></svg>
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold transition-colors duration-200 group-hover/post:text-[color:var(--text)] truncate" style={{ color: "var(--text-soft)", fontFamily: "'Inter', sans-serif" }}>
-                        {post.title}
-                      </p>
-                      {post.desc && <p className="text-xs mt-0.5 truncate" style={{ color: "var(--t5)", fontFamily: "'Inter', sans-serif" }}>{post.desc}</p>}
-                    </div>
-                    <svg className="shrink-0 opacity-0 group-hover/post:opacity-100 transition-opacity" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={series.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M7 7h10v10" /></svg>
-                  </a>
-                ) : (
-                  <div key={pi} className="flex items-center gap-3 py-2.5 px-3 rounded-xl opacity-25">
-                    <span className="shrink-0 w-4 h-4 rounded-full border" style={{ borderColor: "var(--w100)" }} />
-                    <p className="text-sm font-semibold truncate" style={{ color: "var(--t2)", fontFamily: "'Inter', sans-serif" }}>
-                      {post.title}
-                    </p>
-                    <span className="ml-auto shrink-0 text-[9px] font-bold uppercase tracking-widest" style={{ color: "var(--t6)", fontFamily: "'Inter', sans-serif" }}>Soon</span>
-                  </div>
-                )
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* one segment per part */}
+      <div className="flex" style={{ gap: 4 }} aria-label={`${series.current} of ${series.total} parts published`}>
+        {Array.from({ length: series.total }, (_, i) => (
+          <motion.span
+            key={i}
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.25 + i * 0.05, duration: 0.4, ease: "easeOut" }}
+            style={{ flex: 1, height: 5, borderRadius: 999, transformOrigin: "left", background: i < series.current ? series.color : "var(--w60)" }}
+          />
+        ))}
+      </div>
+
+      <ol className="flex flex-col" style={{ margin: 0, padding: 0, listStyle: "none" }}>
+        {series.posts.map((post, i) => {
+          const n = String(i + 1).padStart(2, "0");
+          const inner = (
+            <>
+              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 800, letterSpacing: "0.08em", color: post.done ? series.color : "var(--t6)" }}>{n}</span>
+              <span className="min-w-0">
+                <span className="block truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em", color: post.done ? "var(--text)" : "var(--t5)" }}>
+                  {post.title.replace(/^Part \d+:\s*/, "")}
+                </span>
+                {"desc" in post && post.desc && (
+                  <span className="block truncate" style={{ marginTop: 2, fontFamily: "'Inter', sans-serif", fontSize: 12.5, color: "var(--t4)" }}>{post.desc}</span>
+                )}
+              </span>
+              {post.done ? (
+                <span className="transition-transform duration-300 group-hover/p:translate-x-0.5 group-hover/p:-translate-y-0.5" style={{ color: "var(--t3)" }}><ArrowUpRight size={16} /></span>
+              ) : (
+                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t6)" }}>soon</span>
+              )}
+            </>
+          );
+          const rowStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "28px minmax(0,1fr) auto", alignItems: "center", gap: 12, padding: "11px 10px", borderTop: "1px solid var(--w50)", borderRadius: 12 };
+          return (
+            <li key={post.title}>
+              {post.done && "url" in post ? (
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor-hover
+                  className="group/p transition-colors duration-300 hover:bg-[var(--w30)]"
+                  style={{ ...rowStyle, cursor: "none" }}
+                >
+                  {inner}
+                </a>
+              ) : (
+                <div style={rowStyle}>{inner}</div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </motion.article>
   );
 }
 
-// ── Post Row ─────────────────────────────────────────────────────────────────
+// ── Posts ────────────────────────────────────────────────────────────────────
 
 function PostRow({ post, index }: { post: typeof POSTS[0]; index: number }) {
-  const color = CATEGORY_COLORS[post.category] || "var(--mint)";
+  const color = CATEGORY_COLORS[post.category] ?? "var(--mint)";
   return (
     <motion.a
       href={post.url}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, x: -16 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -16 }}
-      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-5 group transition-all duration-300 rounded-xl"
-      style={{ textDecoration: "none" }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "12px"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "var(--w20)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `inset 3px 0 0 ${color}`; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "0px"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
+      data-cursor-hover
+      onMouseMove={track}
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ delay: (index % 4) * 0.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative grid grid-cols-[minmax(0,1fr)_auto] md:grid-cols-[150px_minmax(0,1fr)_44px] items-center"
+      style={{ gap: "6px 18px", padding: "20px 8px", borderTop: "1px solid var(--w70)", cursor: "none", ["--mx" as string]: "50%", ["--my" as string]: "50%" }}
     >
-      <div className="flex-1 min-w-0">
-        <p className="font-bold text-base leading-snug mb-1 transition-colors duration-200 group-hover:text-[color:var(--text)]" style={{ color: "var(--text-soft)", fontFamily: "var(--font-display)" }}>
-          {post.title}
-        </p>
-        <p className="text-sm truncate" style={{ color: "var(--t4)", fontFamily: "'Inter', sans-serif" }}>
-          {post.desc}
-        </p>
-      </div>
-      <div className="flex items-center gap-3 shrink-0">
+      {/* the category colour spreads from the cursor, like ink in water */}
+      <span
+        aria-hidden
+        className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+        style={{ background: `radial-gradient(340px circle at var(--mx) var(--my), ${tint(color, 16)}, transparent 62%)` }}
+      />
+      <span
+        className="relative col-span-2 md:col-span-1 inline-flex items-center self-start md:self-center"
+        style={{ gap: 8, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color }}
+      >
+        <span style={{ width: 9, height: 9, borderRadius: "50%", background: `radial-gradient(circle at 30% 26%, rgba(255,255,255,0.75) 0 18%, ${color} 42%)` }} />
+        {post.category}
+      </span>
+      <span className="relative min-w-0">
         <span
-          className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full"
-          style={{
-            padding: "3px 7px",
-            backgroundColor: tint(color, 8),
-            color,
-            border: `1px solid ${tint(color, 21)}`,
-            fontFamily: "'Inter', sans-serif",
-          }}
+          className="block transition-transform duration-500 group-hover:translate-x-1.5"
+          style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(1.1rem, 1.9vw, 1.45rem)", letterSpacing: "-0.025em", lineHeight: 1.25, color: "var(--text)" }}
         >
-          {post.category}
+          {post.title}
         </span>
-        <svg className="opacity-0 group-hover:opacity-100 transition-opacity duration-200" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M7 17L17 7M7 7h10v10" />
-        </svg>
-      </div>
+        <span className="block" style={{ marginTop: 5, fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.55, color: "var(--t3)" }}>{post.desc}</span>
+      </span>
+      <span
+        className="relative grid place-items-center justify-self-end transition-all duration-500 group-hover:rotate-45"
+        style={{ width: 40, height: 40, borderRadius: "50%", border: "1px solid var(--w120)", color: "var(--text)" }}
+      >
+        <ArrowUpRight size={17} />
+      </span>
     </motion.a>
   );
 }
 
-// ── Blog Section ─────────────────────────────────────────────────────────────
-
 export default function BlogSection() {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-
-  const filtered = activeCategory === "All" ? POSTS : POSTS.filter(p => p.category === activeCategory);
+  const [activeCategory, setActiveCategory] = useState<typeof CATEGORIES[number]>("All");
+  const filtered = activeCategory === "All" ? POSTS : POSTS.filter((p) => p.category === activeCategory);
+  const count = (c: string) => (c === "All" ? POSTS.length : POSTS.filter((p) => p.category === c).length);
 
   return (
-    <section id="blog" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10" style={{ backgroundColor: "transparent" }}>
+    <section id="blog" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
+        <SectionHeader index="06" label="Writing" title="Thoughts & Articles." highlightWords={["Articles."]} marginBottom={40} />
 
-        {/* Header */}
-        <SectionHeader index="06" label="Writing" title="Thoughts & Articles." highlightWords={["Articles."]} />
+        {/* Series */}
+        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20, marginBottom: 72 }}>
+          {SERIES.map((s, i) => (
+            <SeriesCard key={s.title} series={s} index={i} />
+          ))}
+        </div>
 
-        {/* ── Featured Series ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-20"
-        >
-          <div className="flex items-center gap-3 mb-8" style={{ marginBottom: "0.5rem" }}>
-            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
-              Featured Series
-            </h2>
-            <div className="flex-1 h-px" style={{ backgroundColor: "var(--w60)" }} />
+        {/* Latest posts */}
+        <div className="flex flex-wrap items-end justify-between" style={{ gap: 20, marginBottom: 20 }}>
+          <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(1.5rem, 2.6vw, 2rem)", letterSpacing: "-0.03em", color: "var(--text)" }}>Latest posts</h3>
+          <div className="glass-chip flex flex-wrap" style={{ gap: 2, padding: 4, borderRadius: 999 }} role="tablist" aria-label="Filter posts">
+            {CATEGORIES.map((cat) => {
+              const on = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  role="tab"
+                  aria-selected={on}
+                  onClick={() => setActiveCategory(cat)}
+                  data-cursor-hover
+                  className="relative"
+                  style={{ padding: "7px 14px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: on ? "var(--mint)" : "var(--t3)", cursor: "none", transition: "color 0.25s ease" }}
+                >
+                  {on && (
+                    <motion.span
+                      layoutId="blog-filter"
+                      className="absolute inset-0"
+                      style={{ borderRadius: 999, background: "rgba(var(--mint-rgb),0.14)", boxShadow: "inset 0 0 0 1px rgba(var(--mint-rgb),0.32)" }}
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  )}
+                  <span className="relative">
+                    {cat}
+                    <span style={{ marginLeft: 6, opacity: 0.55, fontVariantNumeric: "tabular-nums" }}>{count(cat)}</span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {SERIES.map((s, i) => <SeriesCard key={s.title} series={s} index={i} inView={inView} />)}
-          </div>
-        </motion.div>
+        </div>
 
-        {/* ── Recent Posts ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="flex items-center gap-3 mb-8" style={{ marginTop: "2rem", marginBottom: "0.5rem" }}>
-            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
-              Latest Posts
-            </h2>
-            <div className="flex-1 h-px" style={{ backgroundColor: "var(--w60)" }} />
-          </div>
-
-          {/* Category Filter */}
-          <div className="flex flex-wrap gap-2 mb-8" style={{marginTop:"10px", marginBottom: "10px"}}>
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className="relative text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full transition-all duration-200"
-                style={{
-                  padding: "4px 8px",
-                  fontFamily: "'Inter', sans-serif",
-                  color: activeCategory === cat ? "var(--mint)" : "var(--t5)",
-                  backgroundColor: activeCategory === cat ? "rgba(var(--mint-rgb),0.08)" : "transparent",
-                  border: `1px solid ${activeCategory === cat ? "rgba(var(--mint-rgb),0.35)" : "var(--w60)"}`,
-                  cursor: "none"
-                }}
-                data-cursor-hover
-              >
-                {cat}
-                {activeCategory === cat && (
-                  <motion.div
-                    layoutId="tab-underline"
-                    className="absolute bottom-[-1px] left-4 right-4 h-[2px] rounded-full"
-                    style={{ backgroundColor: "var(--mint)" }}
-                  />
-                )}
-              </button>
+        <AnimatePresence mode="wait">
+          <motion.div key={activeCategory} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+            {filtered.map((post, i) => (
+              <PostRow key={post.url} post={post} index={i} />
             ))}
-          </div>
-
-          {/* Posts */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2"
-            >
-              {filtered.map((post, i) => <PostRow key={post.url} post={post} index={i} />)}
-            </motion.div>
-          </AnimatePresence>
-        </motion.div>
-
+            <div style={{ borderTop: "1px solid var(--w70)" }} />
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );
