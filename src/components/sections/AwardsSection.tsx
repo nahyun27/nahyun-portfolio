@@ -68,7 +68,7 @@ export default function AwardsSection() {
                     {/* Mobile: title on left, year on right */}
                     <div className="flex items-start justify-between gap-2 sm:hidden">
                       <h3 className="font-bold text-base transition-colors duration-300 group-hover:text-[color:var(--text)]"
-                        style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", lineHeight: "1.4" }}>
+                        style={{ fontFamily: "var(--font-display)", color: "var(--text)", lineHeight: "1.4" }}>
                         {ex.title}
                       </h3>
                       <span className="shrink-0 text-[10px] font-bold rounded-full text-[color:var(--mint)] mt-0.5"
@@ -83,7 +83,7 @@ export default function AwardsSection() {
                     </div>
                     {/* Desktop: title without inline badge */}
                     <h3 className="font-bold text-xl transition-colors duration-300 group-hover:text-[color:var(--text)] hidden sm:block"
-                      style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", lineHeight: "1.3" }}>
+                      style={{ fontFamily: "var(--font-display)", color: "var(--text)", lineHeight: "1.3" }}>
                       {ex.title}
                     </h3>
                     <p className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
@@ -92,7 +92,7 @@ export default function AwardsSection() {
                   </div>
                 </div>
                 {/* Desktop: badge on right */}
-                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[color:var(--mint)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
+                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[image:var(--fill-brand)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
                   style={{
                     border: "1px solid rgba(var(--mint-rgb),0.3)",
                     fontFamily: "'Inter', sans-serif",

@@ -24,7 +24,7 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
       ref={ref}
       className={`font-black leading-tight ${className}`}
       style={{
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: "var(--font-display)",
         color: "var(--text)",
         letterSpacing: "-0.025em",
         ...style
@@ -44,12 +44,17 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
                       isHighlighted
                         ? (gradientHighlight
                           ? {
-                            background: "linear-gradient(135deg, var(--mint) 0%, var(--violet) 100%)",
+                            background: "var(--hl-fill-2)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
                             backgroundClip: "text",
                           }
-                          : { color: "var(--mint)" })
+                          : {
+                            background: "var(--hl-fill)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                          })
                         : { color: "inherit" }
                     }
                     initial={{ y: "110%", rotateZ: 2 }}

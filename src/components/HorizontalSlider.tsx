@@ -124,7 +124,7 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
               </a>
             )}
             <span className="shrink-0 font-bold text-xs ml-1"
-              style={{ color: "var(--mint)", fontFamily: "'Syne', sans-serif" }}>
+              style={{ color: "var(--mint)", fontFamily: "var(--font-display)" }}>
               {card.id}
             </span>
           </div>
@@ -132,7 +132,7 @@ function SpotlightCard({ card, delay }: { card: Card, delay: number }) {
 
         {/* Title row */}
         <h3 className="font-bold text-lg leading-tight"
-          style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)" }}>
+          style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
           {card.title}
         </h3>
 

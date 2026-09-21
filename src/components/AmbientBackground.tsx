@@ -48,7 +48,14 @@ export default function AmbientBackground() {
         }}
         transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-[-20%] left-[10%]"
-        style={{ opacity: "var(--orb-c-o)", width: "80vw", height: "50vw", maxWidth: "1200px", maxHeight: "800px", y: y3, background: "radial-gradient(circle, var(--orb-a) 0%, transparent 60%)", filter: "blur(120px)", transform: "translateZ(0)", willChange: "transform" }}
+        style={{ opacity: "var(--orb-c-o)", width: "80vw", height: "50vw", maxWidth: "1200px", maxHeight: "800px", y: y3, background: "radial-gradient(circle, var(--orb-c) 0%, transparent 60%)", filter: "blur(120px)", transform: "translateZ(0)", willChange: "transform" }}
+      />
+      {/* Accent orb, only visible in the light theme */}
+      <motion.div
+        animate={{ x: [0, 40, -20, 0], y: [0, 30, -20, 0], scale: [1, 1.2, 0.95, 1] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-[8%] left-[-10%]"
+        style={{ opacity: "var(--orb-d-o)", width: "45vw", height: "45vw", maxWidth: "640px", maxHeight: "640px", background: "radial-gradient(circle, var(--orb-d) 0%, transparent 70%)", filter: "blur(100px)", transform: "translateZ(0)", willChange: "transform" }}
       />
     </div>
   );

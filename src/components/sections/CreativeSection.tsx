@@ -182,7 +182,7 @@ export default function CreativeSection() {
                       <h4
                         className="font-bold text-xl md:text-2xl leading-tight transition-colors duration-300 mb-2 truncate group-hover:text-[color:var(--text)]"
                         style={{
-                          fontFamily: "'Syne', sans-serif",
+                          fontFamily: "var(--font-display)",
                           color: isActive ? "var(--text)" : "var(--t4)"
                         }}
                       >
@@ -284,7 +284,7 @@ export default function CreativeSection() {
                       </span>
                       <h3
                         className="font-black text-[22px] leading-tight break-words pr-2 md:text-3xl"
-                        style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", letterSpacing: "-0.02em" }}
+                        style={{ fontFamily: "var(--font-display)", color: "var(--text)", letterSpacing: "-0.02em" }}
                       >
                         {selectedProject.title}
                       </h3>

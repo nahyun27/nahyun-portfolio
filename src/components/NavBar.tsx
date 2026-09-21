@@ -36,7 +36,7 @@ export default function NavBar() {
       {/* Scroll Progress Bar at the very top */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-[2px] z-[210] origin-left"
-        style={{ scaleX, backgroundColor: "var(--mint)" }}
+        style={{ scaleX, background: "var(--fill-brand)" }}
       />
 
       <nav
@@ -54,7 +54,7 @@ export default function NavBar() {
           <button
             onClick={() => scrollTo("hero")}
             className="font-bold text-xl tracking-tight transition-colors duration-200 hover:opacity-70"
-            style={{ fontFamily: "'Syne', sans-serif", color: "var(--mint)", cursor: "none" }}
+            style={{ fontFamily: "var(--font-display)", color: "var(--mint)", cursor: "none" }}
             data-cursor-hover
           >
             NK.
@@ -137,7 +137,7 @@ export default function NavBar() {
                 transition={{ delay: i * 0.07 }}
                 onClick={() => scrollTo(l.id)}
                 className="font-black text-4xl hover:text-[color:var(--mint)] transition-colors"
-                style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", cursor: "none" }}
+                style={{ fontFamily: "var(--font-display)", color: "var(--text)", cursor: "none" }}
                 data-cursor-hover
               >
                 {l.label}

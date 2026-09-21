@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import AnimatedHeading from "@/components/AnimatedHeading";
 import { tint } from "@/lib/color";
@@ -39,9 +39,8 @@ interface Project {
   links: ProjectLink[];
 }
 
-const PROJECTS: Project[] = [
+const PROJECT_DATA: Omit<Project, "id">[] = [
   {
-    id: "01",
     emoji: "💽",
     title: "SSD WAF Optimization",
     summary:
@@ -77,92 +76,6 @@ const PROJECTS: Project[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/femu-hotcold-ftl", kind: "github" }],
   },
   {
-    id: "02",
-    emoji: "🔍",
-    title: "Paperprobe",
-    summary:
-      "Upload academic PDFs and ask questions grounded in their content, compare several papers side by side, and see how they relate in an interactive similarity graph.",
-    metrics: [
-      { value: "5", label: "papers compared at once" },
-      { value: "KO / EN", label: "injection detection" },
-    ],
-    highlights: [
-      "Ingestion pipeline: pdfplumber parsing, chunking and MiniLM embeddings stored per paper in ChromaDB, with streaming answers from FastAPI.",
-      "Comparison view lines up up to five papers by purpose, method, results and limitations.",
-      "D3.js network graph drawn from cosine similarity between paper embeddings.",
-      "Semantic prompt injection detection: embedding similarity flags malicious instructions hidden in papers, ranks them by risk, and a defense prompt is added to every query.",
-      "Swappable LLM backend, local Ollama (llama3.2) or the Gemini API.",
-    ],
-    media: [
-      { src: "/images/projects/paperprobe-qa.gif", label: "Paper Q&A", caption: "Ask questions about an uploaded paper and get streamed answers." },
-      { src: "/images/projects/paperprobe-compare.gif", label: "Compare", caption: "Compare up to five papers by purpose, method, results and limitations." },
-      { src: "/images/projects/paperprobe-graph.gif", label: "Graph", caption: "Interactive similarity graph of the paper collection." },
-      { src: "/images/projects/paperprobe-security.gif", label: "Injection detection", caption: "Suspicious chunks flagged and ranked by risk level." },
-    ],
-    tags: ["FastAPI", "ChromaDB", "Next.js", "D3.js", "RAG"],
-    links: [{ label: "GitHub", href: "https://github.com/nahyun27/paperprobe", kind: "github" }],
-  },
-  {
-    id: "03",
-    emoji: "🐚",
-    title: "nsh> Nahyun Shell",
-    summary:
-      "A Unix shell written in C, covering process creation, pipes, redirection and a hand rolled line editor.",
-    metrics: [{ value: "∞", label: "pipe stages" }],
-    highlights: [
-      "Recursive multi stage pipes built on fork, pipe and dup2, so a | b | c | d works with no stage limit.",
-      "I/O redirection (<, >, >>, 2>), background jobs that are reaped before the next prompt, and semicolon separated commands that respect quotes.",
-      "Line editor in termios raw mode with arrow key history, mid line editing, !! and !n expansion and a colored prompt.",
-      "Signal handling that keeps the shell alive on Ctrl+C while foreground children still terminate.",
-    ],
-    media: [
-      {
-        src: "/images/projects/nsh-demo.png",
-        label: "Demo",
-        caption: "A session in nsh: redirection, history, !! expansion and semicolon separated commands.",
-        fit: "cover",
-        position: "top",
-      },
-    ],
-    tags: ["C", "Linux", "System Programming", "termios"],
-    links: [{ label: "GitHub", href: "https://github.com/nahyun27/linux-study-minishell", kind: "github" }],
-  },
-  {
-    id: "04",
-    emoji: "🎙️",
-    title: "PerSI",
-    summary:
-      "A speaker identification app for hearing impaired users. Register the voices of people you know, then see who is talking in real time as a chat.",
-    highlights: [
-      "Voices are registered with pyannote diarization and matched live using wav2vec2 embeddings.",
-      "Conversations are shown as a chat timeline, with every utterance labeled by the identified speaker.",
-      "React Native app with login, speaker registration and editing, recording and chat room screens.",
-      "FastAPI and PyTorch backend on GCP, with MongoDB for data.",
-    ],
-    tags: ["React Native", "FastAPI", "PyTorch", "wav2vec2", "pyannote", "GCP", "MongoDB"],
-    links: [{ label: "GitHub", href: "https://github.com/PerSI-Org/PerSI_FrontEnd", kind: "github" }],
-  },
-  {
-    id: "05",
-    emoji: "💊",
-    title: "ToFindPill",
-    summary:
-      "A pill recognition app for clinicians. Photograph several pills at once and get each one identified in seconds.",
-    metrics: [
-      { value: "99.76%", label: "Top 1 accuracy" },
-      { value: "1.5s", label: "inference, down from 5s" },
-    ],
-    highlights: [
-      "Two stage pipeline: YOLOv5 detects every pill in the photo, YOLOv8 classifies each detected pill.",
-      "Brought inference from 5s down to 1.5s while holding 99.76% Top 1 accuracy.",
-      "React Native client with a Node.js and MongoDB backend.",
-      "Run as a full SDLC project with an SRS, a QA/QC strategy and Jira managed sprints.",
-    ],
-    tags: ["YOLOv5", "YOLOv8", "React Native", "Node.js", "MongoDB", "Python"],
-    links: [{ label: "GitHub", href: "https://github.com/ToFindPill", kind: "github" }],
-  },
-  {
-    id: "06",
     emoji: "🎾",
     title: "TennisTown",
     badge: "Live",
@@ -191,36 +104,6 @@ const PROJECTS: Project[] = [
     ],
   },
   {
-    id: "07",
-    emoji: "💻",
-    title: "Software Dev Practices",
-    summary:
-      "A team project built around the way software is actually shipped: agile process, automated pipelines and tests.",
-    highlights: [
-      "Worked as a team with agile methodology.",
-      "Automated build and delivery through CI/CD pipelines.",
-      "Testing built into the workflow.",
-    ],
-    tags: ["Agile", "CI/CD", "Testing"],
-    links: [{ label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" }],
-  },
-  {
-    id: "08",
-    emoji: "🔬",
-    title: "ACE Lab Website",
-    badge: "Live",
-    summary:
-      "The official website of Hanyang Univ. ERICA's AI & Cyber Security Lab, covering research, members, publications and photo albums.",
-    highlights: [
-      "Dark and light mode.",
-      "Full Korean and English i18n, with visitor language detection and shareable language links.",
-      "Pages for lab news, research, members, publications and albums, plus admin pages for managing content.",
-    ],
-    tags: ["React", "Supabase", "i18n", "styled-components"],
-    links: [{ label: "Live Site", href: "https://ace.hanyang.ac.kr", kind: "web" }],
-  },
-  {
-    id: "09",
     emoji: "⚖️",
     title: "KCPEC Platform",
     badge: "In production",
@@ -245,7 +128,118 @@ const PROJECTS: Project[] = [
       { label: "GitHub", href: "https://github.com/nahyun27/kcpec-platform", kind: "github" },
     ],
   },
+  {
+    emoji: "🔍",
+    title: "Paperprobe",
+    summary:
+      "Upload academic PDFs and ask questions grounded in their content, compare several papers side by side, and see how they relate in an interactive similarity graph.",
+    metrics: [
+      { value: "5", label: "papers compared at once" },
+      { value: "KO / EN", label: "injection detection" },
+    ],
+    highlights: [
+      "Ingestion pipeline: pdfplumber parsing, chunking and MiniLM embeddings stored per paper in ChromaDB, with streaming answers from FastAPI.",
+      "Comparison view lines up up to five papers by purpose, method, results and limitations.",
+      "D3.js network graph drawn from cosine similarity between paper embeddings.",
+      "Semantic prompt injection detection: embedding similarity flags malicious instructions hidden in papers, ranks them by risk, and a defense prompt is added to every query.",
+      "Swappable LLM backend, local Ollama (llama3.2) or the Gemini API.",
+    ],
+    media: [
+      { src: "/images/projects/paperprobe-qa.gif", label: "Paper Q&A", caption: "Ask questions about an uploaded paper and get streamed answers." },
+      { src: "/images/projects/paperprobe-compare.gif", label: "Compare", caption: "Compare up to five papers by purpose, method, results and limitations." },
+      { src: "/images/projects/paperprobe-graph.gif", label: "Graph", caption: "Interactive similarity graph of the paper collection." },
+      { src: "/images/projects/paperprobe-security.gif", label: "Injection detection", caption: "Suspicious chunks flagged and ranked by risk level." },
+    ],
+    tags: ["FastAPI", "ChromaDB", "Next.js", "D3.js", "RAG"],
+    links: [{ label: "GitHub", href: "https://github.com/nahyun27/paperprobe", kind: "github" }],
+  },
+  {
+    emoji: "🐚",
+    title: "nsh> Nahyun Shell",
+    summary:
+      "A Unix shell written in C, covering process creation, pipes, redirection and a hand rolled line editor.",
+    metrics: [{ value: "∞", label: "pipe stages" }],
+    highlights: [
+      "Recursive multi stage pipes built on fork, pipe and dup2, so a | b | c | d works with no stage limit.",
+      "I/O redirection (<, >, >>, 2>), background jobs that are reaped before the next prompt, and semicolon separated commands that respect quotes.",
+      "Line editor in termios raw mode with arrow key history, mid line editing, !! and !n expansion and a colored prompt.",
+      "Signal handling that keeps the shell alive on Ctrl+C while foreground children still terminate.",
+    ],
+    media: [
+      {
+        src: "/images/projects/nsh-demo.png",
+        label: "Demo",
+        caption: "A session in nsh: redirection, history, !! expansion and semicolon separated commands.",
+        fit: "cover",
+        position: "top",
+      },
+    ],
+    tags: ["C", "Linux", "System Programming", "termios"],
+    links: [{ label: "GitHub", href: "https://github.com/nahyun27/linux-study-minishell", kind: "github" }],
+  },
+  {
+    emoji: "🎙️",
+    title: "PerSI",
+    summary:
+      "A speaker identification app for hearing impaired users. Register the voices of people you know, then see who is talking in real time as a chat.",
+    highlights: [
+      "Voices are registered with pyannote diarization and matched live using wav2vec2 embeddings.",
+      "Conversations are shown as a chat timeline, with every utterance labeled by the identified speaker.",
+      "React Native app with login, speaker registration and editing, recording and chat room screens.",
+      "FastAPI and PyTorch backend on GCP, with MongoDB for data.",
+    ],
+    tags: ["React Native", "FastAPI", "PyTorch", "wav2vec2", "pyannote", "GCP", "MongoDB"],
+    links: [{ label: "GitHub", href: "https://github.com/PerSI-Org/PerSI_FrontEnd", kind: "github" }],
+  },
+  {
+    emoji: "💊",
+    title: "ToFindPill",
+    summary:
+      "A pill recognition app for clinicians. Photograph several pills at once and get each one identified in seconds.",
+    metrics: [
+      { value: "99.76%", label: "Top 1 accuracy" },
+      { value: "1.5s", label: "inference, down from 5s" },
+    ],
+    highlights: [
+      "Two stage pipeline: YOLOv5 detects every pill in the photo, YOLOv8 classifies each detected pill.",
+      "Brought inference from 5s down to 1.5s while holding 99.76% Top 1 accuracy.",
+      "React Native client with a Node.js and MongoDB backend.",
+      "Run as a full SDLC project with an SRS, a QA/QC strategy and Jira managed sprints.",
+    ],
+    tags: ["YOLOv5", "YOLOv8", "React Native", "Node.js", "MongoDB", "Python"],
+    links: [{ label: "GitHub", href: "https://github.com/ToFindPill", kind: "github" }],
+  },
+  {
+    emoji: "💻",
+    title: "Software Dev Practices",
+    summary:
+      "A team project built around the way software is actually shipped: agile process, automated pipelines and tests.",
+    highlights: [
+      "Worked as a team with agile methodology.",
+      "Automated build and delivery through CI/CD pipelines.",
+      "Testing built into the workflow.",
+    ],
+    tags: ["Agile", "CI/CD", "Testing"],
+    links: [{ label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" }],
+  },
+  {
+    emoji: "🔬",
+    title: "ACE Lab Website",
+    badge: "Live",
+    summary:
+      "The official website of Hanyang Univ. ERICA's AI & Cyber Security Lab, covering research, members, publications and photo albums.",
+    highlights: [
+      "Dark and light mode.",
+      "Full Korean and English i18n, with visitor language detection and shareable language links.",
+      "Pages for lab news, research, members, publications and albums, plus admin pages for managing content.",
+    ],
+    tags: ["React", "Supabase", "i18n", "styled-components"],
+    links: [{ label: "Live Site", href: "https://ace.hanyang.ac.kr", kind: "web" }],
+  },
 ];
+
+// ids follow the array order, so reordering the list needs no renumbering
+const PROJECTS: Project[] = PROJECT_DATA.map((p, i) => ({ ...p, id: String(i + 1).padStart(2, "0") }));
 
 const ICONS: Record<LinkKind, React.ReactNode> = {
   web: (
@@ -293,7 +287,7 @@ function LinkButton({ link, primary }: { link: ProjectLink; primary: boolean }) 
       style={{
         fontFamily: "'Inter', sans-serif",
         padding: "9px 18px",
-        backgroundColor: primary ? ACCENT : "transparent",
+        background: primary ? "var(--fill-brand)" : "transparent",
         color: primary ? "var(--on-mint)" : ACCENT,
         border: `1px solid ${primary ? ACCENT : "rgba(var(--mint-rgb),0.4)"}`,
       }}
@@ -370,6 +364,12 @@ export default function ProjectsSection() {
 
   const [selectedId, setSelectedId] = useState(PROJECTS[0].id);
   const selected = PROJECTS.find((p) => p.id === selectedId) || PROJECTS[0];
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // a new project always starts at the top of the panel
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [selectedId]);
   const total = PROJECTS.length.toString().padStart(2, "0");
 
   return (
@@ -467,7 +467,7 @@ export default function ProjectsSection() {
                     <div className="flex-1 min-w-0">
                       <h4
                         className="font-bold text-lg md:text-xl leading-tight transition-colors duration-300 truncate group-hover:text-[color:var(--text)]"
-                        style={{ fontFamily: "'Syne', sans-serif", color: isActive ? "var(--text)" : "var(--t4)" }}
+                        style={{ fontFamily: "var(--font-display)", color: isActive ? "var(--text)" : "var(--t4)" }}
                       >
                         {project.title}
                       </h4>
@@ -520,6 +520,8 @@ export default function ProjectsSection() {
               padding: "1.2rem",
             }}
           >
+            <div ref={scrollRef}
+              className="thin-scroll scroll-fade relative z-10 lg:max-h-[max(440px,calc(100vh-200px))] lg:overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selected.id}
@@ -528,7 +530,7 @@ export default function ProjectsSection() {
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="relative z-10 flex flex-col gap-5"
-                style={{ padding: "12px 20px 20px" }}
+                style={{ padding: "12px 20px 36px" }}
               >
                 {/* Counter and badge */}
                 <div className="flex items-center gap-3">
@@ -555,7 +557,7 @@ export default function ProjectsSection() {
                 <div className="flex items-center gap-4">
                   <span className="text-4xl md:text-5xl leading-none">{selected.emoji}</span>
                   <h3 className="font-black text-2xl md:text-4xl leading-tight break-words"
-                    style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", letterSpacing: "-0.02em" }}>
+                    style={{ fontFamily: "var(--font-display)", color: "var(--text)", letterSpacing: "-0.02em" }}>
                     {selected.title}
                   </h3>
                 </div>
@@ -587,7 +589,7 @@ export default function ProjectsSection() {
                           padding: "12px 18px",
                         }}>
                         <div className="font-black text-2xl md:text-3xl leading-none"
-                          style={{ fontFamily: "'Syne', sans-serif", color: ACCENT }}>
+                          style={{ fontFamily: "var(--font-display)", color: ACCENT }}>
                           {m.value}
                         </div>
                         <div className="text-[11px] uppercase tracking-[0.12em] font-semibold"
@@ -634,6 +636,7 @@ export default function ProjectsSection() {
                 </div>
               </motion.div>
             </AnimatePresence>
+            </div>
 
             <div className="absolute inset-0 pointer-events-none z-0"
               style={{ background: `radial-gradient(ellipse at 80% 120%, ${tint(ACCENT, 6)} 0%, transparent 60%)` }} />
