@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
 import ProjectScene, { type SceneOrigin } from "@/components/ProjectScene";
@@ -9,6 +9,17 @@ import { PROJECTS } from "@/data/projects";
 
 export default function ProjectsSection() {
   const [open, setOpen] = useState<{ index: number; origin: SceneOrigin } | null>(null);
+
+  // the site terminal can open a project with `open <n>`
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const index = (e as CustomEvent<number>).detail;
+      document.getElementById("projects")?.scrollIntoView({ behavior: "instant" });
+      setOpen({ index, origin: { x: window.innerWidth / 2, y: window.innerHeight / 2, R: Math.hypot(window.innerWidth, window.innerHeight) + 180 } });
+    };
+    window.addEventListener("open-project", onOpen);
+    return () => window.removeEventListener("open-project", onOpen);
+  }, []);
 
   const openScene = (index: number, e: React.MouseEvent<HTMLElement>) => {
     // keyboard activation reports 0,0, so fall back to the row centre

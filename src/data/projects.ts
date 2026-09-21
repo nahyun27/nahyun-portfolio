@@ -10,6 +10,8 @@ export interface ProjectLink {
 
 export interface ProjectMedia {
   src: string;
+  /** looping clip shown instead of the image when present, src then acts as its poster */
+  video?: string;
   label: string;
   caption?: string;
   /** cover crops to fill the frame, contain letterboxes */
@@ -28,7 +30,7 @@ export interface SceneTheme {
 }
 
 /** which interactive stage a project scene shows next to the text */
-export type StageKind = "ssd" | "papers" | "shell" | "liquid";
+export type StageKind = "ssd" | "papers" | "shell" | "liquid" | "media";
 
 export interface Project {
   id: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useVelocity } from "framer-motion";
 
 export default function CustomCursor() {
   const mouseX = useMotionValue(-100);
@@ -11,6 +11,14 @@ export default function CustomCursor() {
 
   const ringX = useSpring(mouseX, { stiffness: 180, damping: 16, mass: 0.6 });
   const ringY = useSpring(mouseY, { stiffness: 180, damping: 16, mass: 0.6 });
+
+  // the ring behaves like a drop of water: it stretches along the way it is moving and squashes across it
+  const vx = useVelocity(ringX);
+  const vy = useVelocity(ringY);
+  const speed = useTransform([vx, vy], ([x, y]: number[]) => Math.hypot(x, y));
+  const angle = useTransform([vx, vy], ([x, y]: number[]) => (Math.atan2(y, x) * 180) / Math.PI);
+  const stretch = useTransform(speed, [0, 1800], [1, 1.55]);
+  const squash = useTransform(speed, [0, 1800], [1, 0.72]);
 
   const ringRef = useRef<HTMLDivElement>(null);
 
@@ -76,6 +84,9 @@ export default function CustomCursor() {
           height: 28,
           translateX: "-50%",
           translateY: "-50%",
+          rotate: angle,
+          scaleX: stretch,
+          scaleY: squash,
           borderColor: "color-mix(in srgb, var(--text) 50%, transparent)",
           transition: "width 0.18s ease, height 0.18s ease, border-color 0.18s ease, background 0.18s ease",
         }}

@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Icon } from "@/components/ProjectIcon";
 import { LINK_ICONS, ARROW_ICON } from "@/components/LinkIcons";
 import LiquidStage from "@/components/scenes/LiquidStage";
+import MediaClip from "@/components/MediaClip";
 import SsdScene from "@/components/scenes/SsdScene";
 import PapersScene from "@/components/scenes/PapersScene";
 import NshTerminal from "@/components/scenes/NshTerminal";
@@ -104,14 +105,20 @@ function SceneMedia({ media, theme }: { media: ProjectMedia[]; theme: SceneTheme
           border: `1px solid ${rgba(theme.fg, 0.14)}`,
         }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          key={item.src}
-          src={item.src}
-          alt={item.label}
-          loading="lazy"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
-        />
+        {item.video ? (
+          <div style={{ position: "absolute", inset: 0 }}>
+            <MediaClip key={item.video} src={item.video} poster={item.src} label={item.label} fit={item.fit ?? "cover"} />
+          </div>
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={item.src}
+            src={item.src}
+            alt={item.label}
+            loading="lazy"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: item.fit ?? "cover", objectPosition: item.position ?? "center" }}
+          />
+        )}
       </div>
       {media.length > 1 && (
         <div className="flex flex-wrap" style={{ gap: 8, marginTop: 14 }}>
@@ -173,6 +180,7 @@ function Stage({ p }: { p: Project }) {
         ]}
       />
     );
+  if (p.stage === "media" && screens) return screens.node;
   const liquid = <LiquidStage theme={t} icon={p.icon} label={p.title} />;
   return screens ? <StageTabs theme={t} tabs={[{ label: "Scene", node: liquid }, screens]} /> : liquid;
 }
@@ -182,9 +190,10 @@ interface Props {
   startIndex: number;
   origin: SceneOrigin;
   onClose: () => void;
+  backLabel?: string;
 }
 
-export default function ProjectScene({ projects, startIndex, origin, onClose }: Props) {
+export default function ProjectScene({ projects, startIndex, origin, onClose, backLabel = "Work" }: Props) {
   const reduce = useReducedMotion();
   const [idx, setIdx] = useState(startIndex);
   const [wave, setWave] = useState<{ key: number; color: string; x: number; y: number } | null>(null);
@@ -299,7 +308,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose }: 
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
-            Work
+            {backLabel}
           </button>
           <div className="flex items-center" style={{ gap: 10 }}>
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 15, opacity: 0.7, fontVariantNumeric: "tabular-nums", marginRight: 6 }}>
@@ -405,6 +414,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose }: 
               </div>
             )}
 
+            {p.highlights.length > 0 && (
             <ul className="flex flex-col" style={{ gap: 12, borderTop: `1px solid ${rgba(t.fg, 0.14)}`, paddingTop: 22 }}>
               {p.highlights.map((h) => (
                 <li key={h} className="flex" style={{ gap: 12, fontSize: 15, lineHeight: 1.65, color: rgba(t.fg, 0.82) }}>
@@ -413,6 +423,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose }: 
                 </li>
               ))}
             </ul>
+            )}
 
             <div className="flex flex-wrap" style={{ gap: 8, borderTop: `1px solid ${rgba(t.fg, 0.14)}`, paddingTop: 18 }}>
               {p.tags.map((tag) => (
