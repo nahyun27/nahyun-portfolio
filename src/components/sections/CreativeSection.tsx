@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import AnimatedHeading from "@/components/AnimatedHeading";
+import { tint } from "@/lib/color";
 
 const PROJECTS = [
   {
@@ -12,7 +13,7 @@ const PROJECTS = [
     tags: ["React", "Game Logic", "Web"],
     github: "https://github.com/nahyun27/rise-of-halfmoon",
     demo: "https://rise-of-halfmoon.vercel.app/",
-    color: "#F6C90E",
+    color: "var(--c-yellow)",
     image: "/images/halfmoon.gif"
   },
   {
@@ -22,7 +23,7 @@ const PROJECTS = [
     tags: ["Next.js", "Three.js", "3D"],
     github: "https://github.com/nahyun27/stack-tower-3d",
     demo: "https://tower-stacking.vercel.app/",
-    color: "#00E5FF",
+    color: "var(--c-cyan)",
     image: "/images/tower.gif"
   },
   {
@@ -32,7 +33,7 @@ const PROJECTS = [
     tags: ["React Three Fiber", "WebGL", "Creative"],
     github: "https://github.com/nahyun27/floating-memories",
     demo: "https://floating-memories.vercel.app/",
-    color: "#B388FF",
+    color: "var(--violet)",
     image: "/images/floating.gif"
   },
   {
@@ -41,7 +42,7 @@ const PROJECTS = [
     subtitle: "Tense Unity maze escape game. Your vision narrows relentlessly while you collect coins to survive.",
     tags: ["Unity", "C#", "Level Design"],
     github: "https://github.com/nahyun27/Beware-Of-Darkness",
-    color: "#FF5252",
+    color: "var(--c-red)",
     image: "/images/beware.gif"
   },
   {
@@ -51,7 +52,7 @@ const PROJECTS = [
     tags: ["React", "TypeScript", "Vite", "Framer Motion"],
     github: "https://github.com/nahyun27/algotrace",
     demo: "https://algorithm-trace.vercel.app/",
-    color: "#4ECDC4",
+    color: "var(--c-teal)",
     image: "/images/demo.gif"
   },
 ];
@@ -98,8 +99,8 @@ export default function CreativeSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
             className="text-xs tracking-[0.32em] uppercase font-semibold mb-6"
-            style={{ color: "#00C9A7", fontFamily: "'Inter', sans-serif" }}>
-            04 — Web &amp; Games
+            style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
+            04 / Web &amp; Games
           </motion.p>
           <AnimatedHeading
             text="Interactive|Side Projects."
@@ -121,13 +122,13 @@ export default function CreativeSection() {
                 style={{
                   padding: "2px 7px",
                   fontFamily: "'Inter', sans-serif",
-                  color: isActive ? project.color : "rgba(255,255,255,0.25)",
-                  border: `1px solid ${isActive ? project.color + "60" : "rgba(255,255,255,0.08)"}`,
-                  backgroundColor: isActive ? project.color + "12" : "transparent",
+                  color: isActive ? project.color : "var(--w250)",
+                  border: `1px solid ${isActive ? tint(project.color, 38) : "var(--w80)"}`,
+                  backgroundColor: isActive ? tint(project.color, 7) : "transparent",
                 }}
               >
                 <span>{project.id}</span>
-                <span className="font-medium" style={{ color: isActive ? "#E0D9D0" : "rgba(255,255,255,0.25)", fontSize: "11px" }}>
+                <span className="font-medium" style={{ color: isActive ? "var(--text-soft)" : "var(--w250)", fontSize: "11px" }}>
                   {project.title.split(" ").slice(0, 3).join(" ")}
                 </span>
               </button>
@@ -155,8 +156,8 @@ export default function CreativeSection() {
                   <div
                     className="relative flex items-center gap-5 px-8 py-7 transition-all duration-400 border-b"
                     style={{
-                      borderColor: "rgba(255,255,255,0.05)",
-                      backgroundColor: isActive ? "rgba(255,255,255,0.025)" : "transparent",
+                      borderColor: "var(--w50)",
+                      backgroundColor: isActive ? "var(--w25)" : "transparent",
                       padding: "7px 14px"
                     }}
                   >
@@ -171,7 +172,7 @@ export default function CreativeSection() {
                     {/* Number */}
                     <span
                       className="text-[14px] font-black tracking-widest shrink-0 transition-colors duration-300"
-                      style={{ fontFamily: "'Inter', sans-serif", color: isActive ? project.color : "rgba(255,255,255,0.15)" }}
+                      style={{ fontFamily: "'Inter', sans-serif", color: isActive ? project.color : "var(--w150)" }}
                     >
                       {project.id}
                     </span>
@@ -179,10 +180,10 @@ export default function CreativeSection() {
                     {/* Text */}
                     <div className="flex-1 min-w-0">
                       <h4
-                        className="font-bold text-xl md:text-2xl leading-tight transition-colors duration-300 mb-2 truncate group-hover:text-white"
+                        className="font-bold text-xl md:text-2xl leading-tight transition-colors duration-300 mb-2 truncate group-hover:text-[color:var(--text)]"
                         style={{
                           fontFamily: "'Syne', sans-serif",
-                          color: isActive ? "#F0EDE6" : "#666"
+                          color: isActive ? "var(--text)" : "var(--t4)"
                         }}
                       >
                         {project.title}
@@ -191,7 +192,7 @@ export default function CreativeSection() {
                         {project.tags.map(tag => (
                           <span key={tag}
                             className="text-[13px] uppercase tracking-[0.15em] font-bold transition-colors duration-300"
-                            style={{ fontFamily: "'Inter', sans-serif", color: isActive ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.12)" }}
+                            style={{ fontFamily: "'Inter', sans-serif", color: isActive ? "var(--w400)" : "var(--w120)" }}
                           >
                             {tag}
                           </span>
@@ -217,7 +218,7 @@ export default function CreativeSection() {
                       whileHover={{ opacity: 1 }}
                       className="absolute inset-0 pointer-events-none"
                       style={{
-                        background: `linear-gradient(90deg, ${project.color}06 0%, transparent 70%)`,
+                        background: `linear-gradient(90deg, ${tint(project.color, 2)} 0%, transparent 70%)`,
                       }}
                     />
                   </div>
@@ -228,34 +229,35 @@ export default function CreativeSection() {
 
           {/* ── Connector Bridge ── */}
           <div className="hidden lg:flex flex-col items-center justify-center w-[6%] relative">
-            <motion.div
-              animate={{ backgroundColor: selectedProject.color, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+            <div
               className="w-px h-full max-h-40 mx-auto"
               style={{
                 background: `linear-gradient(180deg, transparent 0%, ${selectedProject.color} 50%, transparent 100%)`,
                 opacity: 0.35,
               }}
             />
-            <motion.div
-              animate={{ backgroundColor: selectedProject.color, boxShadow: `0 0 10px ${selectedProject.color}` }}
-              transition={{ duration: 0.5 }}
+            <div
               className="absolute w-2 h-2 rounded-full"
-              style={{ backgroundColor: selectedProject.color }}
+              style={{
+                backgroundColor: selectedProject.color,
+                boxShadow: `0 0 10px ${selectedProject.color}`,
+                transition: "background-color 0.5s ease, box-shadow 0.5s ease",
+              }}
             />
           </div>
 
           {/* ── Right: Detail Panel ── */}
           <motion.div
             ref={detailPanelRef}
-            animate={{ borderColor: `${selectedProject.color}30` }}
-            whileHover={{ y: -6, boxShadow: `0 40px 100px rgba(0,0,0,0.8), 0 0 100px ${selectedProject.color}15` }}
+            whileHover={{ y: -6 }}
+            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 40px 100px rgba(var(--shadow-rgb),calc(0.8 * var(--shadow-k))), 0 0 100px ${tint(selectedProject.color, 8)}`; }}
+            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 30px 80px rgba(var(--shadow-rgb),calc(0.6 * var(--shadow-k))), 0 0 80px ${tint(selectedProject.color, 3)}`; }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-shadow duration-500 h-auto"
+            className="w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-[box-shadow,border-color] duration-500 h-auto"
             style={{
-              backgroundColor: "#0D0D10",
-              border: `1px solid ${selectedProject.color}20`,
-              boxShadow: `0 30px 80px rgba(0,0,0,0.6), 0 0 80px ${selectedProject.color}08`,
+              backgroundColor: "var(--surface)",
+              border: `1px solid ${tint(selectedProject.color, 19)}`,
+              boxShadow: `0 30px 80px rgba(var(--shadow-rgb),calc(0.6 * var(--shadow-k))), 0 0 80px ${tint(selectedProject.color, 3)}`,
               padding: "1.2rem", // Keep reduced padding
             }}
           >
@@ -282,7 +284,7 @@ export default function CreativeSection() {
                       </span>
                       <h3
                         className="font-black text-[22px] leading-tight break-words pr-2 md:text-3xl"
-                        style={{ fontFamily: "'Syne', sans-serif", color: "#F4F1EB", letterSpacing: "-0.02em" }}
+                        style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)", letterSpacing: "-0.02em" }}
                       >
                         {selectedProject.title}
                       </h3>
@@ -296,9 +298,9 @@ export default function CreativeSection() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-lg"
-                          style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "#888" }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${selectedProject.color}40`; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#888"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.08)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
+                          style={{ backgroundColor: "var(--w50)", border: "1px solid var(--w80)", color: "var(--t2)" }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${tint(selectedProject.color, 25)}`; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--t2)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--w80)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
                           title="GitHub"
                         >
                           {GH_SVG}
@@ -310,9 +312,9 @@ export default function CreativeSection() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-lg"
-                          style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "#888" }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${selectedProject.color}40`; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "#888"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(255,255,255,0.08)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
+                          style={{ backgroundColor: "var(--w50)", border: "1px solid var(--w80)", color: "var(--t2)" }}
+                          onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.borderColor = selectedProject.color; (e.currentTarget as HTMLAnchorElement).style.boxShadow = `0 4px 15px ${tint(selectedProject.color, 25)}`; }}
+                          onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--t2)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--w80)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
                           title="Live Demo"
                         >
                           {DEMO_SVG}
@@ -323,7 +325,7 @@ export default function CreativeSection() {
 
                   {/* Image block */}
                   {selectedProject.image && (
-                    <div className="relative w-full rounded-2xl overflow-hidden group shadow-xl" style={{ paddingBottom: "55%", border: "1px solid rgba(255,255,255,0.04)" }}>
+                    <div className="relative w-full rounded-2xl overflow-hidden group shadow-xl" style={{ paddingBottom: "55%", border: "1px solid var(--w40)" }}>
                       <img
                         src={selectedProject.image}
                         alt={selectedProject.title}
@@ -331,30 +333,30 @@ export default function CreativeSection() {
                       />
                       {/* Interactive hover glow over the image */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                        style={{ boxShadow: `inset 0 0 50px ${selectedProject.color}40, inset 0 0 10px ${selectedProject.color}20` }} />
+                        style={{ boxShadow: `inset 0 0 50px ${tint(selectedProject.color, 25)}, inset 0 0 10px ${tint(selectedProject.color, 13)}` }} />
 
                       {/* Color overlay fade at bottom */}
                       <div
                         className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none transition-opacity duration-700 group-hover:opacity-70"
-                        style={{ background: `linear-gradient(to top, #0D0D10, transparent)` }}
+                        style={{ background: `linear-gradient(to top, var(--surface), transparent)` }}
                       />
                     </div>
                   )}
 
                   {/* Description */}
                   <p className="text-[13px] md:text-base mb-1 leading-[1.7] flex-1"
-                    style={{ color: "#777", fontFamily: "'Inter', sans-serif" }}>
+                    style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif" }}>
                     {selectedProject.subtitle}
                   </p>
 
                   {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-3 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t" style={{ borderColor: "var(--w50)" }}>
                     {selectedProject.tags.map((tag: string) => (
                       <span key={tag}
                         className="px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] rounded-full"
                         style={{
-                          backgroundColor: `${selectedProject.color}14`,
-                          border: `1px solid ${selectedProject.color}30`,
+                          backgroundColor: `${tint(selectedProject.color, 8)}`,
+                          border: `1px solid ${tint(selectedProject.color, 19)}`,
                           color: selectedProject.color,
                           fontFamily: "'Inter', sans-serif", padding: "5px 10px"
                         }}>
@@ -370,7 +372,7 @@ export default function CreativeSection() {
             <div
               className="absolute inset-0 pointer-events-none z-0"
               style={{
-                background: `radial-gradient(ellipse at 80% 120%, ${selectedProject.color}10 0%, transparent 60%)`,
+                background: `radial-gradient(ellipse at 80% 120%, ${tint(selectedProject.color, 6)} 0%, transparent 60%)`,
                 transition: "background 0.8s ease",
               }}
             />

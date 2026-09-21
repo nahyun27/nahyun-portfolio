@@ -3,13 +3,128 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: dark;
+
+  /* surfaces */
   --bg: #0C0C0F;
-  --surface: #141417;
-  --border: rgba(255, 255, 255, 0.07);
+  --bg-rgb: 12, 12, 15;
+  --surface: #0D0D10;
+  --surface-2: #111116;
+
+  /* text */
   --text: #F0EDE6;
-  --muted: #555;
+  --text-soft: #E0D9D0;
+  --t2: #888;
+  --t3: #777;
+  --t4: #666;
+  --t5: #555;
+  --t6: #444;
+  --t7: #3a3a3a;
+
+  /* neutral alpha scale (white on dark, ink on light). Name = alpha x 1000 */
+  --w15: rgba(255, 255, 255, 0.015);
+  --w20: rgba(255, 255, 255, 0.02);
+  --w25: rgba(255, 255, 255, 0.025);
+  --w30: rgba(255, 255, 255, 0.03);
+  --w40: rgba(255, 255, 255, 0.04);
+  --w50: rgba(255, 255, 255, 0.05);
+  --w60: rgba(255, 255, 255, 0.06);
+  --w70: rgba(255, 255, 255, 0.07);
+  --w80: rgba(255, 255, 255, 0.08);
+  --w100: rgba(255, 255, 255, 0.1);
+  --w120: rgba(255, 255, 255, 0.12);
+  --w150: rgba(255, 255, 255, 0.15);
+  --w250: rgba(255, 255, 255, 0.25);
+  --w400: rgba(255, 255, 255, 0.4);
+
+  /* accents */
   --mint: #00C9A7;
-  --mint-dim: rgba(0, 201, 167, 0.12);
+  --mint-rgb: 0, 201, 167;
+  --on-mint: #0C0C0F;
+  --violet: #B388FF;
+  --violet-rgb: 179, 136, 255;
+
+  /* per project / category accents */
+  --c-yellow: #F6C90E;
+  --c-cyan: #00E5FF;
+  --c-purple: #B388FF;
+  --c-red: #FF5252;
+  --c-teal: #4ECDC4;
+  --c-rose: #F87171;
+  --c-amber: #FBBF24;
+  --c-blue: #60A5FA;
+  --c-lilac: #A78BFA;
+
+  /* depth */
+  --shadow-rgb: 0, 0, 0;
+  --shadow-k: 1;
+
+  /* ambient background */
+  --orb-a: #00C9A7;
+  --orb-b: #7000FF;
+  --orb-a-o: 0.12;
+  --orb-b-o: 0.06;
+  --orb-c-o: 0.10;
+  --grain-o: 0.025;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #F4F2EC;
+  --bg-rgb: 244, 242, 236;
+  --surface: #FFFFFF;
+  --surface-2: #FFFFFF;
+
+  --text: #16161D;
+  --text-soft: #2B2B35;
+  --t2: #52525C;
+  --t3: #5E5E68;
+  --t4: #71717B;
+  --t5: #85858F;
+  --t6: #A1A1AA;
+  --t7: #BCBCC4;
+
+  --w15: rgba(22, 22, 40, 0.025);
+  --w20: rgba(22, 22, 40, 0.03);
+  --w25: rgba(22, 22, 40, 0.035);
+  --w30: rgba(22, 22, 40, 0.045);
+  --w40: rgba(22, 22, 40, 0.06);
+  --w50: rgba(22, 22, 40, 0.075);
+  --w60: rgba(22, 22, 40, 0.09);
+  --w70: rgba(22, 22, 40, 0.1);
+  --w80: rgba(22, 22, 40, 0.11);
+  --w100: rgba(22, 22, 40, 0.14);
+  --w120: rgba(22, 22, 40, 0.16);
+  --w150: rgba(22, 22, 40, 0.2);
+  --w250: rgba(22, 22, 40, 0.32);
+  --w400: rgba(22, 22, 40, 0.5);
+
+  --mint: #00705E;
+  --mint-rgb: 0, 140, 118;
+  --on-mint: #FFFFFF;
+  --violet: #6440DC;
+  --violet-rgb: 100, 64, 220;
+
+  --c-yellow: #96700A;
+  --c-cyan: #00778B;
+  --c-purple: #6440DC;
+  --c-red: #C9302C;
+  --c-teal: #0B7F78;
+  --c-rose: #CC2F2F;
+  --c-amber: #9A5B00;
+  --c-blue: #1E5FCC;
+  --c-lilac: #6440DC;
+
+  --shadow-rgb: 40, 40, 90;
+  --shadow-k: 0.16;
+
+  --orb-a: #19D3B0;
+  --orb-b: #8B6CFF;
+  --orb-a-o: 0.34;
+  --orb-b-o: 0.26;
+  --orb-c-o: 0.28;
+  --grain-o: 0.05;
 }
 
 *,
@@ -61,7 +176,7 @@ h5 {
 
 ::selection {
   background: var(--mint);
-  color: #0C0C0F;
+  color: var(--on-mint);
 }
 
 ::-webkit-scrollbar {
@@ -93,10 +208,74 @@ h5 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: var(--grain-o);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 300px 300px;
   z-index: 0;
   transform: translateZ(0);
   will-change: transform;
+}
+
+/* smooth theme switch: only colors, only while the toggle class is present */
+html.theme-anim,
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease,
+    box-shadow 0.4s ease, fill 0.4s ease, stroke 0.4s ease !important;
+}
+
+/* theme toggle icons swap purely in CSS so SSR and the no-flash script never disagree */
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-toggle .icon-sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+.theme-toggle .icon-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[data-theme="light"] .theme-toggle .icon-sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+:root[data-theme="light"] .theme-toggle .icon-moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+/* hover states that must win over inline styles and follow the theme (framer would freeze resolved colors) */
+.hv-mint:hover {
+  color: var(--mint) !important;
+  border-color: rgba(var(--mint-rgb), 0.4) !important;
+  background-color: rgba(var(--mint-rgb), 0.08) !important;
+}
+
+.hv-mint-glow:hover {
+  color: var(--mint) !important;
+  border-color: var(--mint) !important;
+  background-color: rgba(var(--mint-rgb), 0.08) !important;
+  box-shadow: 0 0 16px rgba(var(--mint-rgb), 0.25) !important;
+}
+
+.hv-ink-glow:hover {
+  color: var(--text) !important;
+  border-color: var(--text) !important;
+  background-color: var(--w40) !important;
+  box-shadow: 0 0 16px var(--w100) !important;
+}
+
+.hv-card:hover {
+  background-color: var(--w40) !important;
+  border-color: rgba(var(--mint-rgb), 0.3) !important;
 }
