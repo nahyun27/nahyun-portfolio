@@ -218,7 +218,7 @@ export class Shell {
 
   banner(): Chunk[] {
     return [
-      { kind: "info", text: "Welcome to nsh, Nahyun Shell  (˵^ ᵕ ^˵)\nType a command, or 'exit' / 'quit' to leave. Try 'help'.\n" },
+      { kind: "info", text: "Welcome to nsh, a Linux mini shell  (˵^ ᵕ ^˵)\nType a command, or 'exit' / 'quit' to leave. Try 'help'.\n" },
     ];
   }
 

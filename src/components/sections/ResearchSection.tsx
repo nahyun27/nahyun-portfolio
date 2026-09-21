@@ -40,7 +40,7 @@ export default function ResearchSection() {
     <section id="research" className="min-h-screen flex items-center py-24 md:py-32 relative z-10"
       style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <SectionHeader index="02" label="Research" title="Publications & Patents." highlightWords={["Patents."]} />
+        <SectionHeader index="03" label="Research" title="Publications & Patents." highlightWords={["Patents."]} />
         <HorizontalSlider cards={PAPERS} />
       </div>
     </section>

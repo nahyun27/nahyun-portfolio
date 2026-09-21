@@ -19,7 +19,29 @@ export interface ProjectMedia {
   position?: string;
   /** frame background for images that ship with their own (e.g. white charts) */
   bg?: string;
+  /** frame height as a percentage of its width, default 62 */
+  aspect?: number;
+  /** show native controls and sound instead of a silent loop, for demo recordings */
+  controls?: boolean;
+  /** phone shaped recording, shown at its own proportions */
+  portrait?: boolean;
 }
+
+/** how the screen fills in when a project opens, each one nods to what the project is */
+export type TransitionKind =
+  | "liquid"
+  | "tennis"
+  | "paper"
+  | "grid"
+  | "stack"
+  | "scan"
+  | "wave"
+  | "bars"
+  | "pills"
+  | "photos"
+  | "stamp"
+  | "eclipse"
+  | "darkness";
 
 /** each project opens as its own colour world */
 export interface SceneTheme {
@@ -45,6 +67,7 @@ export interface Project {
   links: ProjectLink[];
   theme: SceneTheme;
   stage: StageKind;
+  transition: TransitionKind;
 }
 
 const PROJECT_DATA: Omit<Project, "id">[] = [
@@ -84,6 +107,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/femu-hotcold-ftl", kind: "github" }],
     theme: { bg: "#071427", fg: "#EAF2FF", accent: "#FF6B3D", accent2: "#4DA3FF" },
     stage: "ssd",
+    transition: "grid",
   },
   {
     icon: "tennis",
@@ -114,6 +138,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#0E3B2E", fg: "#F4FFE0", accent: "#D7F23B", accent2: "#7CE0B0" },
     stage: "liquid",
+    transition: "tennis",
   },
   {
     icon: "scale",
@@ -141,6 +166,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     ],
     theme: { bg: "#12233F", fg: "#F3F0E6", accent: "#F2B544", accent2: "#5EC3E8" },
     stage: "liquid",
+    transition: "stamp",
   },
   {
     icon: "search",
@@ -168,10 +194,11 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/paperprobe", kind: "github" }],
     theme: { bg: "#F4EFE4", fg: "#1B1B1F", accent: "#E5484D", accent2: "#1E6FEB" },
     stage: "papers",
+    transition: "paper",
   },
   {
     icon: "terminal",
-    title: "nsh> Nahyun Shell",
+    title: "nsh> Linux Mini Shell",
     summary:
       "A Unix shell written in C, covering process creation, pipes, redirection and a hand rolled line editor.",
     metrics: [{ value: "∞", label: "pipe stages" }],
@@ -194,22 +221,40 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/nahyun27/linux-study-minishell", kind: "github" }],
     theme: { bg: "#08110B", fg: "#D7F7DE", accent: "#4ADE80", accent2: "#7DD3FC" },
     stage: "shell",
+    transition: "scan",
   },
   {
     icon: "mic",
     title: "PerSI",
     summary:
-      "A speaker identification app for hearing impaired users. Register the voices of people you know, then see who is talking in real time as a chat.",
+      "A speaker identification app for hearing impaired users. Register the voices of the people around you, then see who said what in a conversation, laid out as a chat with their name and picture.",
+    media: [
+      {
+        src: "/images/projects/persi-demo.jpg",
+        video: "/images/projects/persi-demo.mp4",
+        label: "Demo",
+        caption: "The demo recording from the final presentation (about three minutes, with sound).",
+        portrait: true,
+        controls: true,
+      },
+    ],
+    metrics: [
+      { value: "7 / 8", label: "speakers identified in the test" },
+      { value: "2 min", label: "of voice to register someone" },
+    ],
     highlights: [
-      "Voices are registered with pyannote diarization and matched live using wav2vec2 embeddings.",
-      "Conversations are shown as a chat timeline, with every utterance labeled by the identified speaker.",
-      "React Native app with login, speaker registration and editing, recording and chat room screens.",
-      "FastAPI and PyTorch backend on GCP, with MongoDB for data.",
+      "Register a speaker by recording their voice in the app or uploading a recording. About two minutes of speech per person is enough to train the classifier.",
+      "pyannote.audio splits a conversation into per speaker segments. wav2vec 2.0 turns each segment into embeddings that feed a Conv1D speaker classifier, and it produces the transcript in the same pass.",
+      "Anything below 0.5 confidence is treated as an unregistered speaker and only the transcript comes back.",
+      "The classifiers were evaluated on the Zeroth Korean set (115 speakers, 22,720 utterances) across input frame sizes and against a log mel baseline. On a four speaker test conversation, 7 of 8 utterances were attributed correctly.",
+      "My part was the client: UI and UX design with Figma prototypes, and the recording and file upload flow in React Native.",
+      "Built by a team of four across model, server and app. With no GPU on the GCP free tier, inference was slow, and we documented that as the main limitation.",
     ],
     tags: ["React Native", "FastAPI", "PyTorch", "wav2vec2", "pyannote", "GCP", "MongoDB"],
-    links: [{ label: "GitHub", href: "https://github.com/PerSI-Org/PerSI_FrontEnd", kind: "github" }],
+    links: [{ label: "GitHub", href: "https://github.com/PerSI-Org", kind: "github" }],
     theme: { bg: "#FF7A59", fg: "#2A0F08", accent: "#FFE29A", accent2: "#FFFFFF" },
     stage: "liquid",
+    transition: "wave",
   },
   {
     icon: "pill",
@@ -219,6 +264,17 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     metrics: [
       { value: "99.76%", label: "Top 1 accuracy" },
       { value: "1.5s", label: "inference, down from 5s" },
+    ],
+    media: [
+      {
+        src: "/images/projects/tofindpill-architecture.png",
+        label: "Architecture",
+        caption:
+          "The React Native app (login, camera, history and results) talks to a Node.js API. The model server segments every pill in the photo with YOLO, classifies each crop and returns a top 5 list per pill. Users and results live in MongoDB.",
+        fit: "contain",
+        bg: "#FFFFFF",
+        aspect: 96,
+      },
     ],
     highlights: [
       "Two stage pipeline: YOLOv5 detects every pill in the photo, YOLOv8 classifies each detected pill.",
@@ -230,6 +286,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/ToFindPill", kind: "github" }],
     theme: { bg: "#EAF7F5", fg: "#0E2A2A", accent: "#00B8A9", accent2: "#FF8FB1" },
     stage: "liquid",
+    transition: "pills",
   },
   {
     icon: "branch",
@@ -245,6 +302,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "GitHub", href: "https://github.com/Software-Development-Practices", kind: "github" }],
     theme: { bg: "#17181C", fg: "#EDEDED", accent: "#7EE787", accent2: "#79C0FF" },
     stage: "liquid",
+    transition: "liquid",
   },
   {
     icon: "flask",
@@ -261,6 +319,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     links: [{ label: "Live Site", href: "https://ace.hanyang.ac.kr", kind: "web" }],
     theme: { bg: "#0A2E33", fg: "#E6FBFA", accent: "#5EEAD4", accent2: "#38BDF8" },
     stage: "liquid",
+    transition: "liquid",
   },
 ];
 

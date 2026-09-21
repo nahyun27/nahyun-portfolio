@@ -11,8 +11,9 @@ const smooth = (a: number, b: number, x: number) => {
 };
 
 /**
- * Hover the name and watch a classifier get fooled, the way adversarial examples work: the picture
- * barely changes, the prediction flips. Wraps the h1 without touching its layout.
+ * A scripted illustration of an adversarial example (picture barely changes, prediction flips).
+ * Nothing here is a real model: the grain is decoration and the percentages are a formula of hover
+ * time. The HUD says so on screen. Wraps the h1 without touching its layout.
  */
 export default function AdversarialName({ children }: { children: React.ReactNode }) {
   const [eps, setEps] = useState(0);
@@ -51,11 +52,13 @@ export default function AdversarialName({ children }: { children: React.ReactNod
       ];
 
   return (
-    <div
-      className="relative"
-      onPointerEnter={() => (hovering.current = true)}
-      onPointerLeave={() => (hovering.current = false)}
-    >
+    <div className="relative">
+      {/* only the name is hoverable and only the name gets the grain */}
+      <div
+        className="relative inline-block"
+        onPointerEnter={() => (hovering.current = true)}
+        onPointerLeave={() => (hovering.current = false)}
+      >
       {children}
 
       {/* the perturbation: it never changes the layout, it only grains the picture */}
@@ -63,6 +66,7 @@ export default function AdversarialName({ children }: { children: React.ReactNod
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
+          zIndex: 1,
           backgroundImage: NOISE,
           backgroundSize: "220px 220px",
           mixBlendMode: "overlay",
@@ -71,15 +75,20 @@ export default function AdversarialName({ children }: { children: React.ReactNod
         }}
       />
 
+      </div>
+
+      {/* readout sits in the free space below the name, never under the grain */}
       <div
-        className="glass-chip hidden lg:block"
+        className="glass-chip hidden xl:block"
         style={{
           position: "absolute",
           right: 0,
-          top: -8,
+          top: "calc(100% + 30px)",
           width: 250,
           borderRadius: 18,
           padding: "12px 14px",
+          zIndex: 5,
+          isolation: "isolate",
           fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
           fontSize: 11.5,
           lineHeight: 1.5,
@@ -87,7 +96,7 @@ export default function AdversarialName({ children }: { children: React.ReactNod
           pointerEvents: "none",
         }}
       >
-        <div style={{ color: "var(--t4)" }}>predict(nahyun_kim.png)</div>
+        <div style={{ color: "var(--t4)" }}>simulated classifier</div>
         <div style={{ margin: "8px 0 10px", display: "grid", gap: 6 }}>
           {rows.map((r) => (
             <div key={r.label}>
@@ -111,11 +120,14 @@ export default function AdversarialName({ children }: { children: React.ReactNod
         </div>
         <div className="flex justify-between" style={{ color: "var(--t3)", fontVariantNumeric: "tabular-nums" }}>
           <span>{"ε"} = {(eps * 0.03).toFixed(3)}</span>
-          <span>{eps === 0 ? "hover the name" : fooled ? "fooled" : "pushing..."}</span>
+          <span>{eps === 0 ? "hover the name" : fooled ? "flipped" : "pushing..."}</span>
         </div>
         {fooled && (
-          <div style={{ marginTop: 6, color: "var(--mint)" }}>You still read Nahyun Kim. The model does not.</div>
+          <div style={{ marginTop: 6, color: "var(--mint)" }}>You still read Nahyun Kim. A fooled model would not.</div>
         )}
+        <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid var(--w60)", color: "var(--t5)", fontSize: 10.5 }}>
+          Illustration only. No model runs here, the noise is decoration and the numbers follow a script.
+        </div>
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <SectionHeader index="03" label="Projects" title="Selected Work." highlightWords={["Work."]} marginBottom={28} />
+        <SectionHeader index="02" label="Projects" title="Selected Work." highlightWords={["Work."]} marginBottom={28} />
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "var(--t3)", maxWidth: 520, marginBottom: 32, lineHeight: 1.7 }}>
           Pick one. Each project opens as its own little world, and a few of them you can actually play with.
         </p>
