@@ -7,7 +7,7 @@ import { Icon } from "@/components/ProjectIcon";
 import { LINK_ICONS, ARROW_ICON } from "@/components/LinkIcons";
 import LiquidStage from "@/components/scenes/LiquidStage";
 import MediaClip from "@/components/MediaClip";
-import { Transition, COVER_AT } from "@/components/transitions";
+import { Transition, COVER_AT, contentDelay } from "@/components/transitions";
 import SsdScene from "@/components/scenes/SsdScene";
 import PapersScene from "@/components/scenes/PapersScene";
 import NshTerminal from "@/components/scenes/NshTerminal";
@@ -322,7 +322,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
         className="relative"
         style={{ zIndex: 10, minHeight: "100%" }}
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, transition: { delay: reduce ? 0 : Math.max(0.5, COVER_AT[firstKind] - 0.3), duration: 0.45 } }}
+        animate={{ opacity: 1, transition: { delay: reduce ? 0 : contentDelay(firstKind), duration: 0.45 } }}
         exit={{ opacity: 0, transition: { duration: 0.2 } }}
       >
         {/* top bar */}
