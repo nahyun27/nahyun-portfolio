@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import AnimatedHeading from "@/components/AnimatedHeading";
+import SectionHeader from "@/components/SectionHeader";
+import { Icon } from "@/components/ProjectIcon";
 import { tint } from "@/lib/color";
 
 // ── Data ────────────────────────────────────────────────────────────────────
@@ -72,11 +73,9 @@ function SeriesCard({ series, index, inView }: { series: typeof SERIES[0]; index
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-2xl overflow-hidden group cursor-pointer"
+      className="glass glass-ring rounded-2xl overflow-hidden group cursor-pointer"
       style={{
-        backgroundColor: "var(--surface-2)",
-        border: `1px solid ${tint(series.color, 19)}`,
-        boxShadow: `0 0 40px ${tint(series.color, 3)}`,
+        ["--ring-color" as string]: series.color,
         padding: "15px",
       }}
       onClick={() => setExpanded(!expanded)}
@@ -96,7 +95,14 @@ function SeriesCard({ series, index, inView }: { series: typeof SERIES[0]; index
                 marginBottom: "10px",
               }}
             >
-              {isDone ? "✓ 완결" : `● ${series.current}/${series.total} 진행 중`}
+              {isDone ? (
+                <span className="inline-flex items-center" style={{ gap: 4 }}><Icon name="check" size={11} strokeWidth={3} />완결</span>
+              ) : (
+                <span className="inline-flex items-center" style={{ gap: 5 }}>
+                  <span className="rounded-full" style={{ width: 5, height: 5, backgroundColor: "currentColor" }} />
+                  {series.current}/{series.total} 진행 중
+                </span>
+              )}
             </span>
             <h3 className="font-black text-xl leading-tight mb-1.5" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
               {series.title}
@@ -253,22 +259,7 @@ export default function BlogSection() {
       <div className="section-inner w-full">
 
         {/* Header */}
-        <div className="mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            className="text-xs tracking-[0.32em] uppercase font-semibold mb-12"
-            style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}
-          >
-            06 / Writing
-          </motion.p>
-          <AnimatedHeading
-            text="Thoughts &|Articles."
-            highlightWords={["Articles."]}
-            style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)" }}
-            delay={0.1}
-          />
-        </div>
+        <SectionHeader index="06" label="Writing" title="Thoughts & Articles." highlightWords={["Articles."]} />
 
         {/* ── Featured Series ── */}
         <motion.div

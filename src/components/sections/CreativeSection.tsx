@@ -2,12 +2,20 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import AnimatedHeading from "@/components/AnimatedHeading";
+import SectionHeader from "@/components/SectionHeader";
 import { tint } from "@/lib/color";
 
-const PROJECTS = [
+const PROJECT_DATA = [
   {
-    id: "01",
+    title: "AlgoTrace",
+    subtitle: "Interactive visualization platform for understanding complex algorithms step by step. Control playback, watch real-time visualization, and build intuitive understanding.",
+    tags: ["React", "TypeScript", "Vite", "Framer Motion"],
+    github: "https://github.com/nahyun27/algotrace",
+    demo: "https://algorithm-trace.vercel.app/",
+    color: "var(--c-teal)",
+    image: "/images/demo.gif"
+  },
+  {
     title: "Rise of Halfmoon",
     subtitle: "Strategic moon phase card game. Match phases, create lunar cycles, and outsmart your opponent.",
     tags: ["React", "Game Logic", "Web"],
@@ -17,7 +25,6 @@ const PROJECTS = [
     image: "/images/halfmoon.gif"
   },
   {
-    id: "02",
     title: "Stack Tower 3D",
     subtitle: "Addictive 3D stacking game. Click at the perfect moment to stack blocks and reach for the sky.",
     tags: ["Next.js", "Three.js", "3D"],
@@ -27,7 +34,6 @@ const PROJECTS = [
     image: "/images/tower.gif"
   },
   {
-    id: "03",
     title: "Floating Memories",
     subtitle: "Immersive 3D interactive photo gallery. Navigate through the cosmos of your life's moments in zero gravity.",
     tags: ["React Three Fiber", "WebGL", "Creative"],
@@ -37,7 +43,6 @@ const PROJECTS = [
     image: "/images/floating.gif"
   },
   {
-    id: "04",
     title: "Beware Of Darkness",
     subtitle: "Tense Unity maze escape game. Your vision narrows relentlessly while you collect coins to survive.",
     tags: ["Unity", "C#", "Level Design"],
@@ -45,17 +50,10 @@ const PROJECTS = [
     color: "var(--c-red)",
     image: "/images/beware.gif"
   },
-  {
-    id: "05",
-    title: "AlgoTrace",
-    subtitle: "Interactive visualization platform for understanding complex algorithms step by step. Control playback, watch real-time visualization, and build intuitive understanding.",
-    tags: ["React", "TypeScript", "Vite", "Framer Motion"],
-    github: "https://github.com/nahyun27/algotrace",
-    demo: "https://algorithm-trace.vercel.app/",
-    color: "var(--c-teal)",
-    image: "/images/demo.gif"
-  },
 ];
+
+// ids follow the array order, so reordering the list needs no renumbering
+const PROJECTS = PROJECT_DATA.map((p, i) => ({ ...p, id: String(i + 1).padStart(2, "0") }));
 
 const GH_SVG = (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -94,21 +92,7 @@ export default function CreativeSection() {
       <div className="section-inner w-full">
 
         {/* Header */}
-        <div className="mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-            className="text-xs tracking-[0.32em] uppercase font-semibold mb-6"
-            style={{ color: "var(--mint)", fontFamily: "'Inter', sans-serif" }}>
-            04 / Web &amp; Games
-          </motion.p>
-          <AnimatedHeading
-            text="Interactive|Side Projects."
-            highlightWords={["Interactive"]}
-            style={{ fontSize: "clamp(2rem, 8vw, 4.5rem)" }}
-            delay={0.1}
-          />
-        </div>
+        <SectionHeader index="04" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} />
 
         {/* ── Mobile Tab Navigation (lg:hidden) ── */}
         <div className="flex lg:hidden gap-2 mb-6 flex-wrap" style={{ marginBottom: "20px", marginTop: "20px" }}>
@@ -250,14 +234,10 @@ export default function CreativeSection() {
           <motion.div
             ref={detailPanelRef}
             whileHover={{ y: -6 }}
-            onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 40px 100px rgba(var(--shadow-rgb),calc(0.8 * var(--shadow-k))), 0 0 100px ${tint(selectedProject.color, 8)}`; }}
-            onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 30px 80px rgba(var(--shadow-rgb),calc(0.6 * var(--shadow-k))), 0 0 80px ${tint(selectedProject.color, 3)}`; }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden transition-[box-shadow,border-color] duration-500 h-auto"
+            className="glass glass-ring w-full lg:w-[48%] mt-0 lg:mt-0 rounded-3xl flex flex-col overflow-hidden h-auto"
             style={{
-              backgroundColor: "var(--surface)",
-              border: `1px solid ${tint(selectedProject.color, 19)}`,
-              boxShadow: `0 30px 80px rgba(var(--shadow-rgb),calc(0.6 * var(--shadow-k))), 0 0 80px ${tint(selectedProject.color, 3)}`,
+              ["--ring-color" as string]: selectedProject.color,
               padding: "1.2rem", // Keep reduced padding
             }}
           >
