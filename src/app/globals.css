@@ -1,9 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 @import "tailwindcss";
 
 :root {
   color-scheme: dark;
+
+  /* headings: Plus Jakarta Sans for Latin, Pretendard for Hangul */
+  --font-display: 'Plus Jakarta Sans', 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', sans-serif;
 
   /* surfaces */
   --bg: #0C0C0F;
@@ -41,6 +45,9 @@
   --mint: #00C9A7;
   --mint-rgb: 0, 201, 167;
   --on-mint: #0C0C0F;
+  --fill-brand: linear-gradient(#00C9A7, #00C9A7);
+  --hl-fill: linear-gradient(#00C9A7, #00C9A7);
+  --hl-fill-2: linear-gradient(135deg, #00C9A7 0%, #B388FF 100%);
   --violet: #B388FF;
   --violet-rgb: 179, 136, 255;
 
@@ -62,6 +69,9 @@
   /* ambient background */
   --orb-a: #00C9A7;
   --orb-b: #7000FF;
+  --orb-c: #00C9A7;
+  --orb-d: #00C9A7;
+  --orb-d-o: 0;
   --orb-a-o: 0.12;
   --orb-b-o: 0.06;
   --orb-c-o: 0.10;
@@ -71,60 +81,67 @@
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --bg: #F4F2EC;
-  --bg-rgb: 244, 242, 236;
+  /* fresh, airy: cool aqua white, navy ink, vivid mint to sky accents */
+  --bg: #F2F8FC;
+  --bg-rgb: 242, 248, 252;
   --surface: #FFFFFF;
   --surface-2: #FFFFFF;
 
-  --text: #16161D;
-  --text-soft: #2B2B35;
-  --t2: #52525C;
-  --t3: #5E5E68;
-  --t4: #71717B;
-  --t5: #85858F;
-  --t6: #A1A1AA;
-  --t7: #BCBCC4;
+  --text: #0E1A2B;
+  --text-soft: #22324A;
+  --t2: #44546B;
+  --t3: #52627A;
+  --t4: #64748B;
+  --t5: #70809A;
+  --t6: #8797AE;
+  --t7: #A6B4C7;
 
-  --w15: rgba(22, 22, 40, 0.025);
-  --w20: rgba(22, 22, 40, 0.03);
-  --w25: rgba(22, 22, 40, 0.035);
-  --w30: rgba(22, 22, 40, 0.045);
-  --w40: rgba(22, 22, 40, 0.06);
-  --w50: rgba(22, 22, 40, 0.075);
-  --w60: rgba(22, 22, 40, 0.09);
-  --w70: rgba(22, 22, 40, 0.1);
-  --w80: rgba(22, 22, 40, 0.11);
-  --w100: rgba(22, 22, 40, 0.14);
-  --w120: rgba(22, 22, 40, 0.16);
-  --w150: rgba(22, 22, 40, 0.2);
-  --w250: rgba(22, 22, 40, 0.32);
-  --w400: rgba(22, 22, 40, 0.5);
+  --w15: rgba(15, 30, 60, 0.025);
+  --w20: rgba(15, 30, 60, 0.03);
+  --w25: rgba(15, 30, 60, 0.035);
+  --w30: rgba(15, 30, 60, 0.045);
+  --w40: rgba(15, 30, 60, 0.06);
+  --w50: rgba(15, 30, 60, 0.075);
+  --w60: rgba(15, 30, 60, 0.09);
+  --w70: rgba(15, 30, 60, 0.1);
+  --w80: rgba(15, 30, 60, 0.11);
+  --w100: rgba(15, 30, 60, 0.14);
+  --w120: rgba(15, 30, 60, 0.16);
+  --w150: rgba(15, 30, 60, 0.2);
+  --w250: rgba(15, 30, 60, 0.32);
+  --w400: rgba(15, 30, 60, 0.5);
 
-  --mint: #00705E;
-  --mint-rgb: 0, 140, 118;
-  --on-mint: #FFFFFF;
-  --violet: #6440DC;
-  --violet-rgb: 100, 64, 220;
+  --mint: #00806F;
+  --mint-rgb: 0, 196, 166;
+  --on-mint: #032B2F;
+  --fill-brand: linear-gradient(120deg, #19E3C0 0%, #3FB8FF 100%);
+  --hl-fill: linear-gradient(100deg, #00A98F 0%, #2E7DF6 100%);
+  --hl-fill-2: linear-gradient(135deg, #00B79C 0%, #6A4BF2 100%);
+  --violet: #6A4BF2;
+  --violet-rgb: 124, 92, 255;
 
-  --c-yellow: #96700A;
-  --c-cyan: #00778B;
-  --c-purple: #6440DC;
-  --c-red: #C9302C;
-  --c-teal: #0B7F78;
-  --c-rose: #CC2F2F;
-  --c-amber: #9A5B00;
-  --c-blue: #1E5FCC;
-  --c-lilac: #6440DC;
+  --c-yellow: #A66F00;
+  --c-cyan: #007C99;
+  --c-purple: #6A4BF2;
+  --c-red: #D93A3A;
+  --c-teal: #00857A;
+  --c-rose: #DC3545;
+  --c-amber: #AD6500;
+  --c-blue: #2563EB;
+  --c-lilac: #6A4BF2;
 
-  --shadow-rgb: 40, 40, 90;
+  --shadow-rgb: 40, 90, 160;
   --shadow-k: 0.16;
 
-  --orb-a: #19D3B0;
-  --orb-b: #8B6CFF;
-  --orb-a-o: 0.34;
-  --orb-b-o: 0.26;
-  --orb-c-o: 0.28;
-  --grain-o: 0.05;
+  --orb-a: #19E3C0;
+  --orb-b: #B49CFF;
+  --orb-c: #5CC0FF;
+  --orb-d: #FFA8D0;
+  --orb-a-o: 0.45;
+  --orb-b-o: 0.4;
+  --orb-c-o: 0.42;
+  --orb-d-o: 0.38;
+  --grain-o: 0;
 }
 
 *,
@@ -171,7 +188,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-display);
 }
 
 ::selection {
@@ -278,4 +295,30 @@ html.theme-anim *::after {
 .hv-card:hover {
   background-color: var(--w40) !important;
   border-color: rgba(var(--mint-rgb), 0.3) !important;
+}
+
+/* long detail panels scroll inside themselves on desktop, with a soft fade at the bottom edge */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--mint-rgb), 0.45) transparent;
+}
+
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(var(--mint-rgb), 0.45);
+  border-radius: 3px;
+}
+
+@media (min-width: 1024px) {
+  .scroll-fade {
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 32px), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 32px), transparent);
+  }
 }

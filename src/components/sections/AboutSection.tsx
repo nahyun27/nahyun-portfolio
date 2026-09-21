@@ -69,7 +69,7 @@ function StatCard({ s, i, inView }: { s: { num: number; label: string; suffix: s
       />
       <div className="relative z-10 flex flex-col justify-center h-full">
         <p className="font-black leading-none drop-shadow-md"
-          style={{ fontFamily: "'Syne', sans-serif", fontSize: "clamp(3rem, 5vw, 4rem)", color: "var(--text)", letterSpacing: "-0.02em" }}>
+          style={{ fontFamily: "var(--font-display)", fontSize: "clamp(3rem, 5vw, 4rem)", color: "var(--text)", letterSpacing: "-0.02em" }}>
           <Counter target={s.num} suffix={s.suffix} active={inView} />
         </p>
         <p className="text-sm uppercase tracking-[0.2em] mt-6 font-semibold transition-colors duration-300 group-hover:text-[color:var(--mint)]" style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif" }}>
@@ -323,7 +323,7 @@ export default function AboutSection() {
                     style={{ backgroundColor: "var(--w15)", border: "1px solid var(--w50)", padding: "6px 19px" }}
                   >
                     <div className="flex items-center gap-4 sm:gap-5 min-w-0">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-[color:var(--mint)]"
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-[image:var(--fill-brand)]"
                         style={{ backgroundColor: "var(--w40)" }}>
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[color:var(--mint)] group-hover:text-[color:var(--on-mint)] transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -338,7 +338,7 @@ export default function AboutSection() {
                         </p>
                       </div>
                     </div>
-                    <span className="shrink-0 text-[11px] sm:text-sm font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[color:var(--mint)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
+                    <span className="shrink-0 text-[11px] sm:text-sm font-bold px-3 py-1 sm:px-4 sm:py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[image:var(--fill-brand)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
                       style={{ border: "1px solid rgba(var(--mint-rgb),0.3)", fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", padding: "4px 8px" }}>
                       {cert.year}
                     </span>

@@ -98,7 +98,7 @@ function SeriesCard({ series, index, inView }: { series: typeof SERIES[0]; index
             >
               {isDone ? "✓ 완결" : `● ${series.current}/${series.total} 진행 중`}
             </span>
-            <h3 className="font-black text-xl leading-tight mb-1.5" style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)" }}>
+            <h3 className="font-black text-xl leading-tight mb-1.5" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
               {series.title}
             </h3>
             <p className="text-sm leading-relaxed" style={{ color: "var(--t4)", fontFamily: "'Inter', sans-serif" }}>
@@ -211,7 +211,7 @@ function PostRow({ post, index }: { post: typeof POSTS[0]; index: number }) {
       onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.paddingLeft = "0px"; (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none"; }}
     >
       <div className="flex-1 min-w-0">
-        <p className="font-bold text-base leading-snug mb-1 transition-colors duration-200 group-hover:text-[color:var(--text)]" style={{ color: "var(--text-soft)", fontFamily: "'Syne', sans-serif" }}>
+        <p className="font-bold text-base leading-snug mb-1 transition-colors duration-200 group-hover:text-[color:var(--text)]" style={{ color: "var(--text-soft)", fontFamily: "var(--font-display)" }}>
           {post.title}
         </p>
         <p className="text-sm truncate" style={{ color: "var(--t4)", fontFamily: "'Inter', sans-serif" }}>
@@ -278,7 +278,7 @@ export default function BlogSection() {
           className="mb-20"
         >
           <div className="flex items-center gap-3 mb-8" style={{ marginBottom: "0.5rem" }}>
-            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)" }}>
+            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
               Featured Series
             </h2>
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--w60)" }} />
@@ -295,7 +295,7 @@ export default function BlogSection() {
           transition={{ delay: 0.3 }}
         >
           <div className="flex items-center gap-3 mb-8" style={{ marginTop: "2rem", marginBottom: "0.5rem" }}>
-            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)" }}>
+            <h2 className="font-black text-lg tracking-tight" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>
               Latest Posts
             </h2>
             <div className="flex-1 h-px" style={{ backgroundColor: "var(--w60)" }} />

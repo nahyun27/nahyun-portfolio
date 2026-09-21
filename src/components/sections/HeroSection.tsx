@@ -53,7 +53,7 @@ export default function HeroSection() {
         <h1
           aria-label="NAHYUN KIM"
           style={{
-            fontFamily: "'Syne', sans-serif",
+            fontFamily: "var(--font-display)",
             fontWeight: 900,
             lineHeight: 0.88,
             letterSpacing: "-0.04em",

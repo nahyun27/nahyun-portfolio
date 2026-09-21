@@ -78,7 +78,7 @@ export default function FooterSection() {
             }}
           >
             {/* Hover Fill */}
-            <div className="absolute inset-0 w-full h-full bg-[color:var(--mint)] origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
+            <div className="absolute inset-0 w-full h-full bg-[image:var(--fill-brand)] origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[0.16,1,0.3,1]" />
 
             <span className="relative z-10 flex items-center gap-3 font-bold text-base sm:text-lg tracking-wide group-hover:text-[color:var(--on-mint)] transition-colors duration-300"
               style={{ fontFamily: "'Inter', sans-serif", padding: "4px 20px" }}>
@@ -97,7 +97,7 @@ export default function FooterSection() {
           style={{ borderColor: 'var(--w60)', paddingTop: "30px" }}>
 
           <div className="flex flex-col items-center lg:items-start gap-1">
-            <h2 className="text-3xl font-black tracking-tighter" style={{ fontFamily: "'Syne', sans-serif", color: "var(--text)" }}>NK.</h2>
+            <h2 className="text-3xl font-black tracking-tighter" style={{ fontFamily: "var(--font-display)", color: "var(--text)" }}>NK.</h2>
             <p className="text-sm font-medium" style={{ color: "var(--t4)", fontFamily: "'Inter', sans-serif" }}>
               © {new Date().getFullYear()} Nahyun Kim. All rights reserved.
             </p>
