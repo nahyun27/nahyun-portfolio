@@ -8,9 +8,6 @@ export const metadata: Metadata = {
   title: "Nahyun Kim | AI Security Researcher & Creative Developer",
   description:
     "Portfolio of Nahyun Kim, AI security researcher at ACE Lab, Hanyang University. Adversarial ML, audio security, creative development.",
-  icons: {
-    icon: "/favicon.png",
-  },
   openGraph: {
     title: "Nahyun Kim | AI Security Researcher",
     description:
