@@ -46,6 +46,8 @@
   --mint-rgb: 0, 201, 167;
   --on-mint: #0C0C0F;
   --fill-brand: linear-gradient(#00C9A7, #00C9A7);
+  --sel-bg: #00C9A7;
+  --sel-fg: #0C0C0F;
   --hl-fill: linear-gradient(#00C9A7, #00C9A7);
   --hl-fill-2: linear-gradient(135deg, #00C9A7 0%, #B388FF 100%);
   --violet: #B388FF;
@@ -126,6 +128,8 @@
   --mint-rgb: 0, 196, 166;
   --on-mint: #032B2F;
   --fill-brand: linear-gradient(120deg, #19E3C0 0%, #3FB8FF 100%);
+  --sel-bg: rgba(25, 227, 192, 0.3);
+  --sel-fg: #0E1A2B;
   --hl-fill: linear-gradient(100deg, #00A98F 0%, #2E7DF6 100%);
   --hl-fill-2: linear-gradient(135deg, #00B79C 0%, #2563EB 100%);
   --violet: #2563EB;
@@ -212,8 +216,13 @@ h5 {
 }
 
 ::selection {
-  background: var(--mint);
-  color: var(--on-mint);
+  background: var(--sel-bg);
+  color: var(--sel-fg);
+}
+
+::-moz-selection {
+  background: var(--sel-bg);
+  color: var(--sel-fg);
 }
 
 ::-webkit-scrollbar {
