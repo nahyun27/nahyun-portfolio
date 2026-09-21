@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useIsPresent, useReducedMotion } from "framer-motion";
 import { Icon } from "@/components/ProjectIcon";
 import { LINK_ICONS, ARROW_ICON } from "@/components/LinkIcons";
 import LiquidStage from "@/components/scenes/LiquidStage";
@@ -17,6 +17,25 @@ export interface SceneOrigin {
   x: number;
   y: number;
   R: number;
+}
+
+function luminance(hex: string) {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+    const c = v / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+}
+
+function contrast(a: string, b: string) {
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
+}
+
+/** the project accent if it stands out from its own background, otherwise whatever does */
+function cursorDot(t: SceneTheme) {
+  return [t.accent, t.accent2, t.fg].find((c) => contrast(c, t.bg) >= 3) ?? t.fg;
 }
 
 function rgba(hex: string, a: number) {
@@ -209,6 +228,33 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
   const closeRef = useRef<HTMLButtonElement>(null);
   const p = projects[idx];
   const t = p.theme;
+
+  // the cursor takes on this project's palette, but only once the screen has actually changed colour
+  const present = useIsPresent();
+  const painted = useRef(false);
+  useEffect(() => {
+    const root = document.documentElement;
+    const clear = () => ["--cursor-ring", "--cursor-dot", "--cursor-halo"].forEach((k) => root.style.removeProperty(k));
+    if (!present) {
+      clear();
+      return;
+    }
+    const apply = () => {
+      root.style.setProperty("--cursor-ring", t.fg);
+      root.style.setProperty("--cursor-dot", cursorDot(t));
+      root.style.setProperty("--cursor-halo", t.bg);
+      painted.current = true;
+    };
+    if (painted.current || reduce) {
+      apply();
+      return;
+    }
+    const id = window.setTimeout(apply, Math.max(0, COVER_AT[firstKind] * 1000 - 250));
+    return () => window.clearTimeout(id);
+  }, [present, t, firstKind, reduce]);
+  useEffect(() => () => {
+    ["--cursor-ring", "--cursor-dot", "--cursor-halo"].forEach((k) => document.documentElement.style.removeProperty(k));
+  }, []);
 
   // lock page scroll, move focus into the scene and give it back afterwards
   useEffect(() => {
