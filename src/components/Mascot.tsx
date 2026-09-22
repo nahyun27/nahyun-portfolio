@@ -211,15 +211,23 @@ export default function Mascot() {
             </div>
           </span>
 
-          {/* waving arm sits outside the clipped circle so the hand can swing past the frame */}
+          {/* waving arm sits outside the clipped circle so the hand can swing past the frame.
+              The baseline translate/scale lives on this outer <svg>, in real CSS percentage
+              terms, exactly like the head div below it does — not on the inner <g>, where the
+              same numbers would be read as raw SVG user-space units and drift out of sync. */}
           <motion.svg
             viewBox="0 0 240 260"
             className="absolute inset-0 pointer-events-none"
-            style={{ width: "clamp(72px, 8vw, 112px)", height: "clamp(72px, 8vw, 112px)", overflow: "visible" }}
+            style={{
+              width: "clamp(72px, 8vw, 112px)",
+              height: "clamp(72px, 8vw, 112px)",
+              overflow: "visible",
+              transform: "translateY(6%) scale(1.18)",
+            }}
             aria-hidden
           >
             {/* shoulder anchor matches the body's raised shoulder (see CharacterSvg's #body) */}
-            <motion.g animate={arm} style={{ transformOrigin: "168px 190px", transform: "translateY(15.6px) scale(1.18)" }}>
+            <motion.g animate={arm} style={{ transformOrigin: "168px 190px" }}>
               <path d="M168 190 C186 188 198 176 200 160 C201 154 208 154 208 160 C207 180 194 196 170 200 Z" fill="#262A33" />
               <ellipse cx="206" cy="158" rx="11" ry="12" fill="#FCDFC4" />
               <path d="M199 154 C202 150 210 150 213 154" fill="none" stroke="#F3CBAA" strokeWidth="2" strokeLinecap="round" opacity="0.7" />

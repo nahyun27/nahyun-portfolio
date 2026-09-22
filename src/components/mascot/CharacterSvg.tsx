@@ -9,7 +9,6 @@
  */
 
 const HAIR = "#2B211C";
-const HAIR_SHADOW = "#221A16";
 const SKIN = "#FCDFC4";
 const SKIN_SHADOW = "#F3CBAA";
 const HOODIE = "#262A33";
@@ -21,10 +20,10 @@ const MINT = "#00C9A7";
 function Pupil({ id, cx, hl1, hl2 }: { id: string; cx: number; hl1: [number, number]; hl2: [number, number] }) {
   return (
     <g id={id} style={{ transform: "translate(var(--eye-x, 0px), var(--eye-y, 0px))" }}>
-      <circle cx={cx} cy="118" r="8.4" fill="#332018" />
-      <circle cx={cx} cy="118" r="4.2" fill="#1A0F0A" />
-      <circle cx={hl1[0]} cy={hl1[1]} r="2.4" fill="#FFFFFF" />
-      <circle cx={hl2[0]} cy={hl2[1]} r="1.2" fill="#FFFFFF" opacity="0.85" />
+      <circle cx={cx} cy="126" r="9.4" fill="#332018" />
+      <circle cx={cx} cy="126" r="4.8" fill="#1A0F0A" />
+      <circle cx={hl1[0]} cy={hl1[1]} r="2.6" fill="#FFFFFF" />
+      <circle cx={hl2[0]} cy={hl2[1]} r="1.3" fill="#FFFFFF" opacity="0.85" />
     </g>
   );
 }
@@ -73,38 +72,40 @@ export default function CharacterSvg() {
       <path d="M170 112 C170 136 160 156 142 167 C152 150 156 130 154 112 Z" fill={SKIN_SHADOW} opacity="0.45" />
 
       {/* blush */}
-      <ellipse cx="86" cy="134" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
-      <ellipse cx="154" cy="134" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
+      <ellipse cx="86" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
+      <ellipse cx="154" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
 
-      {/* eyebrows: shifted out to stay above each eye's inner corner now that the eyes are wider set */}
-      <path d="M80 100 C85 91 96 90 102 97" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
-      <path d="M138 97 C144 90 155 91 160 100" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      {/* eyebrows: stay above the eyes' inner corners */}
+      <path d="M81 108 C86 99 97 98 103 105" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      <path d="M137 105 C143 98 154 99 159 108" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
 
-      {/* eyes: plain round sockets again, no eyelid cap or lash (removed, didn't read well).
-          Set further apart so they don't crowd the middle of the now-wider face. */}
-      <g id="eyeL" className="eye" style={{ transformOrigin: "92px 118px" }}>
-        <ellipse cx="92" cy="118" rx="11.5" ry="12" fill="#FFFFFF" />
-        <Pupil id="pupilL" cx={92} hl1={[89, 114.5]} hl2={[94.5, 121]} />
+      {/* eyes: plain round sockets, no eyelid cap or lash. A little closer together and a little
+          bigger than before, and moved down with the rest of the face (nose/mouth included) so
+          they sit centred on the now taller lower face instead of bunched near the top. */}
+      <g id="eyeL" className="eye" style={{ transformOrigin: "94px 126px" }}>
+        <ellipse cx="94" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
+        <Pupil id="pupilL" cx={94} hl1={[90.5, 122]} hl2={[97, 129.5]} />
       </g>
-      <g id="eyeR" className="eye" style={{ transformOrigin: "148px 118px" }}>
-        <ellipse cx="148" cy="118" rx="11.5" ry="12" fill="#FFFFFF" />
-        <Pupil id="pupilR" cx={148} hl1={[145, 114.5]} hl2={[150.5, 121]} />
+      <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
+        <ellipse cx="146" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
+        <Pupil id="pupilR" cx={146} hl1={[142.5, 122]} hl2={[149, 129.5]} />
       </g>
 
       {/* nose: barely there, just a hint */}
-      <path d="M120 120 C121 125 122 128 120 130" fill="none" stroke={SKIN_SHADOW} strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+      <path d="M120 128 C121 133 122 136 120 138" fill="none" stroke={SKIN_SHADOW} strokeWidth="2" strokeLinecap="round" opacity="0.7" />
 
       {/* mouths: three variants stacked in place, JS toggles opacity to switch between them */}
-      <path id="mouthNeutral" d="M110 142 Q120 146 130 142" fill="none" stroke="#B8654F" strokeWidth="3" strokeLinecap="round" style={{ opacity: 1, transition: "opacity 0.15s ease" }} />
-      <path id="mouthSmile" d="M105 139 Q120 157 135 139" fill="none" stroke="#B8654F" strokeWidth="4.5" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
-      <ellipse id="mouthOpen" cx="120" cy="144" rx="7" ry="6" fill="#7A2E22" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+      <path id="mouthNeutral" d="M110 150 Q120 154 130 150" fill="none" stroke="#B8654F" strokeWidth="3" strokeLinecap="round" style={{ opacity: 1, transition: "opacity 0.15s ease" }} />
+      <path id="mouthSmile" d="M105 147 Q120 165 135 147" fill="none" stroke="#B8654F" strokeWidth="4.5" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+      <ellipse id="mouthOpen" cx="120" cy="152" rx="7" ry="6" fill="#7A2E22" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
 
-      {/* front hair: one wide, square-edged blunt fringe spanning the full width of the jaw
-          below it (was narrower than the face), and low, close to the brow line. */}
+      {/* front hair: three wide, square-edged blunt pieces (left / centre / right) instead of one
+          solid slab, so it doesn't feel heavy. Each sits low enough that the back hair's own
+          curve is what forms the outline at the very top, no seam between the two. */}
       <g id="bangs">
-        <path d="M70 62 C70 46 92 37 120 37 C148 37 170 46 170 62 L170 106 L70 106 Z" fill={HAIR} />
-        {/* faint centre part, just enough texture to read as hair, not a break in the block */}
-        <path d="M112 40 L110 104 M130 40 L132 104" stroke={HAIR_SHADOW} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
+        <path d="M70 106 L70 62 C70 52 76 50 83.5 50 C91 50 97 52 97 62 L97 106 Z" fill={HAIR} />
+        <path d="M101 106 L101 54 C101 44 108 42 120 42 C132 42 139 44 139 54 L139 106 Z" fill={HAIR} />
+        <path d="M143 106 L143 62 C143 52 149 50 156.5 50 C164 50 170 52 170 62 L170 106 Z" fill={HAIR} />
       </g>
     </svg>
   );
