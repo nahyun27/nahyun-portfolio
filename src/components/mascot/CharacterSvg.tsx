@@ -57,7 +57,7 @@ export default function CharacterSvg() {
         }}
       >
         <path
-          d="M120 36 C170 36 198 58 198 94 C199 122 194 152 188 182 L52 182 C46 152 41 122 42 94 C42 58 70 36 120 36 Z"
+          d="M120 38 C160 38 184 62 184 98 C185 124 180 152 174 182 L66 182 C60 152 55 124 56 98 C56 62 80 38 120 38 Z"
           fill={HAIR}
         />
       </g>
@@ -86,20 +86,25 @@ export default function CharacterSvg() {
       <ellipse cx="86" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
       <ellipse cx="154" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
 
-      {/* eyebrows: closer to a flat line than an arch, and sitting closer to the eyes */}
-      <path d="M81 116 C88 112 96 112 103 116" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
-      <path d="M137 116 C144 112 152 112 159 116" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      {/* eyebrows: closer to a flat line than an arch, and sitting closer to the eyes than the
+          original (was too low right after that fix, nudged back up a little) */}
+      <path d="M81 111 C88 107 96 107 103 111" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      <path d="M137 111 C144 107 152 107 159 111" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
 
-      {/* eyes: plain round sockets, no eyelid cap or lash. A little closer together and a little
-          bigger than before, and moved down with the rest of the face (nose/mouth included) so
-          they sit centred on the now taller lower face instead of bunched near the top. */}
+      {/* eyes: round sockets with a lidded crease along the top - the low eyebrows already read
+          as a hint of eyelid, this line is the actual lid, sitting right at the top of the iris
+          so it reads as a sleepy/soft lidded eye instead of a fully round open one. A little
+          closer together and a little bigger than before, moved down with the rest of the face
+          (nose/mouth included) so they sit centred on the now taller lower face. */}
       <g id="eyeL" className="eye" style={{ transformOrigin: "94px 126px" }}>
         <ellipse cx="94" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
         <Pupil id="pupilL" cx={94} hl1={[90.5, 122]} hl2={[97, 129.5]} />
+        <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
       </g>
       <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
         <ellipse cx="146" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
         <Pupil id="pupilR" cx={146} hl1={[142.5, 122]} hl2={[149, 129.5]} />
+        <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
       </g>
 
       {/* nose: barely there, just a hint */}
@@ -113,11 +118,12 @@ export default function CharacterSvg() {
       {/* front hair: a blunt centre piece plus two side pieces that sweep diagonally out and
           down (their bottom edge slants, longer on the outer/temple side, shorter on the inner
           side toward the centre part) - like a real fringe with the outer sections swept back,
-          not a straight-across trim on all three. Shares the SAME sway variable and origin as
-          the back hair (not a scaled-down version of it): two layers rotating at different
-          rates is what caused the side pieces to poke past the back hair's edge whenever the
-          cursor wasn't dead centre, since they only ever lined up at rotation 0. Moving together
-          keeps them nested at every angle. */}
+          not a straight-across trim on all three. Pieces run long and close together (barely any
+          gap at the top, only a little more at the bottom) so the forehead barely shows between
+          them. Shares the SAME sway variable and origin as the back hair (not a scaled-down
+          version of it): two layers rotating at different rates is what caused the side pieces
+          to poke past the back hair's edge whenever the cursor wasn't dead centre, since they
+          only ever lined up at rotation 0. Moving together keeps them nested at every angle. */}
       <g
         id="bangs"
         style={{
@@ -126,13 +132,13 @@ export default function CharacterSvg() {
           transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
         }}
       >
-        <path d="M72 120 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L92 98 Z" fill={HAIR} />
-        <path d="M107 106 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L133 106 Z" fill={HAIR} />
-        <path d="M168 120 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L148 98 Z" fill={HAIR} />
-        {/* aegyo-meori: two thin wisps at the temple, in front of the ear, separate from the
-            main fringe */}
-        <path d="M60 70 C60 65 66 63 69 67 L66 146 C64 150 60 148 60 143 Z" fill={HAIR} />
-        <path d="M180 70 C180 65 174 63 171 67 L174 146 C176 150 180 148 180 143 Z" fill={HAIR} />
+        <path d="M66 128 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L100 110 Z" fill={HAIR} />
+        <path d="M103 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L137 112 Z" fill={HAIR} />
+        <path d="M174 128 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L140 110 Z" fill={HAIR} />
+        {/* aegyo-meori: two thin wisps at the temple, pulled in closer to the face than the
+            main fringe's outer edge instead of sitting out past the ear */}
+        <path d="M66 70 C66 65 72 63 75 67 L72 146 C70 150 66 148 66 143 Z" fill={HAIR} />
+        <path d="M174 70 C174 65 168 63 165 67 L168 146 C170 150 174 148 174 143 Z" fill={HAIR} />
       </g>
     </svg>
   );
