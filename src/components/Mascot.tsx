@@ -218,10 +218,11 @@ export default function Mascot() {
             style={{ width: "clamp(72px, 8vw, 112px)", height: "clamp(72px, 8vw, 112px)", overflow: "visible" }}
             aria-hidden
           >
-            <motion.g animate={arm} style={{ transformOrigin: "168px 208px", transform: "translateY(15.6px) scale(1.18)" }}>
-              <path d="M168 208 C186 206 198 194 200 178 C201 172 208 172 208 178 C207 198 194 214 170 218 Z" fill="#262A33" />
-              <ellipse cx="206" cy="176" rx="11" ry="12" fill="#FCDFC4" />
-              <path d="M199 172 C202 168 210 168 213 172" fill="none" stroke="#F3CBAA" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+            {/* shoulder anchor matches the body's raised shoulder (see CharacterSvg's #body) */}
+            <motion.g animate={arm} style={{ transformOrigin: "168px 190px", transform: "translateY(15.6px) scale(1.18)" }}>
+              <path d="M168 190 C186 188 198 176 200 160 C201 154 208 154 208 160 C207 180 194 196 170 200 Z" fill="#262A33" />
+              <ellipse cx="206" cy="158" rx="11" ry="12" fill="#FCDFC4" />
+              <path d="M199 154 C202 150 210 150 213 154" fill="none" stroke="#F3CBAA" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
             </motion.g>
           </motion.svg>
         </motion.button>
