@@ -5,13 +5,16 @@ import { AnimatePresence, motion } from "framer-motion";
 
 /**
  * The old hero tag row ("#ProblemSolver" etc), now let loose as soap-bubble droplets that drift
- * across the whole page (fixed, not scoped to the hero) and scatter away from the cursor when it
- * sweeps past. Clicking one pops it - it vanishes, then reappears somewhere else a moment later.
+ * around behind the hero content (absolute within the hero section, not the whole page) and
+ * scatter away from the cursor when it sweeps past. Clicking one pops it - it vanishes, then
+ * reappears somewhere else a moment later.
  *
  * Position is real cursor-avoidance physics (a small drift + a repulsion force near the pointer),
  * stepped every frame and written straight to each bubble's `transform` via a ref, not React
  * state - so 4 bubbles moving at 60fps never trigger a re-render. React only owns which bubbles
- * currently exist (for the pop/respawn mount+unmount and its enter/exit animation).
+ * currently exist (for the pop/respawn mount+unmount and its enter/exit animation). Bounds are
+ * measured off the component's own container (via a ref), not the viewport, so it stays confined
+ * to the hero section it's mounted in.
  */
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
@@ -35,6 +38,7 @@ export default function DropletTags() {
   const [bubbles, setBubbles] = useState<BubbleData[]>(() => TAGS.map((text) => ({ id: uid++, text })));
   const phys = useRef<Map<number, Phys>>(new Map());
   const pointer = useRef({ x: -9999, y: -9999, vx: 0, vy: 0, lastX: -9999, lastY: -9999 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // seeds a bubble's physics state the first time its DOM node shows up, keeps it after that
   const registerEl = (id: number) => (el: HTMLDivElement | null) => {
@@ -44,9 +48,12 @@ export default function DropletTags() {
       return;
     }
     if (!el) return;
+    const box = containerRef.current;
+    const w = box?.clientWidth ?? window.innerWidth;
+    const h = box?.clientHeight ?? window.innerHeight;
     phys.current.set(id, {
-      x: rand(80, window.innerWidth - 80),
-      y: rand(140, window.innerHeight - 120),
+      x: rand(80, Math.max(160, w - 80)),
+      y: rand(140, Math.max(280, h - 120)),
       vx: rand(-6, 6),
       vy: rand(-6, 6),
       el,
@@ -60,8 +67,11 @@ export default function DropletTags() {
       p.vy = p.lastY < 0 ? 0 : e.clientY - p.lastY;
       p.lastX = e.clientX;
       p.lastY = e.clientY;
-      p.x = e.clientX;
-      p.y = e.clientY;
+      const box = containerRef.current?.getBoundingClientRect();
+      // pointer coords converted into the container's own local space, since that's what the
+      // bubbles' physics positions are measured in
+      p.x = e.clientX - (box?.left ?? 0);
+      p.y = e.clientY - (box?.top ?? 0);
     };
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
@@ -76,8 +86,8 @@ export default function DropletTags() {
       const dt = Math.min(2, (now - last) / 16.7); // ~1 at 60fps, capped so a stutter can't fling things
       last = now;
       const pt = pointer.current;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+      const w = containerRef.current?.clientWidth ?? window.innerWidth;
+      const h = containerRef.current?.clientHeight ?? window.innerHeight;
 
       phys.current.forEach((p) => {
         // lazy drift, like it's sitting in still air
@@ -109,8 +119,10 @@ export default function DropletTags() {
         p.x += p.vx * dt;
         p.y += p.vy * dt;
 
-        // bounce off the viewport edges instead of drifting off screen
-        const sideMargin = 54;
+        // bounce off the container's edges instead of drifting past them - margins sized for
+        // the biggest bubble's radius (124px circle) so it doesn't clip against the hero's
+        // overflow-hidden
+        const sideMargin = 68;
         if (p.x < sideMargin) {
           p.x = sideMargin;
           p.vx = Math.abs(p.vx);
@@ -118,11 +130,11 @@ export default function DropletTags() {
           p.x = w - sideMargin;
           p.vx = -Math.abs(p.vx);
         }
-        if (p.y < 88) {
-          p.y = 88;
+        if (p.y < 96) {
+          p.y = 96;
           p.vy = Math.abs(p.vy);
-        } else if (p.y > h - 64) {
-          p.y = h - 64;
+        } else if (p.y > h - 70) {
+          p.y = h - 70;
           p.vy = -Math.abs(p.vy);
         }
 
@@ -145,10 +157,11 @@ export default function DropletTags() {
   };
 
   return (
-    // z-5: above the ambient background (z-0) so the bubbles are visible, but below every
-    // section's content (all z-10) so they stay behind the title and everything else, not
-    // floating in front of it
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 5 }}>
+    // absolute, not fixed: confined to the hero section it's mounted in (its nearest positioned
+    // ancestor), not the whole viewport. z-5 sits above the ambient background (z-0) so the
+    // bubbles are visible, but below the section's own content (z-10) so they stay behind the
+    // title and everything else, not floating in front of it
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 5 }}>
       <AnimatePresence>
         {bubbles.map((b) => {
           const { size, font } = BUBBLE_STYLE[b.text] ?? { size: 90, font: 12 };

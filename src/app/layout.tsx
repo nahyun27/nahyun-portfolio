@@ -4,7 +4,6 @@ import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
 import AmbientBackground from "@/components/AmbientBackground"
 import SiteTerminal from "@/components/SiteTerminal"
-import DropletTags from "@/components/DropletTags"
 
 export const metadata: Metadata = {
   title: "Nahyun Kim | AI Security Researcher & Creative Developer",
@@ -60,7 +59,6 @@ export default function RootLayout({
         <CustomCursor />
         <NavBar />
         <SiteTerminal />
-        <DropletTags />
         <main className="flex-1 relative z-10">{children}</main>
       </body>
     </html>
