@@ -147,14 +147,12 @@ export default function CharacterSvg() {
         }}
       >
         <path d="M66 128 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L100 110 Z" fill={HAIR} />
-        {/* the centre piece's bottom corners sit past the side pieces' inner edges (97/143 vs
-            the side pieces' 100/140) - the gap that mattered was the one low down, near the
-            eyebrows, where a short edge left forehead showing in a wedge that widened the closer
-            it got to the eyes. Overlapping there (invisible, same fill colour as the side pieces)
-            closes it; the top staying overlapped too is fine, not something to reintroduce a
-            gap for - an earlier attempt at a visible part near the hairline read as an odd cut
-            carved into the hair instead. */}
-        <path d="M97 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L143 112 Z" fill={HAIR} />
+        {/* the centre piece's side edges kink at y=90: above the kink they sit inside the side
+            pieces' edges (overlap, invisible - no seam near the hairline/roots), below it they
+            swing back out past them, opening a real gap right near where the fringe ends, close
+            to the eyebrows - like real hair, which stays joined near the root and only visibly
+            splits toward the tips. */}
+        <path d="M104 112 L97 90 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L143 90 L136 112 Z" fill={HAIR} />
         <path d="M174 128 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L140 110 Z" fill={HAIR} />
         {/* aegyo-meori: two thin wisps at the temple, pulled in closer to the face than the
             main fringe's outer edge instead of sitting out past the ear */}
