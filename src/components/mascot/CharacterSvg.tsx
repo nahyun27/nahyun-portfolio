@@ -96,20 +96,29 @@ export default function CharacterSvg() {
           so it reads as a sleepy/soft lidded eye instead of a fully round open one. A little
           closer together and a little bigger than before, moved down with the rest of the face
           (nose/mouth included) so they sit centred on the now taller lower face. */}
+      {/* each eye has two variants stacked in place, like the mouths - JS toggles opacity between
+          the open (normal) eye and a smiling, squinted-closed one when it pets/hovers the
+          character */}
       <g id="eyeL" className="eye" style={{ transformOrigin: "94px 126px" }}>
-        <ellipse cx="94" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
-        <Pupil id="pupilL" cx={94} hl1={[90.5, 122]} hl2={[97, 129.5]} />
-        {/* the lid itself: skin, not white, filling the gap between the brow and the crease
-            line below so it reads as a fold of skin covering the top of the eye, not a line
-            floating over bare sclera */}
-        <path d="M82 119 C82 114 87 111 94 111 C101 111 106 114 106 119 Q94 114.5 82 119 Z" fill={SKIN} />
-        <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
+        <g id="eyeNormalL" style={{ opacity: 1, transition: "opacity 0.15s ease" }}>
+          <ellipse cx="94" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
+          <Pupil id="pupilL" cx={94} hl1={[90.5, 122]} hl2={[97, 129.5]} />
+          {/* the lid itself: skin, not white, filling the gap between the brow and the crease
+              line below so it reads as a fold of skin covering the top of the eye, not a line
+              floating over bare sclera */}
+          <path d="M82 119 C82 114 87 111 94 111 C101 111 106 114 106 119 Q94 114.5 82 119 Z" fill={SKIN} />
+          <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
+        </g>
+        <path id="eyeSmileL" d="M82 128 Q94 114 106 128" fill="none" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       </g>
       <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
-        <ellipse cx="146" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
-        <Pupil id="pupilR" cx={146} hl1={[142.5, 122]} hl2={[149, 129.5]} />
-        <path d="M134 119 C134 114 139 111 146 111 C153 111 158 114 158 119 Q146 114.5 134 119 Z" fill={SKIN} />
-        <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
+        <g id="eyeNormalR" style={{ opacity: 1, transition: "opacity 0.15s ease" }}>
+          <ellipse cx="146" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
+          <Pupil id="pupilR" cx={146} hl1={[142.5, 122]} hl2={[149, 129.5]} />
+          <path d="M134 119 C134 114 139 111 146 111 C153 111 158 114 158 119 Q146 114.5 134 119 Z" fill={SKIN} />
+          <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
+        </g>
+        <path id="eyeSmileR" d="M134 128 Q146 114 158 128" fill="none" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       </g>
 
       {/* nose: barely there, just a hint */}
@@ -138,12 +147,13 @@ export default function CharacterSvg() {
         }}
       >
         <path d="M66 128 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L100 110 Z" fill={HAIR} />
-        {/* the centre piece's bottom corners sit further out than the side pieces' inner edges
-            (97/143 vs the side pieces' 100/140) on purpose: they're the same fill colour, so
-            overlap is invisible, but a gap there showed forehead in a widening wedge down toward
-            the eyebrows, reading as a deep centre part and a wide forehead. Overlapping instead,
-            more so near the bottom, closes it. */}
-        <path d="M97 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L143 112 Z" fill={HAIR} />
+        {/* the centre piece's side edges kink partway down: from the top they angle OUT (a short,
+            visible part near the hairline, like a real centre part) then angle back IN past the
+            kink to overlap the side pieces (same fill colour, so the overlap itself is invisible)
+            well before reaching the eyebrows. A single straight edge either showed a gap that
+            widened all the way down to the eyebrows (too deep, wide-looking forehead) or, once
+            widened enough to fix that, overlapped everywhere and hid the part entirely. */}
+        <path d="M96 112 L102 78 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L138 78 L144 112 Z" fill={HAIR} />
         <path d="M174 128 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L140 110 Z" fill={HAIR} />
         {/* aegyo-meori: two thin wisps at the temple, pulled in closer to the face than the
             main fringe's outer edge instead of sitting out past the ear */}
