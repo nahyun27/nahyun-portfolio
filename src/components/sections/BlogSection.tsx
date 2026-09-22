@@ -20,9 +20,6 @@ const SERIES = [
       { title: "Part 1: Process & Execution", desc: "ls를 치면 무슨 일이 일어날까?", url: "https://nahyun27.github.io/posts/os-process-part1/", done: true },
       { title: "Part 2: IPC, Pipe", desc: "ls | grep .c는 어떻게 동작할까?", url: "https://nahyun27.github.io/posts/os-ipc-pipe-part2/", done: true },
       { title: "Part 3: Shared Memory", desc: "Zero Copy IPC, Shared Memory", url: "https://nahyun27.github.io/posts/os-shared-memory-part3/", done: true },
-      { title: "Part 4: Virtual Memory", done: false },
-      { title: "Part 5: Synchronization & Deadlock", done: false },
-      { title: "Part 6: File System Internals", done: false },
     ],
   },
   {

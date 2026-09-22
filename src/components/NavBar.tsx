@@ -8,8 +8,8 @@ import NavDroplet, { type DropRect } from "@/components/NavDroplet";
 const NAV_LINKS = [
   { id: "about", label: "About" },
   { id: "projects", label: "Projects" },
-  { id: "research", label: "Research" },
   { id: "creative", label: "Creative" },
+  { id: "research", label: "Research" },
   { id: "awards", label: "Awards" },
   { id: "blog", label: "Blog" },
 ];

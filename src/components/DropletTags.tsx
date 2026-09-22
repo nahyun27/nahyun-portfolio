@@ -261,12 +261,20 @@ function Bubble({
           // it's a background element, not something meant to be read - faint on purpose, the
           // hv-mint hover rule (!important) still lights it up clearly on contact
           color: "var(--t6)",
-          opacity: 0.6,
           fontFamily: "'Inter', sans-serif",
           fontSize: font,
           lineHeight: 1.15,
           padding: "0 8px",
           cursor: "none",
+          // a soap-bubble film instead of .glass-chip's own (fairly opaque in light mode)
+          // background: mostly see-through, plus a bright highlight glint up in the top-left and
+          // a fainter one lower-right, like light catching a curved surface. Raw white rgba, not
+          // theme tokens - a bubble's glint reads the same bright white against either theme.
+          background:
+            "radial-gradient(circle at 30% 24%, rgba(255,255,255,0.9), rgba(255,255,255,0.16) 30%, transparent 52%), " +
+            "radial-gradient(circle at 74% 78%, rgba(255,255,255,0.22), transparent 42%), " +
+            "rgba(255,255,255,0.05)",
+          border: "1px solid rgba(255,255,255,0.4)",
         }}
         initial={{ opacity: 0, scale: 0.3 }}
         animate={controls}

@@ -49,7 +49,16 @@ export default function Mascot() {
   const clickTimes = useRef<number[]>([]);
   const greetingIndex = useRef(0);
 
-  const setMouth = (state: MouthState) => {
+  // an expression (mouth shape or eye shape) holds for at least this long before the next
+  // requested change is allowed to land - hovering in and out, or anything else that fires in a
+  // burst, used to flicker between shapes several times a second instead of reading as one change
+  const EXPRESSION_HOLD = 1000;
+  const lastMouthAt = useRef(0);
+  const mouthQueue = useRef<number | undefined>(undefined);
+  const lastEyesAt = useRef(0);
+  const eyesQueue = useRef<number | undefined>(undefined);
+
+  const applyMouth = (state: MouthState) => {
     const root = rootRef.current;
     if (!root) return;
     const set = (id: string, visible: boolean) => {
@@ -59,12 +68,20 @@ export default function Mascot() {
     set("mouthNeutral", state === "neutral");
     set("mouthSmile", state === "smile");
     set("mouthOpen", state === "open");
+    lastMouthAt.current = Date.now();
+  };
+
+  const setMouth = (state: MouthState) => {
+    const elapsed = Date.now() - lastMouthAt.current;
+    window.clearTimeout(mouthQueue.current);
+    if (elapsed >= EXPRESSION_HOLD) applyMouth(state);
+    else mouthQueue.current = window.setTimeout(() => applyMouth(state), EXPRESSION_HOLD - elapsed);
   };
 
   // squints into happy closed eyes for a smile, spins into X's when dizzy, open round eyes
   // otherwise (including while talking - squinting AND talking at once reads oddly, so "open"
   // covers both neutral and talk)
-  const setEyes = (state: EyeState) => {
+  const applyEyes = (state: EyeState) => {
     const root = rootRef.current;
     if (!root) return;
     const set = (id: string, visible: boolean) => {
@@ -77,6 +94,14 @@ export default function Mascot() {
     set("eyeSmileR", state === "smile");
     set("eyeDizzyL", state === "dizzy");
     set("eyeDizzyR", state === "dizzy");
+    lastEyesAt.current = Date.now();
+  };
+
+  const setEyes = (state: EyeState) => {
+    const elapsed = Date.now() - lastEyesAt.current;
+    window.clearTimeout(eyesQueue.current);
+    if (elapsed >= EXPRESSION_HOLD) applyEyes(state);
+    else eyesQueue.current = window.setTimeout(() => applyEyes(state), EXPRESSION_HOLD - elapsed);
   };
 
   const talk = (ms = 900) => {
@@ -198,6 +223,8 @@ export default function Mascot() {
       window.clearTimeout(talkTimer.current);
       window.clearTimeout(winkTimer.current);
       window.clearTimeout(dizzyTimer.current);
+      window.clearTimeout(mouthQueue.current);
+      window.clearTimeout(eyesQueue.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
@@ -221,7 +248,7 @@ export default function Mascot() {
           stays short enough to fit under the HUD on common laptop heights (~720px) */}
       <div className="relative flex items-center" style={{ gap: 10 }}>
         <AnimatePresence>
-          {bubbleOpen && (
+          {bubbleOpen && !dragging && (
             <motion.div
               initial={{ opacity: 0, x: 8, scale: 0.94 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -270,7 +297,7 @@ export default function Mascot() {
           }}
           // a fist while it's being dragged around, a wave otherwise - CustomCursor re-reads
           // this live off the element itself, no fresh hover needed for the swap mid-drag
-          data-cursor-emoji={dragging ? "✊" : "👋"}
+          data-cursor-emoji={dragging ? "🤛" : "👋"}
           aria-label="Say hi back - drag to move it, click to wave"
           className="relative"
           style={{ cursor: "none" }}
