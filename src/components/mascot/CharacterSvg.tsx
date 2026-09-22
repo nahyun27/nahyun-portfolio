@@ -109,7 +109,11 @@ export default function CharacterSvg() {
           <path d="M82 119 C82 114 87 111 94 111 C101 111 106 114 106 119 Q94 114.5 82 119 Z" fill={SKIN} />
           <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
         </g>
-        <path id="eyeSmileL" d="M82 128 Q94 114 106 128" fill="none" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        {/* outer corner (x=84, away from the nose) sits lower than the inner one - a gentle
+            downward droop at the tail instead of a level symmetric arc, for a softer smile */}
+        <path id="eyeSmileL" d="M84 130 Q94 119 104 125" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        {/* a flat-ish shut line, just for this eye - the wink, toggled independently of eyeR */}
+        <path id="eyeWinkL" d="M83 126 Q94 129.5 105 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.1s ease" }} />
       </g>
       <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
         <g id="eyeNormalR" style={{ opacity: 1, transition: "opacity 0.15s ease" }}>
@@ -118,7 +122,7 @@ export default function CharacterSvg() {
           <path d="M134 119 C134 114 139 111 146 111 C153 111 158 114 158 119 Q146 114.5 134 119 Z" fill={SKIN} />
           <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
         </g>
-        <path id="eyeSmileR" d="M134 128 Q146 114 158 128" fill="none" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        <path id="eyeSmileR" d="M136 125 Q146 119 156 130" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       </g>
 
       {/* nose: barely there, just a hint */}
@@ -126,7 +130,7 @@ export default function CharacterSvg() {
 
       {/* mouths: three variants stacked in place, JS toggles opacity to switch between them */}
       <path id="mouthNeutral" d="M110 150 Q120 154 130 150" fill="none" stroke="#B8654F" strokeWidth="3" strokeLinecap="round" style={{ opacity: 1, transition: "opacity 0.15s ease" }} />
-      <path id="mouthSmile" d="M105 147 Q120 165 135 147" fill="none" stroke="#B8654F" strokeWidth="4.5" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+      <path id="mouthSmile" d="M108 148 Q120 158 132 148" fill="none" stroke="#B8654F" strokeWidth="4" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       <ellipse id="mouthOpen" cx="120" cy="152" rx="7" ry="6" fill="#7A2E22" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
 
       {/* front hair: a blunt centre piece plus two side pieces that sweep diagonally out and

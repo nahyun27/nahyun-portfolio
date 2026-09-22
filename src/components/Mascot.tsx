@@ -34,6 +34,7 @@ export default function Mascot() {
   const idleTimer = useRef<number | undefined>(undefined);
   const closeTimer = useRef<number | undefined>(undefined);
   const talkTimer = useRef<number | undefined>(undefined);
+  const winkTimer = useRef<number | undefined>(undefined);
   const hovering = useRef(false);
 
   const setMouth = (state: MouthState) => {
@@ -78,6 +79,27 @@ export default function Mascot() {
       setMouth(hovering.current ? "smile" : "neutral");
       setEyes(hovering.current ? "smile" : "open");
     }, ms);
+  };
+
+  // a quick one-eyed wink on click, left eye only - right eye is left alone, so it stays
+  // whatever it already was (open or smiling)
+  const wink = () => {
+    if (reduce) return;
+    const root = rootRef.current;
+    if (!root) return;
+    const set = (id: string, visible: boolean) => {
+      const el = root.querySelector<SVGElement>(`#${id}`);
+      if (el) el.style.opacity = visible ? "1" : "0";
+    };
+    window.clearTimeout(winkTimer.current);
+    set("eyeNormalL", false);
+    set("eyeSmileL", false);
+    set("eyeWinkL", true);
+    winkTimer.current = window.setTimeout(() => {
+      set("eyeWinkL", false);
+      set("eyeSmileL", hovering.current);
+      set("eyeNormalL", !hovering.current);
+    }, 260);
   };
 
   const showBubble = (ms = 3600) => {
@@ -148,6 +170,7 @@ export default function Mascot() {
       window.clearTimeout(idleTimer.current);
       window.clearTimeout(closeTimer.current);
       window.clearTimeout(talkTimer.current);
+      window.clearTimeout(winkTimer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
@@ -160,10 +183,12 @@ export default function Mascot() {
   };
 
   return (
-    // pinned low and to the side, on purpose: it needs to clear the adversarial-example readout
-    // that sits under the name on wide screens, and there isn't much vertical room to spare there
+    // fixed, not absolute, and mounted globally (see layout.tsx) - it follows you down the page
+    // instead of only living in the hero, more like a little guide than a hero decoration.
+    // z-150 sits above ordinary section content (z-10) but below the nav (z-200) and the custom
+    // cursor (z-9999)
     <div
-      className="absolute z-20"
+      className="fixed z-[150]"
       style={{ right: "clamp(16px, 4vw, 56px)", bottom: "clamp(20px, 5vh, 60px)" }}
     >
       {/* row, not a column: the bubble sits beside the avatar instead of above it, so the group
@@ -195,7 +220,10 @@ export default function Mascot() {
 
         <motion.button
           type="button"
-          onClick={greet}
+          onClick={() => {
+            wink();
+            greet();
+          }}
           onMouseEnter={() => {
             hovering.current = true;
             setMouth("smile");

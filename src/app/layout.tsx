@@ -4,6 +4,7 @@ import NavBar from "@/components/NavBar";
 import CustomCursor from "@/components/CustomCursor";
 import AmbientBackground from "@/components/AmbientBackground"
 import SiteTerminal from "@/components/SiteTerminal"
+import Mascot from "@/components/Mascot"
 
 export const metadata: Metadata = {
   title: "Nahyun Kim | AI Security Researcher & Creative Developer",
@@ -60,6 +61,7 @@ export default function RootLayout({
         <NavBar />
         <SiteTerminal />
         <main className="flex-1 relative z-10">{children}</main>
+        <Mascot />
       </body>
     </html>
   );

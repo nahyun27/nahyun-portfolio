@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import Mascot from "@/components/Mascot";
 import DropletTags from "@/components/DropletTags";
 
 const WORDS = ["Nahyun", "Kim"];
@@ -153,8 +152,6 @@ export default function HeroSection() {
           </a>
         </motion.div>
       </div>
-
-      <Mascot />
 
       {/* Scroll indicator */}
       <motion.div
