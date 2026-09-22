@@ -1,20 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useAnimationControls } from "framer-motion";
+
+type AnimationControls = ReturnType<typeof useAnimationControls>;
 
 /**
  * The old hero tag row ("#ProblemSolver" etc), now let loose as soap-bubble droplets that drift
- * around behind the hero content (absolute within the hero section, not the whole page) and
- * scatter away from the cursor when it sweeps past. Clicking one pops it - it vanishes, then
+ * around behind the hero content (absolute within the hero section, not the whole page), wander
+ * on their own even with no cursor nearby, scatter when the cursor sweeps past, and give a
+ * springy "boing" squash when it actually touches one. Clicking one pops it - it vanishes, then
  * reappears somewhere else a moment later.
  *
- * Position is real cursor-avoidance physics (a small drift + a repulsion force near the pointer),
- * stepped every frame and written straight to each bubble's `transform` via a ref, not React
- * state - so 4 bubbles moving at 60fps never trigger a re-render. React only owns which bubbles
- * currently exist (for the pop/respawn mount+unmount and its enter/exit animation). Bounds are
- * measured off the component's own container (via a ref), not the viewport, so it stays confined
- * to the hero section it's mounted in.
+ * Position is real physics (wander drift + a repulsion force near the pointer), stepped every
+ * frame and written straight to each bubble's `transform` via a ref, not React state - so 4
+ * bubbles moving at 60fps never trigger a re-render. Each bubble also gets its own framer
+ * AnimationControls (for the entrance/exit/boing squash, all just `scale`), handed to the physics
+ * loop through the same phys map so a touch can trigger it imperatively without React state.
+ * Bounds are measured off the component's own container (via a ref), not the viewport, so it
+ * stays confined to the hero section it's mounted in.
  */
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
@@ -32,7 +36,18 @@ let uid = 0;
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
 type BubbleData = { id: number; text: string };
-type Phys = { x: number; y: number; vx: number; vy: number; el: HTMLDivElement | null };
+type Phys = {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  angle: number; // current wander heading, turns gently instead of jittering
+  radius: number;
+  touching: boolean;
+  lastBoing: number;
+  el: HTMLDivElement | null;
+  controls: AnimationControls | null;
+};
 
 export default function DropletTags() {
   const [bubbles, setBubbles] = useState<BubbleData[]>(() => TAGS.map((text) => ({ id: uid++, text })));
@@ -41,7 +56,7 @@ export default function DropletTags() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // seeds a bubble's physics state the first time its DOM node shows up, keeps it after that
-  const registerEl = (id: number) => (el: HTMLDivElement | null) => {
+  const registerEl = (id: number, text: string) => (el: HTMLDivElement | null) => {
     const existing = phys.current.get(id);
     if (existing) {
       existing.el = el;
@@ -54,10 +69,22 @@ export default function DropletTags() {
     phys.current.set(id, {
       x: rand(80, Math.max(160, w - 80)),
       y: rand(140, Math.max(280, h - 120)),
-      vx: rand(-6, 6),
-      vy: rand(-6, 6),
+      vx: rand(-4, 4),
+      vy: rand(-4, 4),
+      angle: rand(0, Math.PI * 2),
+      radius: (BUBBLE_STYLE[text]?.size ?? 90) / 2,
+      touching: false,
+      lastBoing: 0,
       el,
+      controls: null,
     });
+  };
+
+  // hands the bubble's own animation controls to its physics entry, so the physics loop can
+  // trigger the boing squash on contact without going through React state
+  const registerControls = (id: number, controls: AnimationControls | null) => {
+    const p = phys.current.get(id);
+    if (p) p.controls = controls;
   };
 
   useEffect(() => {
@@ -90,22 +117,38 @@ export default function DropletTags() {
       const h = containerRef.current?.clientHeight ?? window.innerHeight;
 
       phys.current.forEach((p) => {
-        // lazy drift, like it's sitting in still air
-        p.vx += rand(-0.05, 0.05) * dt;
-        p.vy += rand(-0.05, 0.05) * dt;
+        // wander drift: the heading turns a little each frame instead of the velocity itself
+        // jittering, so it settles into smooth, gently curving paths - like actually floating in
+        // still air, not a bubble vibrating in place
+        p.angle += rand(-0.1, 0.1) * dt;
+        p.vx += Math.cos(p.angle) * 0.05 * dt;
+        p.vy += Math.sin(p.angle) * 0.05 * dt;
 
         // scatter away from the cursor - stronger the closer and the faster it's sweeping past,
         // which is what makes a slow hover barely nudge it but a quick swirl send it flying
         const dx = p.x - pt.x;
         const dy = p.y - pt.y;
         const dist = Math.hypot(dx, dy) || 1;
-        const radius = 160;
-        if (dist < radius) {
+        const fieldRadius = 160;
+        if (dist < fieldRadius) {
           const cursorSpeed = Math.min(Math.hypot(pt.vx, pt.vy), 45);
-          const strength = (1 - dist / radius) * (1.8 + cursorSpeed * 0.4);
+          const strength = (1 - dist / fieldRadius) * (1.8 + cursorSpeed * 0.4);
           p.vx += (dx / dist) * strength * dt;
           p.vy += (dy / dist) * strength * dt;
         }
+
+        // an actual touch (cursor within the bubble itself) gets a one-off springy squash on top
+        // of the scatter, not just the push - a little "boing~" instead of only sliding away.
+        // Re-arms once the cursor has properly left, with a cooldown so it can't fire every frame
+        const touchNow = dist < p.radius + 6;
+        if (touchNow && !p.touching && now - p.lastBoing > 450) {
+          p.controls?.start({
+            scale: [1, 1.3, 0.85, 1.1, 0.96, 1],
+            transition: { duration: 0.55, times: [0, 0.18, 0.42, 0.64, 0.84, 1], ease: "easeOut" },
+          });
+          p.lastBoing = now;
+        }
+        p.touching = dist < p.radius + 16; // a little hysteresis so it doesn't flicker at the edge
 
         p.vx *= 0.965;
         p.vy *= 0.965;
@@ -126,16 +169,20 @@ export default function DropletTags() {
         if (p.x < sideMargin) {
           p.x = sideMargin;
           p.vx = Math.abs(p.vx);
+          p.angle = 0;
         } else if (p.x > w - sideMargin) {
           p.x = w - sideMargin;
           p.vx = -Math.abs(p.vx);
+          p.angle = Math.PI;
         }
         if (p.y < 96) {
           p.y = 96;
           p.vy = Math.abs(p.vy);
+          p.angle = Math.PI / 2;
         } else if (p.y > h - 70) {
           p.y = h - 70;
           p.vy = -Math.abs(p.vy);
+          p.angle = -Math.PI / 2;
         }
 
         if (p.el) p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
@@ -163,41 +210,67 @@ export default function DropletTags() {
     // title and everything else, not floating in front of it
     <div ref={containerRef} className="absolute inset-0 pointer-events-none" style={{ zIndex: 5 }}>
       <AnimatePresence>
-        {bubbles.map((b) => {
-          const { size, font } = BUBBLE_STYLE[b.text] ?? { size: 90, font: 12 };
-          return (
-            // outer div: physics owns its `transform` (translate3d), written straight to the DOM.
-            // inner motion.button: framer owns ITS OWN transform (scale, for the pop) - two
-            // separate elements each with their own transform, so the two never fight.
-            <div key={b.id} ref={registerEl(b.id)} className="absolute pointer-events-auto" style={{ left: 0, top: 0, translate: "-50% -50%" }}>
-              <motion.button
-                type="button"
-                onClick={() => pop(b.id, b.text)}
-                data-cursor-hover
-                aria-label={`${b.text}, click to pop`}
-                className="glass-chip hv-mint font-bold tracking-[0.02em] grid place-items-center text-center"
-                style={{
-                  width: size,
-                  height: size,
-                  borderRadius: "50%",
-                  color: "var(--t3)",
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: font,
-                  lineHeight: 1.15,
-                  padding: "0 8px",
-                  cursor: "none",
-                }}
-                initial={{ opacity: 0, scale: 0.3 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                {b.text}
-              </motion.button>
-            </div>
-          );
-        })}
+        {bubbles.map((b) => (
+          <Bubble key={b.id} id={b.id} text={b.text} registerEl={registerEl} registerControls={registerControls} onPop={pop} />
+        ))}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function Bubble({
+  id,
+  text,
+  registerEl,
+  registerControls,
+  onPop,
+}: {
+  id: number;
+  text: string;
+  registerEl: (id: number, text: string) => (el: HTMLDivElement | null) => void;
+  registerControls: (id: number, controls: AnimationControls | null) => void;
+  onPop: (id: number, text: string) => void;
+}) {
+  const controls = useAnimationControls();
+  const { size, font } = BUBBLE_STYLE[text] ?? { size: 90, font: 12 };
+
+  useEffect(() => {
+    registerControls(id, controls);
+    // the entrance: same spring the old declarative `animate` used, just kicked off imperatively
+    // now that `controls` (not a plain object) drives this bubble's scale/opacity
+    controls.start({ opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 20 } });
+    return () => registerControls(id, null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  return (
+    // outer div: physics owns its `transform` (translate3d), written straight to the DOM.
+    // inner motion.button: framer owns ITS OWN transform (scale, for the entrance/pop/boing) -
+    // two separate elements each with their own transform, so the two never fight.
+    <div ref={registerEl(id, text)} className="absolute pointer-events-auto" style={{ left: 0, top: 0, translate: "-50% -50%" }}>
+      <motion.button
+        type="button"
+        onClick={() => onPop(id, text)}
+        data-cursor-hover
+        aria-label={`${text}, click to pop`}
+        className="glass-chip hv-mint font-bold tracking-[0.02em] grid place-items-center text-center"
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "50%",
+          color: "var(--t3)",
+          fontFamily: "'Inter', sans-serif",
+          fontSize: font,
+          lineHeight: 1.15,
+          padding: "0 8px",
+          cursor: "none",
+        }}
+        initial={{ opacity: 0, scale: 0.3 }}
+        animate={controls}
+        exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
+      >
+        {text}
+      </motion.button>
     </div>
   );
 }
