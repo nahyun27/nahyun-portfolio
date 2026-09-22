@@ -16,6 +16,15 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
 
+// true circles, so a fixed equal width/height per tag instead of a pill that grows with its
+// text - longer tags get a bigger circle and a smaller font instead of a wider box
+const BUBBLE_STYLE: Record<string, { size: number; font: number }> = {
+  "#ProblemSolver": { size: 118, font: 12.5 },
+  "#ProblemDefiner": { size: 124, font: 12 },
+  "#EarlyAdopter": { size: 108, font: 12.5 },
+  "#ENTJ": { size: 72, font: 13.5 },
+};
+
 let uid = 0;
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
@@ -136,39 +145,45 @@ export default function DropletTags() {
   };
 
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 80 }}>
+    // z-5: above the ambient background (z-0) so the bubbles are visible, but below every
+    // section's content (all z-10) so they stay behind the title and everything else, not
+    // floating in front of it
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 5 }}>
       <AnimatePresence>
-        {bubbles.map((b) => (
-          // outer div: physics owns its `transform` (translate3d), written straight to the DOM.
-          // inner motion.button: framer owns ITS OWN transform (scale, for the pop) - two
-          // separate elements each with their own transform, so the two never fight.
-          <div key={b.id} ref={registerEl(b.id)} className="absolute pointer-events-auto" style={{ left: 0, top: 0, translate: "-50% -50%" }}>
-            <motion.button
-              type="button"
-              onClick={() => pop(b.id, b.text)}
-              data-cursor-hover
-              aria-label={`${b.text}, click to pop`}
-              className="blob-morph hv-mint text-xs font-bold tracking-[0.04em]"
-              style={{
-                display: "block",
-                border: "1px solid var(--w80)",
-                color: "var(--t3)",
-                fontFamily: "'Inter', sans-serif",
-                backgroundColor: "var(--w20)",
-                padding: "7px 15px",
-                cursor: "none",
-                animation: `blob-morph ${7 + rand(0, 4)}s ease-in-out infinite`,
-                animationDelay: `${-rand(0, 6)}s`,
-              }}
-              initial={{ opacity: 0, scale: 0.3 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              {b.text}
-            </motion.button>
-          </div>
-        ))}
+        {bubbles.map((b) => {
+          const { size, font } = BUBBLE_STYLE[b.text] ?? { size: 90, font: 12 };
+          return (
+            // outer div: physics owns its `transform` (translate3d), written straight to the DOM.
+            // inner motion.button: framer owns ITS OWN transform (scale, for the pop) - two
+            // separate elements each with their own transform, so the two never fight.
+            <div key={b.id} ref={registerEl(b.id)} className="absolute pointer-events-auto" style={{ left: 0, top: 0, translate: "-50% -50%" }}>
+              <motion.button
+                type="button"
+                onClick={() => pop(b.id, b.text)}
+                data-cursor-hover
+                aria-label={`${b.text}, click to pop`}
+                className="glass-chip hv-mint font-bold tracking-[0.02em] grid place-items-center text-center"
+                style={{
+                  width: size,
+                  height: size,
+                  borderRadius: "50%",
+                  color: "var(--t3)",
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: font,
+                  lineHeight: 1.15,
+                  padding: "0 8px",
+                  cursor: "none",
+                }}
+                initial={{ opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                {b.text}
+              </motion.button>
+            </div>
+          );
+        })}
       </AnimatePresence>
     </div>
   );
