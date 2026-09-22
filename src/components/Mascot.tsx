@@ -2,29 +2,59 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "framer-motion";
+import CharacterSvg from "@/components/mascot/CharacterSvg";
 
 /**
- * A small waving avatar, the first piece of what's meant to grow into a site mascot/chat character.
- * Built in plain CSS/SVG (no Live2D yet, that needs a rigged model file from outside this codebase).
- * Waves on load, waves again every so often, and reacts to hover/tap.
+ * The site mascot: a bob-haired SVG character rigged with plain CSS/JS, not a static image.
+ * Eyes track the cursor, it blinks on an interval, smiles on hover, waves and talks on click, and
+ * breathes gently while idle. Everything except the arm lives in one CharacterSvg; the arm is a
+ * separate unclipped layer on top so the waving hand can swing past the circular frame.
  */
 
-// classic emoji hand-wave keyframes: two swings, pause, repeat
-const WAVE_KEYFRAMES = { rotate: [0, 16, -10, 16, -6, 0], transition: { duration: 1.1, times: [0, 0.2, 0.4, 0.6, 0.8, 1], ease: "easeInOut" as const } };
+const WAVE_KEYFRAMES = { rotate: [0, -18, 10, -16, 6, 0], transition: { duration: 1.1, times: [0, 0.2, 0.4, 0.6, 0.8, 1], ease: "easeInOut" as const } };
 
 const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free to look around ✨"];
 
+// how far the pupils and the head are allowed to drift toward the cursor
+const EYE_RANGE = 3.2;
+const HEAD_TILT_RANGE = 3;
+
+type MouthState = "neutral" | "smile" | "open";
+
 export default function Mascot() {
   const reduce = useReducedMotion();
-  const hand = useAnimationControls();
+  const arm = useAnimationControls();
+  const rootRef = useRef<HTMLDivElement>(null);
   const [bubbleOpen, setBubbleOpen] = useState(false);
   const [greeting, setGreeting] = useState(0);
   const idleTimer = useRef<number | undefined>(undefined);
   const closeTimer = useRef<number | undefined>(undefined);
+  const talkTimer = useRef<number | undefined>(undefined);
+  const hovering = useRef(false);
+
+  const setMouth = (state: MouthState) => {
+    const root = rootRef.current;
+    if (!root) return;
+    const set = (id: string, visible: boolean) => {
+      const el = root.querySelector<SVGElement>(`#${id}`);
+      if (el) el.style.opacity = visible ? "1" : "0";
+    };
+    set("mouthNeutral", state === "neutral");
+    set("mouthSmile", state === "smile");
+    set("mouthOpen", state === "open");
+  };
 
   const wave = () => {
     if (reduce) return;
-    hand.start(WAVE_KEYFRAMES);
+    arm.start(WAVE_KEYFRAMES);
+  };
+
+  const talk = (ms = 900) => {
+    if (reduce) return;
+    window.clearTimeout(talkTimer.current);
+    setMouth("open");
+    // settle back into a smile if the cursor is still there, not a blank stare
+    talkTimer.current = window.setTimeout(() => setMouth(hovering.current ? "smile" : "neutral"), ms);
   };
 
   const showBubble = (ms = 3600) => {
@@ -33,18 +63,54 @@ export default function Mascot() {
     closeTimer.current = window.setTimeout(() => setBubbleOpen(false), ms);
   };
 
+  // eyes track the pointer, with a small tilt of the whole head following along
+  useEffect(() => {
+    if (reduce) return;
+    const el = rootRef.current;
+    if (!el) return;
+
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = Math.max(-1, Math.min(1, (e.clientX - cx) / 420));
+      const dy = Math.max(-1, Math.min(1, (e.clientY - cy) / 420));
+      el.style.setProperty("--eye-x", `${dx * EYE_RANGE}px`);
+      el.style.setProperty("--eye-y", `${dy * EYE_RANGE}px`);
+      el.style.setProperty("--head-tilt", `${dx * HEAD_TILT_RANGE}deg`);
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [reduce]);
+
+  // blink on an interval: squash each eye socket, matching the classic scaleY trick
+  useEffect(() => {
+    if (reduce) return;
+    const blink = () => {
+      const eyes = rootRef.current?.querySelectorAll<SVGGElement>(".eye");
+      eyes?.forEach((eye) => (eye.style.transform = "scaleY(0.1)"));
+      window.setTimeout(() => {
+        eyes?.forEach((eye) => (eye.style.transform = "scaleY(1)"));
+      }, 120);
+    };
+    const id = window.setInterval(blink, 3400 + Math.random() * 1400);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
   // greet once shortly after the hero settles, then check back in every so often.
   // Skipped entirely under reduced motion: only a click should trigger anything then.
   useEffect(() => {
     if (reduce) return;
     const hello = window.setTimeout(() => {
       wave();
+      talk(1400);
       showBubble();
     }, 1500);
 
     const scheduleIdle = () => {
       idleTimer.current = window.setTimeout(() => {
         wave();
+        talk(1200);
         setGreeting((g) => (g + 1) % GREETINGS.length);
         showBubble(3200);
         scheduleIdle();
@@ -56,12 +122,14 @@ export default function Mascot() {
       window.clearTimeout(hello);
       window.clearTimeout(idleTimer.current);
       window.clearTimeout(closeTimer.current);
+      window.clearTimeout(talkTimer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
 
   const greet = () => {
     wave();
+    talk(1100);
     setGreeting((g) => (g + 1) % GREETINGS.length);
     showBubble();
   };
@@ -103,43 +171,59 @@ export default function Mascot() {
         <motion.button
           type="button"
           onClick={greet}
-          onMouseEnter={greet}
+          onMouseEnter={() => {
+            hovering.current = true;
+            setMouth("smile");
+            greet();
+          }}
+          onMouseLeave={() => {
+            hovering.current = false;
+            setMouth("neutral");
+          }}
           data-cursor-hover
           aria-label="Say hi back"
           className="relative"
           style={{ cursor: "none" }}
-          animate={reduce ? undefined : { y: [0, -7, 0] }}
+          animate={reduce ? undefined : { y: [0, -6, 0] }}
           transition={reduce ? undefined : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
           whileTap={{ scale: 0.94 }}
         >
           <span
+            ref={rootRef}
             className="block overflow-hidden rounded-full"
             style={{
-              width: "clamp(58px, 7vw, 92px)",
-              height: "clamp(58px, 7vw, 92px)",
+              width: "clamp(72px, 8vw, 112px)",
+              height: "clamp(72px, 8vw, 112px)",
               border: "2px solid var(--w120)",
               boxShadow: "0 16px 36px -14px rgba(var(--shadow-rgb),calc(0.55 * var(--shadow-k))), 0 0 0 4px var(--bg)",
-              background: "var(--surface)",
+              background: "linear-gradient(180deg, var(--surface-2), var(--surface))",
+              ["--eye-x" as string]: "0px",
+              ["--eye-y" as string]: "0px",
+              ["--head-tilt" as string]: "0deg",
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/mascot.png" alt="" aria-hidden className="w-full h-full object-cover" draggable={false} />
+            {/* head: tilts toward the cursor, scaled/nudged so the bust fills the circular frame */}
+            <div
+              className="w-full h-full transition-transform duration-300 ease-out"
+              style={{ transform: "translateY(6%) scale(1.18) rotate(var(--head-tilt))" }}
+            >
+              <CharacterSvg />
+            </div>
           </span>
 
-          <motion.span
+          {/* waving arm sits outside the clipped circle so the hand can swing past the frame */}
+          <motion.svg
+            viewBox="0 0 240 260"
+            className="absolute inset-0 pointer-events-none"
+            style={{ width: "clamp(72px, 8vw, 112px)", height: "clamp(72px, 8vw, 112px)", overflow: "visible" }}
             aria-hidden
-            animate={hand}
-            className="absolute select-none"
-            style={{
-              right: "-6%",
-              top: "-8%",
-              fontSize: "clamp(20px, 2.6vw, 30px)",
-              transformOrigin: "70% 80%",
-              filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.25))",
-            }}
           >
-            👋
-          </motion.span>
+            <motion.g animate={arm} style={{ transformOrigin: "168px 208px", transform: "translateY(15.6px) scale(1.18)" }}>
+              <path d="M168 208 C186 206 198 194 200 178 C201 172 208 172 208 178 C207 198 194 214 170 218 Z" fill="#262A33" />
+              <ellipse cx="206" cy="176" rx="11" ry="12" fill="#FCDFC4" />
+              <path d="M199 172 C202 168 210 168 213 172" fill="none" stroke="#F3CBAA" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+            </motion.g>
+          </motion.svg>
         </motion.button>
       </div>
     </div>
