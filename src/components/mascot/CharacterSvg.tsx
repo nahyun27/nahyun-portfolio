@@ -47,9 +47,10 @@ export default function CharacterSvg() {
       <path d="M104 168 L136 168 L136 202 C120 210 120 210 104 202 Z" fill={SKIN} />
       <path d="M104 190 C120 198 120 198 136 190 L136 202 C120 210 120 210 104 202 Z" fill={SKIN_SHADOW} opacity="0.55" />
 
-      {/* back hair, sits behind everything else above the shoulders */}
+      {/* back hair: one blunt bob silhouette, rounded crown, straight sides, one flat hem
+          (the flat "L 62 208" bottom edge is what makes it read as a blunt one-length cut) */}
       <path
-        d="M120 44 C160 44 182 76 182 116 C182 150 176 176 168 198 C160 184 160 160 158 140 C150 158 148 178 150 200 L128 206 C126 176 126 150 120 128 C114 150 114 176 112 206 L90 200 C92 178 90 158 82 140 C80 160 80 184 72 198 C64 176 58 150 58 116 C58 76 80 44 120 44 Z"
+        d="M120 40 C158 40 181 66 183 104 C184 132 181 168 178 208 L62 208 C59 168 56 132 57 104 C59 66 82 40 120 40 Z"
         fill={HAIR}
       />
 
@@ -70,9 +71,9 @@ export default function CharacterSvg() {
       <ellipse cx="90" cy="140" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
       <ellipse cx="150" cy="140" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
 
-      {/* eyebrows */}
-      <path d="M92 100 C98 94 110 94 116 99" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
-      <path d="M124 99 C130 94 142 94 148 100" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      {/* eyebrows: inner tips sit above each eye's inner corner, not crowded together */}
+      <path d="M87 100 C92 91 103 90 109 97" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      <path d="M131 97 C137 90 148 91 153 100" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
 
       {/* eyes: the socket (.eye) is what blinking squashes; the pupil cluster inside drifts with the cursor */}
       <g id="eyeL" className="eye" style={{ transformOrigin: "98px 118px" }}>
@@ -92,15 +93,11 @@ export default function CharacterSvg() {
       <path id="mouthSmile" d="M105 147 Q120 165 135 147" fill="none" stroke="#B8654F" strokeWidth="4.5" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       <ellipse id="mouthOpen" cx="120" cy="152" rx="7" ry="6" fill="#7A2E22" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
 
-      {/* front hair, drawn last so it overlaps the top of the face */}
+      {/* front hair: one wide, square-edged blunt fringe, not separate wispy strands */}
       <g id="bangs">
-        <path d="M58 116 C58 84 72 58 96 50 C86 66 82 86 84 108 C74 104 64 108 58 116 Z" fill={HAIR} />
-        <path d="M182 116 C182 84 168 58 144 50 C154 66 158 86 156 108 C166 104 176 108 182 116 Z" fill={HAIR} />
-        <path d="M120 46 C104 46 92 58 88 76 C96 66 108 60 120 60 C132 60 144 66 152 76 C148 58 136 46 120 46 Z" fill={HAIR} />
-        <path d="M96 58 C90 70 88 84 90 98 C96 88 100 78 100 66 Z" fill={HAIR_SHADOW} />
-        <path d="M144 58 C150 70 152 84 150 98 C144 88 140 78 140 66 Z" fill={HAIR_SHADOW} />
-        <path d="M112 54 C108 66 108 78 112 90 C116 78 116 66 114 54 Z" fill={HAIR} />
-        <path d="M128 54 C132 66 132 78 128 90 C124 78 124 66 126 54 Z" fill={HAIR} />
+        <path d="M78 60 C78 46 96 39 120 39 C144 39 162 46 162 60 L162 96 L78 96 Z" fill={HAIR} />
+        {/* faint centre part, just enough texture to read as hair, not a break in the block */}
+        <path d="M112 42 L110 94 M130 42 L132 94" stroke={HAIR_SHADOW} strokeWidth="1.6" strokeLinecap="round" opacity="0.5" />
       </g>
     </svg>
   );
