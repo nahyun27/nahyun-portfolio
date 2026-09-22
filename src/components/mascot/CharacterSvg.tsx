@@ -45,11 +45,22 @@ export default function CharacterSvg() {
       {/* back hair: one blunt bob silhouette, rounded crown, straight sides, one flat hem
           (the flat "L 62 182" bottom edge is what makes it read as a blunt one-length cut).
           Hem sits just past the chin, short rather than shoulder length. Drawn before the neck
-          so the neck's front skin sits on top of it instead of being hidden underneath. */}
-      <path
-        d="M120 40 C158 40 181 66 183 104 C184 122 181 148 178 182 L62 182 C59 148 56 122 57 104 C59 66 82 40 120 40 Z"
-        fill={HAIR}
-      />
+          so the neck's front skin sits on top of it instead of being hidden underneath.
+          Pivots from the crown so it can sway with the cursor (set by an ancestor via
+          --hair-sway); being the longest piece it swings the most. */}
+      <g
+        id="hairBack"
+        style={{
+          transformOrigin: "120px 45px",
+          transform: "rotate(var(--hair-sway, 0deg))",
+          transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+      >
+        <path
+          d="M120 40 C158 40 181 66 183 104 C184 122 181 148 178 182 L62 182 C59 148 56 122 57 104 C59 66 82 40 120 40 Z"
+          fill={HAIR}
+        />
+      </g>
 
       {/* neck: short, just enough to connect the chin to the collar. On top of the hair so it
           reads as in front of it, behind the face */}
@@ -99,13 +110,29 @@ export default function CharacterSvg() {
       <path id="mouthSmile" d="M105 147 Q120 165 135 147" fill="none" stroke="#B8654F" strokeWidth="4.5" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       <ellipse id="mouthOpen" cx="120" cy="152" rx="7" ry="6" fill="#7A2E22" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
 
-      {/* front hair: three wide, square-edged blunt pieces (left / centre / right) instead of one
-          solid slab, so it doesn't feel heavy. Each sits low enough that the back hair's own
-          curve is what forms the outline at the very top, no seam between the two. */}
-      <g id="bangs">
-        <path d="M70 106 L70 62 C70 52 76 50 83.5 50 C91 50 97 52 97 62 L97 106 Z" fill={HAIR} />
-        <path d="M101 106 L101 54 C101 44 108 42 120 42 C132 42 139 44 139 54 L139 106 Z" fill={HAIR} />
-        <path d="M143 106 L143 62 C143 52 149 50 156.5 50 C164 50 170 52 170 62 L170 106 Z" fill={HAIR} />
+      {/* front hair: a blunt centre piece plus two side pieces that sweep diagonally out and
+          down (their bottom edge slants, longer on the outer/temple side, shorter on the inner
+          side toward the centre part) - like a real fringe with the outer sections swept back,
+          not a straight-across trim on all three. Shares the SAME sway variable and origin as
+          the back hair (not a scaled-down version of it): two layers rotating at different
+          rates is what caused the side pieces to poke past the back hair's edge whenever the
+          cursor wasn't dead centre, since they only ever lined up at rotation 0. Moving together
+          keeps them nested at every angle. */}
+      <g
+        id="bangs"
+        style={{
+          transformOrigin: "120px 45px",
+          transform: "rotate(var(--hair-sway, 0deg))",
+          transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+      >
+        <path d="M78 118 L70 62 C70 52 76 50 83.5 50 C91 50 97 52 97 62 L90 98 Z" fill={HAIR} />
+        <path d="M108 106 L101 54 C101 44 108 42 120 42 C132 42 139 44 139 54 L132 106 Z" fill={HAIR} />
+        <path d="M150 98 L143 62 C143 52 149 50 156.5 50 C164 50 170 52 170 62 L162 118 Z" fill={HAIR} />
+        {/* aegyo-meori: two thin wisps at the temple, in front of the ear, separate from the
+            main fringe */}
+        <path d="M63 70 C63 65 69 63 72 67 L69 146 C67 150 63 148 63 143 Z" fill={HAIR} />
+        <path d="M177 70 C177 65 171 63 168 67 L171 146 C173 150 177 148 177 143 Z" fill={HAIR} />
       </g>
     </svg>
   );

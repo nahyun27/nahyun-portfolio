@@ -18,6 +18,9 @@ const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free 
 // how far the pupils and the head are allowed to drift toward the cursor
 const EYE_RANGE = 3.2;
 const HEAD_TILT_RANGE = 3;
+// hair swings further than the head tilts. Bangs and back hair share this one value (not two
+// independent ones) so they always stay nested at the same angle - see CharacterSvg's #bangs.
+const HAIR_SWAY_RANGE = 9;
 
 type MouthState = "neutral" | "smile" | "open";
 
@@ -78,6 +81,8 @@ export default function Mascot() {
       el.style.setProperty("--eye-x", `${dx * EYE_RANGE}px`);
       el.style.setProperty("--eye-y", `${dy * EYE_RANGE}px`);
       el.style.setProperty("--head-tilt", `${dx * HEAD_TILT_RANGE}deg`);
+      // the transition on the hair groups (not this property write) is what gives the swishy lag
+      el.style.setProperty("--hair-sway", `${dx * HAIR_SWAY_RANGE}deg`);
     };
     window.addEventListener("pointermove", onMove);
     return () => window.removeEventListener("pointermove", onMove);
@@ -211,10 +216,10 @@ export default function Mascot() {
             </div>
           </span>
 
-          {/* waving arm sits outside the clipped circle so the hand can swing past the frame.
-              The baseline translate/scale lives on this outer <svg>, in real CSS percentage
-              terms, exactly like the head div below it does — not on the inner <g>, where the
-              same numbers would be read as raw SVG user-space units and drift out of sync. */}
+          {/* just a waving hand, no arm/sleeve — a drawn limb never quite looked attached to the
+              body no matter where the shoulder joint was placed, so it's a floating hand instead
+              (same idea as a 👋 emoji next to the avatar). Sits outside the clipped circle so it
+              can swing past the frame; the outer <svg>'s transform matches the head div's. */}
           <motion.svg
             viewBox="0 0 240 260"
             className="absolute inset-0 pointer-events-none"
@@ -226,11 +231,17 @@ export default function Mascot() {
             }}
             aria-hidden
           >
-            {/* shoulder anchor matches the body's raised shoulder (see CharacterSvg's #body) */}
-            <motion.g animate={arm} style={{ transformOrigin: "168px 190px" }}>
-              <path d="M168 190 C186 188 198 176 200 160 C201 154 208 154 208 160 C207 180 194 196 170 200 Z" fill="#262A33" />
-              <ellipse cx="206" cy="158" rx="11" ry="12" fill="#FCDFC4" />
-              <path d="M199 154 C202 150 210 150 213 154" fill="none" stroke="#F3CBAA" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+            <motion.g animate={arm} style={{ transformOrigin: "206px 158px" }}>
+              <ellipse cx="206" cy="158" rx="12.5" ry="13.5" fill="#FCDFC4" />
+              {/* knuckle creases, just enough for it to read as a hand and not a blob */}
+              <path
+                d="M198 151 C200.5 148.5 204.5 147.5 207.5 149.5 M199 158 C202 155.8 206.5 154.8 209.5 157 M200 165 C203 163.3 206.8 163.3 209 165.3"
+                stroke="#EAB98F"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                fill="none"
+                opacity="0.65"
+              />
             </motion.g>
           </motion.svg>
         </motion.button>
