@@ -109,9 +109,10 @@ export default function CharacterSvg() {
           <path d="M82 119 C82 114 87 111 94 111 C101 111 106 114 106 119 Q94 114.5 82 119 Z" fill={SKIN} />
           <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
         </g>
-        {/* outer corner (x=84, away from the nose) sits lower than the inner one - a gentle
-            downward droop at the tail instead of a level symmetric arc, for a softer smile */}
-        <path id="eyeSmileL" d="M84 130 Q94 119 104 125" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        {/* outer corner (x=84, away from the nose) sits a little lower than the inner one - a
+            gentle downward droop at the tail instead of a level symmetric arc, for a softer
+            smile (was drooping too hard, toned down to a smaller difference) */}
+        <path id="eyeSmileL" d="M80 128.5 Q94 120 108 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
         {/* a flat-ish shut line, just for this eye - the wink, toggled independently of eyeR */}
         <path id="eyeWinkL" d="M83 126 Q94 129.5 105 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.1s ease" }} />
       </g>
@@ -122,7 +123,7 @@ export default function CharacterSvg() {
           <path d="M134 119 C134 114 139 111 146 111 C153 111 158 114 158 119 Q146 114.5 134 119 Z" fill={SKIN} />
           <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
         </g>
-        <path id="eyeSmileR" d="M136 125 Q146 119 156 130" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        <path id="eyeSmileR" d="M132 126 Q146 120 160 128.5" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
       </g>
 
       {/* nose: barely there, just a hint */}

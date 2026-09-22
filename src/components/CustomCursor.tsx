@@ -22,10 +22,16 @@ export default function CustomCursor() {
 
   const ringRef = useRef<HTMLDivElement>(null);
 
+  // when set, the cursor becomes this emoji instead of the usual ring/dot - see [data-cursor-emoji]
+  const [cursorEmoji, setCursorEmoji] = useState<string | null>(null);
+
   // Detect touch device safely inside a state/effect
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // intentional: starts false so SSR and the first client render match, then flips once we can
+    // actually check - a lazy initial state would read `window` during the server render too
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
@@ -41,6 +47,14 @@ export default function CustomCursor() {
 
     const onOver = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
+      // an element opts into "cursor becomes this emoji" via data-cursor-emoji="<emoji>" - takes
+      // over from the usual ring/dot entirely rather than combining with it (see the render below)
+      const emojiEl = t.closest<HTMLElement>("[data-cursor-emoji]");
+      if (emojiEl) {
+        setCursorEmoji(emojiEl.dataset.cursorEmoji ?? null);
+        return;
+      }
+      setCursorEmoji(null);
       if (t.closest("a,button,[data-cursor-hover]")) {
         if (ringRef.current) {
           ringRef.current.style.width = "48px";
@@ -50,7 +64,9 @@ export default function CustomCursor() {
         }
       }
     };
-    const onOut = () => {
+    const onOut = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (t.closest("[data-cursor-emoji]")) setCursorEmoji(null);
       if (ringRef.current) {
         ringRef.current.style.width = "28px";
         ringRef.current.style.height = "28px";
@@ -87,10 +103,11 @@ export default function CustomCursor() {
           rotate: angle,
           scaleX: stretch,
           scaleY: squash,
+          opacity: cursorEmoji ? 0 : 1,
           borderColor: "color-mix(in srgb, var(--cursor-ring, var(--text)) 60%, transparent)",
           // the halo is the local background colour, so the ring stays readable over similar shapes
           boxShadow: "0 0 0 1px var(--cursor-halo, transparent)",
-          transition: "width 0.18s ease, height 0.18s ease, border-color 0.3s ease, background 0.18s ease, box-shadow 0.3s ease",
+          transition: "width 0.18s ease, height 0.18s ease, border-color 0.3s ease, background 0.18s ease, box-shadow 0.3s ease, opacity 0.15s ease",
         }}
       />
       <motion.div
@@ -103,10 +120,29 @@ export default function CustomCursor() {
           translateX: "-50%",
           translateY: "-50%",
           backgroundColor: "var(--cursor-dot, var(--mint))",
+          opacity: cursorEmoji ? 0 : 1,
           boxShadow: "0 0 0 1.5px var(--cursor-halo, transparent)",
-          transition: "background-color 0.3s ease, box-shadow 0.3s ease",
+          transition: "background-color 0.3s ease, box-shadow 0.3s ease, opacity 0.15s ease",
         }}
       />
+      {/* the emoji itself, snapped to the raw (unsprung) cursor position like the dot - a cute
+          little swap-out for the ring/dot rather than something layered on top of them */}
+      <motion.div
+        aria-hidden
+        className="fixed top-0 left-0 pointer-events-none z-[9999] select-none"
+        style={{
+          x: dotX,
+          y: dotY,
+          translateX: "-50%",
+          translateY: "-50%",
+          fontSize: 26,
+          filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.3))",
+        }}
+        animate={{ opacity: cursorEmoji ? 1 : 0, scale: cursorEmoji ? 1 : 0.4 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+      >
+        {cursorEmoji}
+      </motion.div>
     </>
   );
 }
