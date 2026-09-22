@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Mascot from "@/components/Mascot";
+import DropletTags from "@/components/DropletTags";
 
 const WORDS = ["Nahyun", "Kim"];
 
@@ -40,6 +41,10 @@ export default function HeroSection() {
           <circle cx="250" cy="400" r="4" fill="var(--mint)" />
         </svg>
       </div>
+
+      {/* the tag bubbles - confined to this section (it's the nearest positioned ancestor),
+          drift behind the title/CTA below (they're z-10, this is z-5 inside the component) */}
+      <DropletTags />
 
       <div className="section-inner w-full flex-1 flex flex-col justify-center relative z-10" style={{ paddingTop: 96, paddingBottom: 48 }}>
         {/* Status chip */}
