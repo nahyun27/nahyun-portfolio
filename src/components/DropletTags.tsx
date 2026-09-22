@@ -1,103 +1,173 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 /**
- * The hero tag list ("#ProblemSolver" etc), but as loose droplets instead of a static row:
- * they drift lazily inside their box, and clicking one pops it - it vanishes, then reappears
- * at a fresh random spot a moment later. Reuses the site's existing `.blob-morph` (border-radius
- * wobble) and the same glass-chip colours the static tags used, just rigged to move and pop.
+ * The old hero tag row ("#ProblemSolver" etc), now let loose as soap-bubble droplets that drift
+ * across the whole page (fixed, not scoped to the hero) and scatter away from the cursor when it
+ * sweeps past. Clicking one pops it - it vanishes, then reappears somewhere else a moment later.
+ *
+ * Position is real cursor-avoidance physics (a small drift + a repulsion force near the pointer),
+ * stepped every frame and written straight to each bubble's `transform` via a ref, not React
+ * state - so 4 bubbles moving at 60fps never trigger a re-render. React only owns which bubbles
+ * currently exist (for the pop/respawn mount+unmount and its enter/exit animation).
  */
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
 
-type Droplet = { id: number; text: string; left: number; top: number; scale: number };
-
 let uid = 0;
 const rand = (min: number, max: number) => min + Math.random() * (max - min);
 
-// pick a spot away from the droplets already out there, so a respawn doesn't just land back
-// on top of a neighbour - try a handful of candidates and keep the one with the most room
-function spawnPos(avoid: { left: number; top: number }[]) {
-  let best = { left: rand(8, 80), top: rand(10, 68) };
-  let bestDist = -1;
-  for (let i = 0; i < 10; i++) {
-    const candidate = { left: rand(8, 80), top: rand(10, 68) };
-    const dist = avoid.length
-      ? Math.min(...avoid.map((p) => Math.hypot(p.left - candidate.left, (p.top - candidate.top) * 1.6)))
-      : 999;
-    if (dist > bestDist) {
-      bestDist = dist;
-      best = candidate;
-    }
-  }
-  return best;
-}
+type BubbleData = { id: number; text: string };
+type Phys = { x: number; y: number; vx: number; vy: number; el: HTMLDivElement | null };
 
 export default function DropletTags() {
-  const [drops, setDrops] = useState<Droplet[]>(() => {
-    const placed: { left: number; top: number }[] = [];
-    return TAGS.map((text) => {
-      const pos = spawnPos(placed);
-      placed.push(pos);
-      return { id: uid++, text, ...pos, scale: rand(0.94, 1.08) };
+  const [bubbles, setBubbles] = useState<BubbleData[]>(() => TAGS.map((text) => ({ id: uid++, text })));
+  const phys = useRef<Map<number, Phys>>(new Map());
+  const pointer = useRef({ x: -9999, y: -9999, vx: 0, vy: 0, lastX: -9999, lastY: -9999 });
+
+  // seeds a bubble's physics state the first time its DOM node shows up, keeps it after that
+  const registerEl = (id: number) => (el: HTMLDivElement | null) => {
+    const existing = phys.current.get(id);
+    if (existing) {
+      existing.el = el;
+      return;
+    }
+    if (!el) return;
+    phys.current.set(id, {
+      x: rand(80, window.innerWidth - 80),
+      y: rand(140, window.innerHeight - 120),
+      vx: rand(-6, 6),
+      vy: rand(-6, 6),
+      el,
     });
-  });
+  };
+
+  useEffect(() => {
+    const onMove = (e: PointerEvent) => {
+      const p = pointer.current;
+      p.vx = p.lastX < 0 ? 0 : e.clientX - p.lastX;
+      p.vy = p.lastY < 0 ? 0 : e.clientY - p.lastY;
+      p.lastX = e.clientX;
+      p.lastY = e.clientY;
+      p.x = e.clientX;
+      p.y = e.clientY;
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, []);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let last = performance.now();
+
+    const tick = (now: number) => {
+      const dt = Math.min(2, (now - last) / 16.7); // ~1 at 60fps, capped so a stutter can't fling things
+      last = now;
+      const pt = pointer.current;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      phys.current.forEach((p) => {
+        // lazy drift, like it's sitting in still air
+        p.vx += rand(-0.05, 0.05) * dt;
+        p.vy += rand(-0.05, 0.05) * dt;
+
+        // scatter away from the cursor - stronger the closer and the faster it's sweeping past,
+        // which is what makes a slow hover barely nudge it but a quick swirl send it flying
+        const dx = p.x - pt.x;
+        const dy = p.y - pt.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        const radius = 160;
+        if (dist < radius) {
+          const cursorSpeed = Math.min(Math.hypot(pt.vx, pt.vy), 45);
+          const strength = (1 - dist / radius) * (1.8 + cursorSpeed * 0.4);
+          p.vx += (dx / dist) * strength * dt;
+          p.vy += (dy / dist) * strength * dt;
+        }
+
+        p.vx *= 0.965;
+        p.vy *= 0.965;
+        const speed = Math.hypot(p.vx, p.vy);
+        const maxSpeed = 16;
+        if (speed > maxSpeed) {
+          p.vx = (p.vx / speed) * maxSpeed;
+          p.vy = (p.vy / speed) * maxSpeed;
+        }
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+
+        // bounce off the viewport edges instead of drifting off screen
+        const sideMargin = 54;
+        if (p.x < sideMargin) {
+          p.x = sideMargin;
+          p.vx = Math.abs(p.vx);
+        } else if (p.x > w - sideMargin) {
+          p.x = w - sideMargin;
+          p.vx = -Math.abs(p.vx);
+        }
+        if (p.y < 88) {
+          p.y = 88;
+          p.vy = Math.abs(p.vy);
+        } else if (p.y > h - 64) {
+          p.y = h - 64;
+          p.vy = -Math.abs(p.vy);
+        }
+
+        if (p.el) p.el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
+      });
+
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   const pop = (id: number, text: string) => {
-    setDrops((ds) => ds.filter((d) => d.id !== id));
+    phys.current.delete(id);
+    setBubbles((bs) => bs.filter((b) => b.id !== id));
     window.setTimeout(() => {
-      setDrops((ds) => {
-        const pos = spawnPos(ds.map((d) => ({ left: d.left, top: d.top })));
-        return [...ds, { id: uid++, text, ...pos, scale: rand(0.94, 1.08) }];
-      });
+      setBubbles((bs) => [...bs, { id: uid++, text }]);
     }, 550 + Math.random() * 750);
   };
 
   return (
-    <div className="relative w-full" style={{ height: "clamp(104px, 12vw, 140px)", maxWidth: 480, marginTop: 22 }}>
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 80 }}>
       <AnimatePresence>
-        {drops.map((d) => (
-          // `translate` is the standalone CSS property (not `transform`), so it centers the
-          // pill on its (left, top) point without fighting framer-motion, which only ever
-          // writes to `transform` - that's where the opacity/scale/x/y animation below lives.
-          <motion.button
-            key={d.id}
-            type="button"
-            onClick={() => pop(d.id, d.text)}
-            data-cursor-hover
-            aria-label={`${d.text}, click to pop`}
-            className="blob-morph absolute hv-mint text-xs font-bold tracking-[0.04em]"
-            style={{
-              left: `${d.left}%`,
-              top: `${d.top}%`,
-              translate: "-50% -50%",
-              border: "1px solid var(--w80)",
-              color: "var(--t3)",
-              fontFamily: "'Inter', sans-serif",
-              backgroundColor: "var(--w20)",
-              padding: "7px 15px",
-              cursor: "none",
-              animation: `blob-morph ${7 + rand(0, 4)}s ease-in-out infinite`,
-              animationDelay: `${-rand(0, 6)}s`,
-            }}
-            initial={{ opacity: 0, scale: 0.3 }}
-            animate={{
-              opacity: 1,
-              scale: d.scale,
-              y: [0, -7, 1, -4, 0],
-              x: [0, 4, -3, 2, 0],
-            }}
-            exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
-            transition={{
-              default: { type: "spring", stiffness: 300, damping: 20 },
-              y: { duration: rand(4.5, 6.5), repeat: Infinity, ease: "easeInOut", delay: rand(0, 2) },
-              x: { duration: rand(5, 7), repeat: Infinity, ease: "easeInOut", delay: rand(0, 2) },
-            }}
-          >
-            {d.text}
-          </motion.button>
+        {bubbles.map((b) => (
+          // outer div: physics owns its `transform` (translate3d), written straight to the DOM.
+          // inner motion.button: framer owns ITS OWN transform (scale, for the pop) - two
+          // separate elements each with their own transform, so the two never fight.
+          <div key={b.id} ref={registerEl(b.id)} className="absolute pointer-events-auto" style={{ left: 0, top: 0, translate: "-50% -50%" }}>
+            <motion.button
+              type="button"
+              onClick={() => pop(b.id, b.text)}
+              data-cursor-hover
+              aria-label={`${b.text}, click to pop`}
+              className="blob-morph hv-mint text-xs font-bold tracking-[0.04em]"
+              style={{
+                display: "block",
+                border: "1px solid var(--w80)",
+                color: "var(--t3)",
+                fontFamily: "'Inter', sans-serif",
+                backgroundColor: "var(--w20)",
+                padding: "7px 15px",
+                cursor: "none",
+                animation: `blob-morph ${7 + rand(0, 4)}s ease-in-out infinite`,
+                animationDelay: `${-rand(0, 6)}s`,
+              }}
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.7, transition: { duration: 0.32, ease: "easeOut" } }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
+              {b.text}
+            </motion.button>
+          </div>
         ))}
       </AnimatePresence>
     </div>
