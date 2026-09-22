@@ -147,13 +147,14 @@ export default function CharacterSvg() {
         }}
       >
         <path d="M66 128 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L100 110 Z" fill={HAIR} />
-        {/* the centre piece's side edges kink partway down: from the top they angle OUT (a short,
-            visible part near the hairline, like a real centre part) then angle back IN past the
-            kink to overlap the side pieces (same fill colour, so the overlap itself is invisible)
-            well before reaching the eyebrows. A single straight edge either showed a gap that
-            widened all the way down to the eyebrows (too deep, wide-looking forehead) or, once
-            widened enough to fix that, overlapped everywhere and hid the part entirely. */}
-        <path d="M96 112 L102 78 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L138 78 L144 112 Z" fill={HAIR} />
+        {/* the centre piece's bottom corners sit past the side pieces' inner edges (97/143 vs
+            the side pieces' 100/140) - the gap that mattered was the one low down, near the
+            eyebrows, where a short edge left forehead showing in a wedge that widened the closer
+            it got to the eyes. Overlapping there (invisible, same fill colour as the side pieces)
+            closes it; the top staying overlapped too is fine, not something to reintroduce a
+            gap for - an earlier attempt at a visible part near the hairline read as an odd cut
+            carved into the hair instead. */}
+        <path d="M97 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L143 112 Z" fill={HAIR} />
         <path d="M174 128 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L140 110 Z" fill={HAIR} />
         {/* aegyo-meori: two thin wisps at the temple, pulled in closer to the face than the
             main fringe's outer edge instead of sitting out past the ear */}

@@ -2,10 +2,9 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import AdversarialName from "@/components/AdversarialName";
 import Mascot from "@/components/Mascot";
+import DropletTags from "@/components/DropletTags";
 
-const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
 const WORDS = ["Nahyun", "Kim"];
 
 const scrollToId = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -63,8 +62,7 @@ export default function HeroSection() {
           </span>
         </motion.div>
 
-        {/* Name, wrapped so hovering it can fool a pretend classifier */}
-        <AdversarialName>
+        {/* Name */}
         <h1
           aria-label="Nahyun Kim"
           className="flex flex-wrap"
@@ -109,7 +107,6 @@ export default function HeroSection() {
             </span>
           ))}
         </h1>
-        </AdversarialName>
 
         {/* Role */}
         <motion.p
@@ -126,24 +123,9 @@ export default function HeroSection() {
           <strong style={{ color: "var(--text)", fontWeight: 600 }}>AI Security Researcher</strong> &amp; Creative Developer
         </motion.p>
 
-        {/* Tags */}
-        <motion.div {...fade(1.05)} className="flex flex-wrap" style={{ marginTop: 22, gap: 8 }}>
-          {TAGS.map((tag) => (
-            <span
-              key={tag}
-              className="hv-mint text-xs font-bold tracking-[0.04em] cursor-default transition-all duration-300"
-              style={{
-                border: "1px solid var(--w80)",
-                color: "var(--t3)",
-                fontFamily: "'Inter', sans-serif",
-                backgroundColor: "var(--w20)",
-                borderRadius: 999,
-                padding: "5px 12px",
-              }}
-            >
-              {tag}
-            </span>
-          ))}
+        {/* Tags: droplets that drift, and pop back into a new spot when clicked */}
+        <motion.div {...fade(1.05)}>
+          <DropletTags />
         </motion.div>
 
         {/* Calls to action */}
