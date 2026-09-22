@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import AdversarialName from "@/components/AdversarialName";
+import Mascot from "@/components/Mascot";
 
 const TAGS = ["#ProblemSolver", "#ProblemDefiner", "#EarlyAdopter", "#ENTJ"];
 const WORDS = ["Nahyun", "Kim"];
@@ -170,6 +171,8 @@ export default function HeroSection() {
           </a>
         </motion.div>
       </div>
+
+      <Mascot />
 
       {/* Scroll indicator */}
       <motion.div
