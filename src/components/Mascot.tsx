@@ -48,6 +48,21 @@ export default function Mascot() {
     set("mouthOpen", state === "open");
   };
 
+  // squints into happy closed eyes for a smile, open round eyes otherwise (including while
+  // talking - squinting AND talking at once reads oddly, so "open" covers both neutral and talk)
+  const setEyes = (state: "open" | "smile") => {
+    const root = rootRef.current;
+    if (!root) return;
+    const set = (id: string, visible: boolean) => {
+      const el = root.querySelector<SVGElement>(`#${id}`);
+      if (el) el.style.opacity = visible ? "1" : "0";
+    };
+    set("eyeNormalL", state === "open");
+    set("eyeNormalR", state === "open");
+    set("eyeSmileL", state === "smile");
+    set("eyeSmileR", state === "smile");
+  };
+
   const wave = () => {
     if (reduce) return;
     arm.start(WAVE_KEYFRAMES);
@@ -57,8 +72,12 @@ export default function Mascot() {
     if (reduce) return;
     window.clearTimeout(talkTimer.current);
     setMouth("open");
+    setEyes("open");
     // settle back into a smile if the cursor is still there, not a blank stare
-    talkTimer.current = window.setTimeout(() => setMouth(hovering.current ? "smile" : "neutral"), ms);
+    talkTimer.current = window.setTimeout(() => {
+      setMouth(hovering.current ? "smile" : "neutral");
+      setEyes(hovering.current ? "smile" : "open");
+    }, ms);
   };
 
   const showBubble = (ms = 3600) => {
@@ -180,11 +199,13 @@ export default function Mascot() {
           onMouseEnter={() => {
             hovering.current = true;
             setMouth("smile");
+            setEyes("smile");
             greet();
           }}
           onMouseLeave={() => {
             hovering.current = false;
             setMouth("neutral");
+            setEyes("open");
           }}
           data-cursor-hover
           aria-label="Say hi back"
