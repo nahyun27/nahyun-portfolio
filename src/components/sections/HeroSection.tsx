@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Mascot from "@/components/Mascot";
-import DropletTags from "@/components/DropletTags";
 
 const WORDS = ["Nahyun", "Kim"];
 
@@ -123,13 +122,9 @@ export default function HeroSection() {
           <strong style={{ color: "var(--text)", fontWeight: 600 }}>AI Security Researcher</strong> &amp; Creative Developer
         </motion.p>
 
-        {/* Tags: droplets that drift, and pop back into a new spot when clicked */}
-        <motion.div {...fade(1.05)}>
-          <DropletTags />
-        </motion.div>
-
-        {/* Calls to action */}
-        <motion.div {...fade(1.2)} className="flex flex-wrap items-center" style={{ marginTop: 38, gap: 12 }}>
+        {/* Calls to action - the tags used to sit here; they now drift across the whole page
+            instead (DropletTags, mounted globally in layout.tsx) so this slot moved up */}
+        <motion.div {...fade(1.05)} className="flex flex-wrap items-center" style={{ marginTop: 30, gap: 12 }}>
           <button
             onClick={() => scrollToId("projects")}
             data-cursor-hover
