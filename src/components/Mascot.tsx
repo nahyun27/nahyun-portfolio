@@ -217,34 +217,24 @@ export default function Mascot() {
             </div>
           </span>
 
-          {/* just a waving hand, no arm/sleeve — a drawn limb never quite looked attached to the
-              body no matter where the shoulder joint was placed, so it's a floating hand instead
-              (same idea as a 👋 emoji next to the avatar). Sits outside the clipped circle so it
-              can swing past the frame; the outer <svg>'s transform matches the head div's. */}
-          <motion.svg
-            viewBox="0 0 240 260"
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              width: "clamp(72px, 8vw, 112px)",
-              height: "clamp(72px, 8vw, 112px)",
-              overflow: "visible",
-              transform: "translateY(6%) scale(1.18)",
-            }}
+          {/* just a waving hand emoji, no drawn arm/sleeve — a drawn limb never quite looked
+              attached to the body no matter where the shoulder joint was placed, and a drawn
+              floating hand still read as an odd disembodied blob. The emoji reads instantly as
+              "hand waving" on its own, no attachment needed. */}
+          <motion.span
             aria-hidden
+            animate={arm}
+            className="absolute select-none pointer-events-none"
+            style={{
+              right: "-6%",
+              top: "2%",
+              fontSize: "clamp(20px, 2.6vw, 30px)",
+              transformOrigin: "70% 80%",
+              filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.25))",
+            }}
           >
-            <motion.g animate={arm} style={{ transformOrigin: "206px 158px" }}>
-              <ellipse cx="206" cy="158" rx="12.5" ry="13.5" fill="#FCDFC4" />
-              {/* knuckle creases, just enough for it to read as a hand and not a blob */}
-              <path
-                d="M198 151 C200.5 148.5 204.5 147.5 207.5 149.5 M199 158 C202 155.8 206.5 154.8 209.5 157 M200 165 C203 163.3 206.8 163.3 209 165.3"
-                stroke="#EAB98F"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                fill="none"
-                opacity="0.65"
-              />
-            </motion.g>
-          </motion.svg>
+            👋
+          </motion.span>
         </motion.button>
       </div>
     </div>
