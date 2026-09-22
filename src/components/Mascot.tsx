@@ -13,6 +13,7 @@ import CharacterSvg from "@/components/mascot/CharacterSvg";
  */
 
 const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free to look around ✨"];
+const DIZZY_TEXT = "whoa, dizzy~ 🌀";
 
 // how far the pupils and the head are allowed to drift toward the cursor
 const EYE_RANGE = 3.2;
@@ -22,18 +23,31 @@ const HEAD_TILT_RANGE = 3;
 // swaying. Bangs and back hair share this one value so they stay nested at the same angle.
 const HAIR_SWAY_RANGE = 3.2;
 
+// 4 clicks inside 1.4s counts as "rapid" and triggers the dizzy reaction instead of a wink
+const RAPID_CLICK_COUNT = 4;
+const RAPID_CLICK_WINDOW = 1400;
+
+const IDLE_BOB = { y: [0, -6, 0], rotate: 0, transition: { duration: 3.4, repeat: Infinity, ease: "easeInOut" as const } };
+const DIZZY_WOBBLE = { rotate: [0, -16, 14, -12, 10, -5, 0], y: [0, -3, 2, -2, 0], transition: { duration: 0.85, ease: "easeInOut" as const } };
+
 type MouthState = "neutral" | "smile" | "open";
+type EyeState = "open" | "smile" | "dizzy";
 
 export default function Mascot() {
   const reduce = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const [bubbleOpen, setBubbleOpen] = useState(false);
-  const [greeting, setGreeting] = useState(0);
+  const [bubbleText, setBubbleText] = useState(GREETINGS[0]);
+  const [dizzyActive, setDizzyActive] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const idleTimer = useRef<number | undefined>(undefined);
   const closeTimer = useRef<number | undefined>(undefined);
   const talkTimer = useRef<number | undefined>(undefined);
   const winkTimer = useRef<number | undefined>(undefined);
+  const dizzyTimer = useRef<number | undefined>(undefined);
   const hovering = useRef(false);
+  const clickTimes = useRef<number[]>([]);
+  const greetingIndex = useRef(0);
 
   const setMouth = (state: MouthState) => {
     const root = rootRef.current;
@@ -47,9 +61,10 @@ export default function Mascot() {
     set("mouthOpen", state === "open");
   };
 
-  // squints into happy closed eyes for a smile, open round eyes otherwise (including while
-  // talking - squinting AND talking at once reads oddly, so "open" covers both neutral and talk)
-  const setEyes = (state: "open" | "smile") => {
+  // squints into happy closed eyes for a smile, spins into X's when dizzy, open round eyes
+  // otherwise (including while talking - squinting AND talking at once reads oddly, so "open"
+  // covers both neutral and talk)
+  const setEyes = (state: EyeState) => {
     const root = rootRef.current;
     if (!root) return;
     const set = (id: string, visible: boolean) => {
@@ -60,6 +75,8 @@ export default function Mascot() {
     set("eyeNormalR", state === "open");
     set("eyeSmileL", state === "smile");
     set("eyeSmileR", state === "smile");
+    set("eyeDizzyL", state === "dizzy");
+    set("eyeDizzyR", state === "dizzy");
   };
 
   const talk = (ms = 900) => {
@@ -95,10 +112,28 @@ export default function Mascot() {
     }, 260);
   };
 
-  const showBubble = (ms = 3600) => {
+  const showBubble = (text: string, ms = 3600) => {
     window.clearTimeout(closeTimer.current);
+    setBubbleText(text);
     setBubbleOpen(true);
     closeTimer.current = window.setTimeout(() => setBubbleOpen(false), ms);
+  };
+
+  // 4+ clicks inside RAPID_CLICK_WINDOW instead reads as "stop poking me" - X eyes, a wobble, a
+  // dedicated line in the speech bubble - rather than another wink
+  const dizzy = () => {
+    if (reduce) return;
+    window.clearTimeout(winkTimer.current);
+    setDizzyActive(true);
+    setMouth("open");
+    setEyes("dizzy");
+    showBubble(DIZZY_TEXT, 1400);
+    window.clearTimeout(dizzyTimer.current);
+    dizzyTimer.current = window.setTimeout(() => {
+      setDizzyActive(false);
+      setMouth(hovering.current ? "smile" : "neutral");
+      setEyes(hovering.current ? "smile" : "open");
+    }, 850);
   };
 
   // eyes track the pointer, with a small tilt of the whole head following along
@@ -143,14 +178,14 @@ export default function Mascot() {
     if (reduce) return;
     const hello = window.setTimeout(() => {
       talk(1400);
-      showBubble();
+      showBubble(GREETINGS[0]);
     }, 1500);
 
     const scheduleIdle = () => {
       idleTimer.current = window.setTimeout(() => {
         talk(1200);
-        setGreeting((g) => (g + 1) % GREETINGS.length);
-        showBubble(3200);
+        greetingIndex.current = (greetingIndex.current + 1) % GREETINGS.length;
+        showBubble(GREETINGS[greetingIndex.current], 3200);
         scheduleIdle();
       }, 9000 + Math.random() * 6000);
     };
@@ -162,14 +197,15 @@ export default function Mascot() {
       window.clearTimeout(closeTimer.current);
       window.clearTimeout(talkTimer.current);
       window.clearTimeout(winkTimer.current);
+      window.clearTimeout(dizzyTimer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
 
   const greet = () => {
     talk(1100);
-    setGreeting((g) => (g + 1) % GREETINGS.length);
-    showBubble();
+    greetingIndex.current = (greetingIndex.current + 1) % GREETINGS.length;
+    showBubble(GREETINGS[greetingIndex.current]);
   };
 
   return (
@@ -203,7 +239,7 @@ export default function Mascot() {
                 boxShadow: "0 12px 28px -10px rgba(var(--shadow-rgb),calc(0.4 * var(--shadow-k)))",
               }}
             >
-              {GREETINGS[greeting]}
+              {bubbleText}
             </motion.div>
           )}
         </AnimatePresence>
@@ -211,6 +247,13 @@ export default function Mascot() {
         <motion.button
           type="button"
           onClick={() => {
+            const now = Date.now();
+            clickTimes.current = [...clickTimes.current.filter((t) => now - t < RAPID_CLICK_WINDOW), now];
+            if (clickTimes.current.length >= RAPID_CLICK_COUNT) {
+              clickTimes.current = [];
+              dizzy();
+              return;
+            }
             wink();
             greet();
           }}
@@ -225,12 +268,21 @@ export default function Mascot() {
             setMouth("neutral");
             setEyes("open");
           }}
-          data-cursor-emoji="👋"
-          aria-label="Say hi back"
+          // a fist while it's being dragged around, a wave otherwise - CustomCursor re-reads
+          // this live off the element itself, no fresh hover needed for the swap mid-drag
+          data-cursor-emoji={dragging ? "✊" : "👋"}
+          aria-label="Say hi back - drag to move it, click to wave"
           className="relative"
           style={{ cursor: "none" }}
-          animate={reduce ? undefined : { y: [0, -6, 0] }}
-          transition={reduce ? undefined : { duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
+          drag
+          dragSnapToOrigin
+          dragElastic={0.15}
+          dragMomentum={false}
+          dragTransition={{ bounceStiffness: 420, bounceDamping: 16 }}
+          onDragStart={() => setDragging(true)}
+          onDragEnd={() => setDragging(false)}
+          whileDrag={{ scale: 1.08 }}
+          animate={reduce || dragging ? undefined : dizzyActive ? DIZZY_WOBBLE : IDLE_BOB}
           whileTap={{ scale: 0.94 }}
         >
           <span

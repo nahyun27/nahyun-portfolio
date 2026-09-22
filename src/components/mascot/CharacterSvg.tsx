@@ -113,8 +113,21 @@ export default function CharacterSvg() {
             gentle downward droop at the tail instead of a level symmetric arc, for a softer
             smile (was drooping too hard, toned down to a smaller difference) */}
         <path id="eyeSmileL" d="M80 128.5 Q94 120 108 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
-        {/* a flat-ish shut line, just for this eye - the wink, toggled independently of eyeR */}
-        <path id="eyeWinkL" d="M83 126 Q94 129.5 105 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.1s ease" }} />
+        {/* the wink, toggled independently of eyeR - backed by a solid skin patch, not just the
+            line. eyeNormalL/eyeSmileL fade out over their own 0.15s while this fades in over
+            0.1s, so for a stretch both are partway visible at once; a bare line let the fading
+            open eye/pupil show through underneath it during that overlap. The patch opaquely
+            covers that regardless of exactly how the two transitions line up. */}
+        <g id="eyeWinkL" style={{ opacity: 0, transition: "opacity 0.1s ease" }}>
+          <ellipse cx="94" cy="126" rx="14" ry="14.5" fill={SKIN} />
+          <path d="M83 126 Q94 129.5 105 126" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" />
+        </g>
+        {/* dizzy X eyes, for one too many rapid clicks - same solid-patch trick as the wink so it
+            cleanly covers whichever eye it's replacing during the crossfade */}
+        <g id="eyeDizzyL" style={{ opacity: 0, transition: "opacity 0.1s ease" }}>
+          <ellipse cx="94" cy="126" rx="14" ry="14.5" fill={SKIN} />
+          <path d="M84 118 L104 134 M104 118 L84 134" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" />
+        </g>
       </g>
       <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
         <g id="eyeNormalR" style={{ opacity: 1, transition: "opacity 0.15s ease" }}>
@@ -124,6 +137,10 @@ export default function CharacterSvg() {
           <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
         </g>
         <path id="eyeSmileR" d="M132 126 Q146 120 160 128.5" fill="none" stroke={HAIR} strokeWidth="3" strokeLinecap="round" style={{ opacity: 0, transition: "opacity 0.15s ease" }} />
+        <g id="eyeDizzyR" style={{ opacity: 0, transition: "opacity 0.1s ease" }}>
+          <ellipse cx="146" cy="126" rx="14" ry="14.5" fill={SKIN} />
+          <path d="M136 118 L156 134 M156 118 L136 134" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" />
+        </g>
       </g>
 
       {/* nose: barely there, just a hint */}
