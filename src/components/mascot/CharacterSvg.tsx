@@ -99,11 +99,16 @@ export default function CharacterSvg() {
       <g id="eyeL" className="eye" style={{ transformOrigin: "94px 126px" }}>
         <ellipse cx="94" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
         <Pupil id="pupilL" cx={94} hl1={[90.5, 122]} hl2={[97, 129.5]} />
+        {/* the lid itself: skin, not white, filling the gap between the brow and the crease
+            line below so it reads as a fold of skin covering the top of the eye, not a line
+            floating over bare sclera */}
+        <path d="M82 119 C82 114 87 111 94 111 C101 111 106 114 106 119 Q94 114.5 82 119 Z" fill={SKIN} />
         <path d="M82 119 Q94 113.5 106 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
       </g>
       <g id="eyeR" className="eye" style={{ transformOrigin: "146px 126px" }}>
         <ellipse cx="146" cy="126" rx="13" ry="13.5" fill="#FFFFFF" />
         <Pupil id="pupilR" cx={146} hl1={[142.5, 122]} hl2={[149, 129.5]} />
+        <path d="M134 119 C134 114 139 111 146 111 C153 111 158 114 158 119 Q146 114.5 134 119 Z" fill={SKIN} />
         <path d="M134 119 Q146 113.5 158 119" fill="none" stroke={HAIR} strokeWidth="2.6" strokeLinecap="round" opacity="0.85" />
       </g>
 
@@ -133,7 +138,12 @@ export default function CharacterSvg() {
         }}
       >
         <path d="M66 128 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L100 110 Z" fill={HAIR} />
-        <path d="M103 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L137 112 Z" fill={HAIR} />
+        {/* the centre piece's bottom corners sit further out than the side pieces' inner edges
+            (97/143 vs the side pieces' 100/140) on purpose: they're the same fill colour, so
+            overlap is invisible, but a gap there showed forehead in a widening wedge down toward
+            the eyebrows, reading as a deep centre part and a wide forehead. Overlapping instead,
+            more so near the bottom, closes it. */}
+        <path d="M97 112 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L143 112 Z" fill={HAIR} />
         <path d="M174 128 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L140 110 Z" fill={HAIR} />
         {/* aegyo-meori: two thin wisps at the temple, pulled in closer to the face than the
             main fringe's outer edge instead of sitting out past the ear */}
