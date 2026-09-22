@@ -18,9 +18,10 @@ const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free 
 // how far the pupils and the head are allowed to drift toward the cursor
 const EYE_RANGE = 3.2;
 const HEAD_TILT_RANGE = 3;
-// hair swings further than the head tilts. Bangs and back hair share this one value (not two
-// independent ones) so they always stay nested at the same angle - see CharacterSvg's #bangs.
-const HAIR_SWAY_RANGE = 9;
+// hair swings a little further than the head tilts - was 9deg, which visibly outran the face
+// (which only ever rotates by HEAD_TILT_RANGE), reading as the hair sliding loose rather than
+// swaying. Bangs and back hair share this one value so they stay nested at the same angle.
+const HAIR_SWAY_RANGE = 3.2;
 
 type MouthState = "neutral" | "smile" | "open";
 

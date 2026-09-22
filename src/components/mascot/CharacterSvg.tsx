@@ -57,7 +57,7 @@ export default function CharacterSvg() {
         }}
       >
         <path
-          d="M120 40 C158 40 181 66 183 104 C184 122 181 148 178 182 L62 182 C59 148 56 122 57 104 C59 66 82 40 120 40 Z"
+          d="M120 36 C170 36 198 58 198 94 C199 122 194 152 188 182 L52 182 C46 152 41 122 42 94 C42 58 70 36 120 36 Z"
           fill={HAIR}
         />
       </g>
@@ -86,9 +86,9 @@ export default function CharacterSvg() {
       <ellipse cx="86" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
       <ellipse cx="154" cy="142" rx="10" ry="6.5" fill={BLUSH} opacity="0.4" />
 
-      {/* eyebrows: stay above the eyes' inner corners */}
-      <path d="M81 108 C86 99 97 98 103 105" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
-      <path d="M137 105 C143 98 154 99 159 108" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      {/* eyebrows: closer to a flat line than an arch, and sitting closer to the eyes */}
+      <path d="M81 116 C88 112 96 112 103 116" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
+      <path d="M137 116 C144 112 152 112 159 116" fill="none" stroke={HAIR} strokeWidth="4" strokeLinecap="round" />
 
       {/* eyes: plain round sockets, no eyelid cap or lash. A little closer together and a little
           bigger than before, and moved down with the rest of the face (nose/mouth included) so
@@ -126,13 +126,13 @@ export default function CharacterSvg() {
           transition: "transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
         }}
       >
-        <path d="M78 118 L70 62 C70 52 76 50 83.5 50 C91 50 97 52 97 62 L90 98 Z" fill={HAIR} />
-        <path d="M108 106 L101 54 C101 44 108 42 120 42 C132 42 139 44 139 54 L132 106 Z" fill={HAIR} />
-        <path d="M150 98 L143 62 C143 52 149 50 156.5 50 C164 50 170 52 170 62 L162 118 Z" fill={HAIR} />
+        <path d="M72 120 L64 60 C64 50 70 48 78 48 C87 48 99 50 99 60 L92 98 Z" fill={HAIR} />
+        <path d="M107 106 L99 52 C99 42 107 40 120 40 C133 40 141 42 141 52 L133 106 Z" fill={HAIR} />
+        <path d="M168 120 L176 60 C176 50 170 48 162 48 C153 48 141 50 141 60 L148 98 Z" fill={HAIR} />
         {/* aegyo-meori: two thin wisps at the temple, in front of the ear, separate from the
             main fringe */}
-        <path d="M63 70 C63 65 69 63 72 67 L69 146 C67 150 63 148 63 143 Z" fill={HAIR} />
-        <path d="M177 70 C177 65 171 63 168 67 L171 146 C173 150 177 148 177 143 Z" fill={HAIR} />
+        <path d="M60 70 C60 65 66 63 69 67 L66 146 C64 150 60 148 60 143 Z" fill={HAIR} />
+        <path d="M180 70 C180 65 174 63 171 67 L174 146 C176 150 180 148 180 143 Z" fill={HAIR} />
       </g>
     </svg>
   );
