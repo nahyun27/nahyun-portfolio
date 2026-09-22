@@ -253,12 +253,15 @@ function Bubble({
         onClick={() => onPop(id, text)}
         data-cursor-hover
         aria-label={`${text}, click to pop`}
-        className="glass-chip hv-mint font-bold tracking-[0.02em] grid place-items-center text-center"
+        className="glass-chip hv-mint font-semibold tracking-[0.02em] grid place-items-center text-center"
         style={{
           width: size,
           height: size,
           borderRadius: "50%",
-          color: "var(--t3)",
+          // it's a background element, not something meant to be read - faint on purpose, the
+          // hv-mint hover rule (!important) still lights it up clearly on contact
+          color: "var(--t6)",
+          opacity: 0.6,
           fontFamily: "'Inter', sans-serif",
           fontSize: font,
           lineHeight: 1.15,
