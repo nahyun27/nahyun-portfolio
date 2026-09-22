@@ -1,17 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import CharacterSvg from "@/components/mascot/CharacterSvg";
 
 /**
  * The site mascot: a bob-haired SVG character rigged with plain CSS/JS, not a static image.
- * Eyes track the cursor, it blinks on an interval, smiles on hover, waves and talks on click, and
- * breathes gently while idle. Everything except the arm lives in one CharacterSvg; the arm is a
- * separate unclipped layer on top so the waving hand can swing past the circular frame.
+ * Eyes track the cursor, it blinks on an interval, smiles on hover, winks and talks on click, and
+ * breathes gently while idle. There's no drawn or emoji arm on the character itself - instead the
+ * button carries `data-cursor-emoji="👋"`, which CustomCursor reads to turn the cursor itself
+ * into a waving hand while it's over the avatar (see CustomCursor.tsx).
  */
-
-const WAVE_KEYFRAMES = { rotate: [0, -18, 10, -16, 6, 0], transition: { duration: 1.1, times: [0, 0.2, 0.4, 0.6, 0.8, 1], ease: "easeInOut" as const } };
 
 const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free to look around ✨"];
 
@@ -27,7 +26,6 @@ type MouthState = "neutral" | "smile" | "open";
 
 export default function Mascot() {
   const reduce = useReducedMotion();
-  const arm = useAnimationControls();
   const rootRef = useRef<HTMLDivElement>(null);
   const [bubbleOpen, setBubbleOpen] = useState(false);
   const [greeting, setGreeting] = useState(0);
@@ -62,11 +60,6 @@ export default function Mascot() {
     set("eyeNormalR", state === "open");
     set("eyeSmileL", state === "smile");
     set("eyeSmileR", state === "smile");
-  };
-
-  const wave = () => {
-    if (reduce) return;
-    arm.start(WAVE_KEYFRAMES);
   };
 
   const talk = (ms = 900) => {
@@ -149,14 +142,12 @@ export default function Mascot() {
   useEffect(() => {
     if (reduce) return;
     const hello = window.setTimeout(() => {
-      wave();
       talk(1400);
       showBubble();
     }, 1500);
 
     const scheduleIdle = () => {
       idleTimer.current = window.setTimeout(() => {
-        wave();
         talk(1200);
         setGreeting((g) => (g + 1) % GREETINGS.length);
         showBubble(3200);
@@ -176,7 +167,6 @@ export default function Mascot() {
   }, [reduce]);
 
   const greet = () => {
-    wave();
     talk(1100);
     setGreeting((g) => (g + 1) % GREETINGS.length);
     showBubble();
@@ -235,7 +225,7 @@ export default function Mascot() {
             setMouth("neutral");
             setEyes("open");
           }}
-          data-cursor-hover
+          data-cursor-emoji="👋"
           aria-label="Say hi back"
           className="relative"
           style={{ cursor: "none" }}
@@ -265,25 +255,6 @@ export default function Mascot() {
               <CharacterSvg />
             </div>
           </span>
-
-          {/* just a waving hand emoji, no drawn arm/sleeve — a drawn limb never quite looked
-              attached to the body no matter where the shoulder joint was placed, and a drawn
-              floating hand still read as an odd disembodied blob. The emoji reads instantly as
-              "hand waving" on its own, no attachment needed. */}
-          <motion.span
-            aria-hidden
-            animate={arm}
-            className="absolute select-none pointer-events-none"
-            style={{
-              right: "-6%",
-              top: "2%",
-              fontSize: "clamp(20px, 2.6vw, 30px)",
-              transformOrigin: "70% 80%",
-              filter: "drop-shadow(0 3px 6px rgba(0,0,0,0.25))",
-            }}
-          >
-            👋
-          </motion.span>
         </motion.button>
       </div>
     </div>
