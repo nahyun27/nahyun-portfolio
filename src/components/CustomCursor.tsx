@@ -24,6 +24,10 @@ export default function CustomCursor() {
 
   // when set, the cursor becomes this emoji instead of the usual ring/dot - see [data-cursor-emoji]
   const [cursorEmoji, setCursorEmoji] = useState<string | null>(null);
+  // the element currently under the cursor that opted in, so its emoji can be re-read live (an
+  // element can change its own data-cursor-emoji value - e.g. a wave while idle vs. a fist while
+  // being dragged - without the cursor needing a fresh mouseover to notice)
+  const emojiElRef = useRef<HTMLElement | null>(null);
 
   // Detect touch device safely inside a state/effect
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -43,6 +47,12 @@ export default function CustomCursor() {
       mouseY.set(e.clientY);
       dotX.set(e.clientX);
       dotY.set(e.clientY);
+      // catch up to the hovered element's current emoji, in case it changed its own attribute
+      // since the last mouseover (no new mouseover fires just from that)
+      if (emojiElRef.current) {
+        const live = emojiElRef.current.dataset.cursorEmoji ?? null;
+        setCursorEmoji((prev) => (prev === live ? prev : live));
+      }
     };
 
     const onOver = (e: MouseEvent) => {
@@ -50,6 +60,7 @@ export default function CustomCursor() {
       // an element opts into "cursor becomes this emoji" via data-cursor-emoji="<emoji>" - takes
       // over from the usual ring/dot entirely rather than combining with it (see the render below)
       const emojiEl = t.closest<HTMLElement>("[data-cursor-emoji]");
+      emojiElRef.current = emojiEl;
       if (emojiEl) {
         setCursorEmoji(emojiEl.dataset.cursorEmoji ?? null);
         return;
@@ -66,7 +77,10 @@ export default function CustomCursor() {
     };
     const onOut = (e: MouseEvent) => {
       const t = e.target as HTMLElement;
-      if (t.closest("[data-cursor-emoji]")) setCursorEmoji(null);
+      if (t.closest("[data-cursor-emoji]")) {
+        setCursorEmoji(null);
+        emojiElRef.current = null;
+      }
       if (ringRef.current) {
         ringRef.current.style.width = "28px";
         ringRef.current.style.height = "28px";
