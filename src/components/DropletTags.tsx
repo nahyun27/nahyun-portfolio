@@ -258,23 +258,29 @@ function Bubble({
           width: size,
           height: size,
           borderRadius: "50%",
-          // it's a background element, not something meant to be read - faint on purpose, the
-          // hv-mint hover rule (!important) still lights it up clearly on contact
-          color: "var(--t6)",
+          // white text with a dark shadow/outline instead of a theme token or a flat fill colour
+          // - the bubble's own backdrop varies (page content shows through it at different
+          // points, and it sits over both light and dark themes), so nothing that just relies on
+          // a plain fill-vs-background contrast holds up everywhere. The dark shadow acts like a
+          // stroke around each letter, which stays legible over almost anything underneath it.
+          color: "rgba(255, 255, 255, 0.95)",
+          textShadow: "0 1px 3px rgba(0,0,0,0.5), 0 0 6px rgba(0,0,0,0.3)",
           fontFamily: "'Inter', sans-serif",
           fontSize: font,
           lineHeight: 1.15,
           padding: "0 8px",
           cursor: "none",
-          // a soap-bubble film instead of .glass-chip's own (fairly opaque in light mode)
-          // background: mostly see-through, plus a bright highlight glint up in the top-left and
-          // a fainter one lower-right, like light catching a curved surface. Raw white rgba, not
-          // theme tokens - a bubble's glint reads the same bright white against either theme.
+          // a soap-bubble film instead of .glass-chip's own (theme-dependent, and fairly opaque
+          // in light mode) background: mostly see-through - a stronger base here made the whole
+          // bubble read as a solid grey ball in dark mode, competing with the actual page content
+          // behind it - plus a bright highlight glint up in the top-left and a fainter one
+          // lower-right, like light catching a curved surface. Raw white rgba throughout, not
+          // theme tokens - a bubble's film reads the same against either theme on purpose.
           background:
-            "radial-gradient(circle at 30% 24%, rgba(255,255,255,0.9), rgba(255,255,255,0.16) 30%, transparent 52%), " +
-            "radial-gradient(circle at 74% 78%, rgba(255,255,255,0.22), transparent 42%), " +
-            "rgba(255,255,255,0.05)",
-          border: "1px solid rgba(255,255,255,0.4)",
+            "radial-gradient(circle at 30% 24%, rgba(255,255,255,0.85), rgba(255,255,255,0.2) 30%, transparent 55%), " +
+            "radial-gradient(circle at 74% 78%, rgba(255,255,255,0.25), transparent 45%), " +
+            "rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.35)",
         }}
         initial={{ opacity: 0, scale: 0.3 }}
         animate={controls}

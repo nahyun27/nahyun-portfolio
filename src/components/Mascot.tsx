@@ -116,8 +116,10 @@ export default function Mascot() {
     }, ms);
   };
 
-  // a quick one-eyed wink on click, left eye only - right eye is left alone, so it stays
-  // whatever it already was (open or smiling)
+  // a quick one-eyed wink on click. The right eye is forced open for the duration, even if it
+  // was mid-smile - a smile arc and the wink's closed arc sitting side by side look too similar
+  // and read as a glitch (one eye "stuck", not a wink) rather than a deliberate one-eyed close.
+  // An open eye next to the shut one is what actually reads as a wink.
   const wink = () => {
     if (reduce) return;
     const root = rootRef.current;
@@ -130,10 +132,14 @@ export default function Mascot() {
     set("eyeNormalL", false);
     set("eyeSmileL", false);
     set("eyeWinkL", true);
+    set("eyeSmileR", false);
+    set("eyeNormalR", true);
     winkTimer.current = window.setTimeout(() => {
       set("eyeWinkL", false);
       set("eyeSmileL", hovering.current);
       set("eyeNormalL", !hovering.current);
+      set("eyeSmileR", hovering.current);
+      set("eyeNormalR", !hovering.current);
     }, 260);
   };
 
