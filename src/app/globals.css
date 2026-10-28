@@ -179,14 +179,15 @@
   --shadow-rgb: 40, 90, 160;
   --shadow-k: 0.16;
 
+  /* cool tones only: the old peach and yellow orbs muddied the white surfaces */
   --orb-a: #19E3C0;
-  --orb-b: #FFC9A0;
+  --orb-b: #9FD4FF;
   --orb-c: #5CC0FF;
-  --orb-d: #FFE58F;
-  --orb-a-o: 0.34;
-  --orb-b-o: 0.3;
-  --orb-c-o: 0.32;
-  --orb-d-o: 0.26;
+  --orb-d: #A8F0DF;
+  --orb-a-o: 0.3;
+  --orb-b-o: 0.28;
+  --orb-c-o: 0.28;
+  --orb-d-o: 0.24;
   --grain-o: 0;
 }
 
@@ -218,6 +219,12 @@ h3,
 h4,
 h5 {
   font-family: var(--font-display);
+}
+
+/* keyboard focus only; mouse clicks stay clean */
+:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 3px;
 }
 
 ::selection {

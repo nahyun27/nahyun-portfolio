@@ -135,7 +135,7 @@ export default function HeroSection() {
 
       {/* At a glance */}
       <motion.dl {...fade(1.25)} className="section-inner w-full relative z-10" style={{ paddingBottom: 36 }}>
-        <div className="grid grid-cols-2 md:grid-cols-4" style={{ borderTop: "1px solid var(--w80)" }}>
+        <div className="grid grid-cols-2 md:grid-cols-4 max-w-[960px]" style={{ borderTop: "1px solid var(--w80)" }}>
           {HIGHLIGHTS.map((h, i) => (
             // 2 columns on phones, 4 from md: a divider sits left of every item that is not first in its row
             <div
