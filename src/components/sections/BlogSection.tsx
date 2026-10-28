@@ -83,26 +83,26 @@ function SeriesCard({ series, index }: { series: typeof SERIES[0]; index: number
       viewport={{ once: true, amount: 0.2 }}
       transition={{ delay: index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="glass glass-ring flex flex-col"
-      style={{ borderRadius: 28, padding: "28px 28px 18px", ["--ring-color" as string]: series.color, gap: 18 }}
+      style={{ borderRadius: "var(--radius-lg)", padding: "28px 28px 18px", ["--ring-color" as string]: series.color, gap: 18 }}
     >
       <div className="flex items-start justify-between" style={{ gap: 16 }}>
         <div className="min-w-0">
           <span
             className="inline-flex items-center"
-            style={{ gap: 7, padding: "4px 12px", borderRadius: 999, marginBottom: 14, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: series.color, background: tint(series.color, 12), border: `1px solid ${tint(series.color, 30)}` }}
+            style={{ gap: 7, padding: "4px 12px", borderRadius: 999, marginBottom: 14, fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", color: series.color, background: tint(series.color, 12), border: `1px solid ${tint(series.color, 30)}` }}
           >
             {isDone ? <Icon name="check" size={11} strokeWidth={3} /> : <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: 999, background: "currentColor" }} />}
             {isDone ? "Completed" : "In progress"}
           </span>
           <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(1.4rem, 2.2vw, 1.8rem)", letterSpacing: "-0.03em", lineHeight: 1.1, color: "var(--text)" }}>{series.title}</h3>
-          <p style={{ marginTop: 8, fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.6, color: "var(--t3)" }}>{series.description}</p>
+          <p style={{ marginTop: 8, fontFamily: "var(--font-body)", fontSize: 14, lineHeight: 1.6, color: "var(--t3)" }}>{series.description}</p>
         </div>
         <div className="shrink-0 text-right" style={{ fontFamily: "var(--font-display)" }}>
           <div style={{ fontWeight: 800, fontSize: 30, lineHeight: 1, letterSpacing: "-0.03em", color: "var(--text)", fontVariantNumeric: "tabular-nums" }}>
             {series.current}
             <span style={{ color: "var(--t5)", fontSize: 18 }}>/{series.total}</span>
           </div>
-          <div style={{ marginTop: 4, fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--t5)" }}>parts</div>
+          <div style={{ marginTop: 4, fontFamily: "var(--font-body)", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--t5)" }}>parts</div>
         </div>
       </div>
 
@@ -125,19 +125,19 @@ function SeriesCard({ series, index }: { series: typeof SERIES[0]; index: number
           const n = String(i + 1).padStart(2, "0");
           const inner = (
             <>
-              <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 800, letterSpacing: "0.08em", color: post.done ? series.color : "var(--t6)" }}>{n}</span>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 800, letterSpacing: "0.08em", color: post.done ? series.color : "var(--t6)" }}>{n}</span>
               <span className="min-w-0">
                 <span className="block truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 15, letterSpacing: "-0.01em", color: post.done ? "var(--text)" : "var(--t5)" }}>
                   {post.title.replace(/^Part \d+:\s*/, "")}
                 </span>
                 {"desc" in post && post.desc && (
-                  <span className="block truncate" style={{ marginTop: 2, fontFamily: "'Inter', sans-serif", fontSize: 12.5, color: "var(--t4)" }}>{post.desc}</span>
+                  <span className="block truncate" style={{ marginTop: 2, fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--t4)" }}>{post.desc}</span>
                 )}
               </span>
               {post.done ? (
                 <span className="transition-transform duration-300 group-hover/p:translate-x-0.5 group-hover/p:-translate-y-0.5" style={{ color: "var(--t3)" }}><ArrowUpRight size={16} /></span>
               ) : (
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t6)" }}>soon</span>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: 10, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t6)" }}>soon</span>
               )}
             </>
           );
@@ -192,7 +192,7 @@ function PostRow({ post, index }: { post: typeof POSTS[0]; index: number }) {
       />
       <span
         className="relative col-span-2 md:col-span-1 inline-flex items-center self-start md:self-center"
-        style={{ gap: 8, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color }}
+        style={{ gap: 8, fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 800, letterSpacing: "0.14em", textTransform: "uppercase", color }}
       >
         <span style={{ width: 9, height: 9, borderRadius: "50%", background: `radial-gradient(circle at 30% 26%, rgba(255,255,255,0.75) 0 18%, ${color} 42%)` }} />
         {post.category}
@@ -204,7 +204,7 @@ function PostRow({ post, index }: { post: typeof POSTS[0]; index: number }) {
         >
           {post.title}
         </span>
-        <span className="block" style={{ marginTop: 5, fontFamily: "'Inter', sans-serif", fontSize: 14, lineHeight: 1.55, color: "var(--t3)" }}>{post.desc}</span>
+        <span className="block" style={{ marginTop: 5, fontFamily: "var(--font-body)", fontSize: 14, lineHeight: 1.55, color: "var(--t3)" }}>{post.desc}</span>
       </span>
       <span
         className="relative grid place-items-center justify-self-end transition-all duration-500 group-hover:rotate-45"
@@ -222,9 +222,10 @@ export default function BlogSection() {
   const count = (c: string) => (c === "All" ? POSTS.length : POSTS.filter((p) => p.category === c).length);
 
   return (
-    <section id="blog" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
+    <section id="blog" className="relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <SectionHeader index="06" label="Writing" title="Thoughts & Articles." highlightWords={["Articles."]} marginBottom={40} />
+        <SectionHeader index="06" label="Writing" title="Thoughts & Articles." highlightWords={["Articles."]} marginBottom={40}
+          description="Long-form series and paper reviews from my blog, mostly in Korean." />
 
         {/* Series */}
         <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20, marginBottom: 72 }}>
@@ -247,7 +248,7 @@ export default function BlogSection() {
                   onClick={() => setActiveCategory(cat)}
                   data-cursor-hover
                   className="relative"
-                  style={{ padding: "7px 14px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: on ? "var(--mint)" : "var(--t3)", cursor: "none", transition: "color 0.25s ease" }}
+                  style={{ padding: "7px 14px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: "0.04em", color: on ? "var(--mint)" : "var(--t3)", cursor: "none", transition: "color 0.25s ease" }}
                 >
                   {on && (
                     <motion.span

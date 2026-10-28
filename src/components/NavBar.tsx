@@ -139,7 +139,7 @@ export default function NavBar() {
                   onClick={() => scrollTo(l.id)}
                   className="relative text-sm font-medium transition-colors duration-200"
                   style={{
-                    fontFamily: "'Inter', sans-serif",
+                    fontFamily: "var(--font-body)",
                     color: isActive ? "var(--mint)" : "var(--t3)",
                     fontWeight: isActive ? 600 : 500,
                     cursor: "none",
@@ -164,7 +164,7 @@ export default function NavBar() {
               style={{
                 background: "var(--fill-brand)",
                 color: "var(--on-mint)",
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "var(--font-body)",
                 borderRadius: 999,
                 cursor: "none",
                 padding: "0 20px",

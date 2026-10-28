@@ -39,12 +39,16 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
+    <section id="projects" className="relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <SectionHeader index="02" label="Projects" title="Selected Work." highlightWords={["Work."]} marginBottom={28} />
-        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 15, color: "var(--t3)", maxWidth: 520, marginBottom: 32, lineHeight: 1.7 }}>
-          Pick one. Each project opens as its own little world, and a few of them you can actually play with.
-        </p>
+        <SectionHeader
+          index="02"
+          label="Projects"
+          title="Selected Work."
+          highlightWords={["Work."]}
+          marginBottom={36}
+          description="Pick one. Each project opens as its own little world, and a few of them you can actually play with."
+        />
 
         <div>
           {PROJECTS.map((p, i) => (
@@ -69,7 +73,7 @@ export default function ProjectsSection() {
                 style={{ background: `radial-gradient(360px circle at var(--mx) var(--my), color-mix(in srgb, ${p.theme.accent} 30%, transparent), transparent 62%)` }}
               />
               <span className="relative grid items-center" style={{ gridTemplateColumns: "48px auto minmax(0,1fr) auto", gap: 18, padding: "16px 8px" }}>
-                <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", color: "var(--t5)" }}>{p.id}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 800, letterSpacing: "0.08em", color: "var(--t5)" }}>{p.id}</span>
                 <span
                   className="blob-morph hidden sm:grid place-items-center transition-all duration-500 group-hover:scale-110"
                   style={{
@@ -90,7 +94,7 @@ export default function ProjectsSection() {
                   >
                     {p.title}
                   </span>
-                  <span className="block truncate" style={{ marginTop: 6, fontFamily: "'Inter', sans-serif", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t4)" }}>
+                  <span className="block truncate" style={{ marginTop: 6, fontFamily: "var(--font-body)", fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t4)" }}>
                     {p.tags.slice(0, 4).join("  ·  ")}
                   </span>
                 </span>

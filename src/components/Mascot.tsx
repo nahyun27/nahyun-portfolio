@@ -264,7 +264,7 @@ export default function Mascot() {
               style={{
                 padding: "9px 16px",
                 borderRadius: "16px 8px 8px 16px",
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "var(--font-body)",
                 fontSize: 13,
                 fontWeight: 600,
                 color: "var(--text)",

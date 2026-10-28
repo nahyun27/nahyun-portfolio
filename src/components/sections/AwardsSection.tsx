@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import SectionHeader from "@/components/SectionHeader";
 
 const EXPERIENCES = [
@@ -16,85 +15,45 @@ const EXPERIENCES = [
 ];
 
 export default function AwardsSection() {
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.1 });
-
   return (
-    <section id="awards" ref={ref} className="min-h-screen flex items-center py-24 md:py-40 relative z-10"
-      style={{ backgroundColor: "transparent" }}>
+    <section id="awards" className="relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-24">
-          <div className="md:w-1/3 shrink-0 relative">
-            <div className="sticky top-40">
-              <SectionHeader index="05" label="Experiences" title="Awards & Experience." highlightWords={["Experience."]}
-                size="clamp(2rem, 4.2vw, 3.25rem)" marginBottom={0} />
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] gap-10 lg:gap-20">
+          <div>
+            <div className="lg:sticky lg:top-32">
+              <SectionHeader index="05" label="Experience" title="Awards & Experience." highlightWords={["Experience."]} marginBottom={0} />
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col gap-0 border-t" style={{ borderColor: 'var(--w50)' }}>
+          <ol style={{ borderTop: "1px solid var(--w70)" }}>
             {EXPERIENCES.map((ex, i) => (
-              <motion.div key={ex.title + i}
-                initial={{ opacity: 0, x: 20 }}
-                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-                transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-                className="group flex flex-row sm:flex-row sm:items-center justify-between py-2 sm:py-3 pr-4 sm:pr-8 gap-2 sm:gap-10 border-b cursor-default transition-all duration-300"
-                style={{ borderColor: 'var(--w50)', padding: '10px' }}
-                onMouseEnter={(e) => {
-                  if ('ontouchstart' in window) return;
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.backgroundColor = "rgba(var(--mint-rgb),0.04)";
-                  el.style.paddingLeft = "24px";
-                }}
-                onMouseLeave={(e) => {
-                  if ('ontouchstart' in window) return;
-                  const el = e.currentTarget as HTMLDivElement;
-                  el.style.backgroundColor = "transparent";
-                  el.style.paddingLeft = "0px";
-                }}
+              <motion.li
+                key={ex.title}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.5 }}
+                transition={{ delay: (i % 4) * 0.05, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative grid grid-cols-[56px_minmax(0,1fr)] sm:grid-cols-[72px_minmax(0,1fr)] gap-x-4 py-5 px-2 transition-colors duration-300 hover:bg-[var(--w30)]"
+                style={{ borderBottom: "1px solid var(--w70)" }}
               >
-                <div className="flex items-start gap-3 sm:gap-5 flex-1 min-w-0">
-                  <div className="mt-1 shrink-0 w-[2px] h-[24px] rounded-full scale-y-0 origin-top group-hover:scale-y-100 transition-transform duration-300 hidden sm:block"
-                    style={{ backgroundColor: "var(--mint)" }} />
-                  <div className="min-w-0 flex-1">
-                    {/* Mobile: title on left, year on right */}
-                    <div className="flex items-start justify-between gap-2 sm:hidden">
-                      <h3 className="font-bold text-base transition-colors duration-300 group-hover:text-[color:var(--text)]"
-                        style={{ fontFamily: "var(--font-display)", color: "var(--text)", lineHeight: "1.4" }}>
-                        {ex.title}
-                      </h3>
-                      <span className="shrink-0 text-[10px] font-bold rounded-full text-[color:var(--mint)] mt-0.5"
-                        style={{
-                          border: "1px solid rgba(var(--mint-rgb),0.3)",
-                          fontFamily: "'Inter', sans-serif",
-                          letterSpacing: "0.05em",
-                          padding: "2px 7px",
-                        }}>
-                        {ex.year}
-                      </span>
-                    </div>
-                    {/* Desktop: title without inline badge */}
-                    <h3 className="font-bold text-xl transition-colors duration-300 group-hover:text-[color:var(--text)] hidden sm:block"
-                      style={{ fontFamily: "var(--font-display)", color: "var(--text)", lineHeight: "1.3" }}>
-                      {ex.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm mt-1 sm:mt-2" style={{ color: "var(--t3)", fontFamily: "'Inter', sans-serif", lineHeight: "1.6" }}>
-                      {ex.org}
-                    </p>
-                  </div>
-                </div>
-                {/* Desktop: badge on right */}
-                <span className="hidden sm:inline-flex shrink-0 self-auto text-xs font-bold px-4 py-1.5 rounded-full transition-all duration-300 text-[color:var(--mint)] group-hover:bg-[image:var(--fill-brand)] group-hover:text-[color:var(--on-mint)] group-hover:shadow-[0_0_12px_rgba(var(--mint-rgb),0.6)]"
-                  style={{
-                    border: "1px solid rgba(var(--mint-rgb),0.3)",
-                    fontFamily: "'Inter', sans-serif",
-                    letterSpacing: "0.05em",
-                    padding: "4px 8px",
-                  }}>
+                <span
+                  className="pt-1 transition-colors duration-300 group-hover:text-[color:var(--mint)]"
+                  style={{ fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 800, letterSpacing: "0.06em", color: "var(--t4)", fontVariantNumeric: "tabular-nums" }}
+                >
                   {ex.year}
                 </span>
-              </motion.div>
+                <span className="min-w-0">
+                  <span className="block transition-transform duration-500 group-hover:translate-x-1"
+                    style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(1.02rem, 1.6vw, 1.2rem)", letterSpacing: "-0.015em", lineHeight: 1.35, color: "var(--text)" }}>
+                    {ex.title}
+                  </span>
+                  <span className="block mt-1.5" style={{ fontFamily: "var(--font-body)", fontSize: 13.5, lineHeight: 1.6, color: "var(--t3)" }}>
+                    {ex.org}
+                  </span>
+                </span>
+              </motion.li>
             ))}
-          </div>
+          </ol>
         </div>
       </div>
     </section>

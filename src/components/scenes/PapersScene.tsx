@@ -260,7 +260,7 @@ export default function PapersScene({ theme }: { theme: SceneTheme }) {
   };
 
   const btn = (primary: boolean): React.CSSProperties => ({
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: 12,
     fontWeight: 700,
     padding: "8px 16px",

@@ -63,7 +63,7 @@ function StageTabs({ tabs, theme }: { tabs: { label: string; node: React.ReactNo
               data-cursor-hover
               aria-pressed={i === k}
               style={{
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "var(--font-body)",
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: "0.06em",
@@ -142,7 +142,7 @@ function SceneMedia({ media, theme }: { media: ProjectMedia[]; theme: SceneTheme
               data-cursor-hover
               aria-pressed={i === k}
               style={{
-                fontFamily: "'Inter', sans-serif",
+                fontFamily: "var(--font-body)",
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: "0.1em",
@@ -322,7 +322,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
     cursor: "none",
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: 13,
     fontWeight: 700,
   };
@@ -455,7 +455,7 @@ export default function ProjectScene({ projects, startIndex, origin, onClose, ba
                     height: 46,
                     padding: "0 22px",
                     borderRadius: 999,
-                    fontFamily: "'Inter', sans-serif",
+                    fontFamily: "var(--font-body)",
                     fontSize: 13,
                     fontWeight: 700,
                     cursor: "none",
