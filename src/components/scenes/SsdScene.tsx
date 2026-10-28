@@ -204,7 +204,7 @@ export default function SsdScene({ theme }: { theme: SceneTheme }) {
   }, [theme]);
 
   const btn = (active = false): React.CSSProperties => ({
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "var(--font-body)",
     fontSize: 12,
     fontWeight: 700,
     padding: "7px 14px",

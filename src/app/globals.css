@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 @import "tailwindcss";
@@ -8,6 +8,24 @@
 
   /* headings: Plus Jakarta Sans for Latin, Pretendard for Hangul */
   --font-display: 'Plus Jakarta Sans', 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+  /* body: Inter for Latin, Pretendard for Hangul (blog titles, awards) */
+  --font-body: 'Inter', 'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* type scale */
+  --fs-display: clamp(3.2rem, 11.5vw, 10rem);
+  --fs-h2: clamp(2.2rem, 5vw, 3.75rem);
+  --fs-h3: clamp(1.3rem, 2vw, 1.6rem);
+  --fs-lead: clamp(1.05rem, 1.6vw, 1.25rem);
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-label: 11px;
+
+  /* rhythm and shape */
+  --space-section: clamp(88px, 11vw, 152px);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* surfaces */
   --bg: #0C0C0F;
@@ -172,34 +190,17 @@
   --grain-o: 0;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* margin/padding reset comes from Tailwind preflight (@layer base), so p-* and m-* utilities work */
 
 html {
   cursor: none;
   background-color: var(--bg);
 }
 
-@media (min-width: 768px) {
-  html {
-    scroll-snap-type: y mandatory;
-  }
-
-  section,
-  footer {
-    scroll-snap-align: start;
-  }
-}
-
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   overflow-x: hidden;
   cursor: none;
   -webkit-font-smoothing: antialiased;
@@ -356,11 +357,20 @@ html.theme-anim *::after {
   }
 }
 
-/* Tailwind padding utilities are overridden by the reset above, so section rhythm lives here.
-   Top padding clears the floating nav pill. */
+/* shared vertical rhythm; the top value also clears the floating nav pill */
 section[id]:not(#hero) {
-  padding-top: 112px;
-  padding-bottom: 72px;
+  padding-top: var(--space-section);
+  padding-bottom: calc(var(--space-section) * 0.6);
+}
+
+/* small uppercase label used for eyebrows, meta and group titles */
+.t-label {
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--t4);
 }
 
 /* ---------- glass ----------
@@ -506,27 +516,14 @@ section[id]:not(#hero) {
   66% { transform: translate3d(-20px, -20px, 0) scale(0.95); }
 }
 
-/* hero orbit spins in CSS too, so no per frame JS or filter repaint */
-.hero-orbit {
-  transform-origin: center center;
-  will-change: transform;
-  animation: hero-spin 160s linear infinite;
-}
-
-@keyframes hero-spin {
-  to { transform: rotate(360deg); }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .orb,
-  .hero-orbit {
+  .orb {
     animation: none;
   }
 }
 
 /* while scrolling, hold the backdrop still so glass cards do not re-blur a moving background every frame */
-html.is-scrolling .orb,
-html.is-scrolling .hero-orbit {
+html.is-scrolling .orb {
   animation-play-state: paused;
 }
 

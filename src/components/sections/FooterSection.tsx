@@ -181,14 +181,14 @@ export default function FooterSection() {
           className="flex flex-wrap items-center"
           style={{ gap: 10 }}
         >
-          <span className="glass-chip inline-flex items-center" style={{ gap: 10, padding: "8px 16px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t2)" }}>
+          <span className="glass-chip inline-flex items-center" style={{ gap: 10, padding: "8px 16px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t2)" }}>
             <span className="relative flex" style={{ width: 8, height: 8 }}>
               <span className="absolute inline-flex w-full h-full rounded-full animate-ping" style={{ background: "#22C55E", opacity: 0.6 }} />
               <span className="relative inline-flex w-full h-full rounded-full" style={{ background: "#22C55E" }} />
             </span>
             Open to collaborations
           </span>
-          <span className="glass-chip inline-flex items-center" style={{ gap: 8, padding: "8px 16px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t3)", fontVariantNumeric: "tabular-nums", minWidth: 120, justifyContent: "center" }}>
+          <span className="glass-chip inline-flex items-center" style={{ gap: 8, padding: "8px 16px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--t3)", fontVariantNumeric: "tabular-nums", minWidth: 120, justifyContent: "center" }}>
             Seoul {time || "--:--"}
           </span>
         </motion.div>
@@ -234,7 +234,7 @@ export default function FooterSection() {
               href={`mailto:${EMAIL}`}
               data-cursor-hover
               className="group inline-flex items-center transition-shadow duration-300 hover:shadow-[0_24px_54px_-14px_rgba(var(--mint-rgb),0.7)]"
-              style={{ gap: 14, height: 68, padding: "0 38px", borderRadius: 999, background: "var(--fill-brand)", color: "var(--on-mint)", fontFamily: "'Inter', sans-serif", fontSize: 18, fontWeight: 800, cursor: "none" }}
+              style={{ gap: 14, height: 68, padding: "0 38px", borderRadius: 999, background: "var(--fill-brand)", color: "var(--on-mint)", fontFamily: "var(--font-body)", fontSize: 18, fontWeight: 800, cursor: "none" }}
             >
               Say Hello
               <span className="transition-transform duration-500 group-hover:rotate-45"><Arrow /></span>
@@ -246,7 +246,7 @@ export default function FooterSection() {
             data-cursor-hover
             aria-live="polite"
             className="glass-chip hv-mint inline-flex items-center transition-all duration-300"
-            style={{ gap: 12, height: 68, padding: "0 28px", borderRadius: 999, color: "var(--text)", fontFamily: "'Inter', sans-serif", fontSize: 16, fontWeight: 700, cursor: "none" }}
+            style={{ gap: 12, height: 68, padding: "0 28px", borderRadius: 999, color: "var(--text)", fontFamily: "var(--font-body)", fontSize: 16, fontWeight: 700, cursor: "none" }}
           >
             {copied ? (
               <>
@@ -273,7 +273,7 @@ export default function FooterSection() {
             <span style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 26, letterSpacing: "-0.04em", color: "var(--text)" }}>
               NK<span style={{ color: "var(--mint)" }}>.</span>
             </span>
-            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: "var(--t4)" }}>© {new Date().getFullYear()} Nahyun Kim</span>
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 13, color: "var(--t4)" }}>© {new Date().getFullYear()} Nahyun Kim</span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center" style={{ gap: 8 }}>
@@ -285,7 +285,7 @@ export default function FooterSection() {
                 rel="noopener noreferrer"
                 data-cursor-hover
                 className="group glass-chip hv-mint inline-flex items-center transition-all duration-300"
-                style={{ gap: 7, height: 40, padding: "0 16px", borderRadius: 999, color: "var(--t2)", fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 700, cursor: "none" }}
+                style={{ gap: 7, height: 40, padding: "0 16px", borderRadius: 999, color: "var(--t2)", fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 700, cursor: "none" }}
               >
                 {l.label}
                 <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" style={{ opacity: 0.7 }}>
@@ -300,7 +300,7 @@ export default function FooterSection() {
               aria-label="Open the site terminal"
               title="or press the ` key"
               className="inline-flex items-center transition-all duration-300 hover:-translate-y-0.5"
-              style={{ gap: 7, height: 40, padding: "0 16px", borderRadius: 999, color: "var(--mint)", background: "rgba(var(--mint-rgb),0.1)", border: "1px solid rgba(var(--mint-rgb),0.35)", fontFamily: "ui-monospace, 'SF Mono', Menlo, monospace", fontSize: 13, fontWeight: 700, cursor: "none" }}
+              style={{ gap: 7, height: 40, padding: "0 16px", borderRadius: 999, color: "var(--mint)", background: "rgba(var(--mint-rgb),0.1)", border: "1px solid rgba(var(--mint-rgb),0.35)", fontFamily: "var(--font-mono)", fontSize: 13, fontWeight: 700, cursor: "none" }}
             >
               {">_"} terminal
             </button>

@@ -35,7 +35,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       onFocusCapture={() => setLive(true)}
       onBlurCapture={() => setLive(false)}
       className={`glass glass-ring group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
-      style={{ borderRadius: 30, ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
+      style={{ borderRadius: "var(--radius-lg)", ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
     >
       {/* the project's own colour blooms under the cursor */}
       <span
@@ -60,7 +60,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
         )}
         <span
           className="glass-chip absolute grid place-items-center"
-          style={{ left: 16, top: 16, height: 30, padding: "0 12px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#fff", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)" }}
+          style={{ left: 16, top: 16, height: 30, padding: "0 12px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#fff", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)" }}
         >
           {p.id}
         </span>
@@ -80,7 +80,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
             border: "1px solid rgba(255,255,255,0.5)",
             backdropFilter: "blur(10px)",
             WebkitBackdropFilter: "blur(10px)",
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "var(--font-body)",
             fontSize: 12,
             fontWeight: 800,
             letterSpacing: "0.14em",
@@ -113,7 +113,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
 
         <p
           style={{
-            fontFamily: "'Inter', sans-serif",
+            fontFamily: "var(--font-body)",
             fontSize: 15,
             lineHeight: 1.65,
             color: "var(--t3)",
@@ -128,7 +128,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
 
         <div className="flex flex-wrap" style={{ gap: 6 }}>
           {p.tags.map((t) => (
-            <span key={t} style={{ padding: "4px 11px", borderRadius: 999, fontFamily: "'Inter', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--t3)", background: "var(--w40)", border: "1px solid var(--w80)" }}>
+            <span key={t} style={{ padding: "4px 11px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--t3)", background: "var(--w40)", border: "1px solid var(--w80)" }}>
               {t}
             </span>
           ))}
@@ -142,7 +142,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
             rel="noopener noreferrer"
             data-cursor-hover
             className="inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-8px_rgba(var(--mint-rgb),0.6)]"
-            style={{ gap: 10, height: 52, padding: "0 28px", borderRadius: 999, background: "var(--fill-brand)", color: "var(--on-mint)", fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 800, cursor: "none", flex: featured ? "0 0 auto" : "1 1 auto" }}
+            style={{ gap: 10, height: 52, padding: "0 28px", borderRadius: 999, background: "var(--fill-brand)", color: "var(--on-mint)", fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 800, cursor: "none", flex: featured ? "0 0 auto" : "1 1 auto" }}
           >
             {LINK_ICONS[primary.kind]}
             {primary.label}
@@ -156,7 +156,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
               rel="noopener noreferrer"
               data-cursor-hover
               className="glass-chip hv-mint inline-flex items-center justify-center transition-all duration-300 hover:-translate-y-0.5"
-              style={{ gap: 10, height: 52, padding: "0 24px", borderRadius: 999, color: "var(--text)", fontFamily: "'Inter', sans-serif", fontSize: 15, fontWeight: 700, cursor: "none" }}
+              style={{ gap: 10, height: 52, padding: "0 24px", borderRadius: 999, color: "var(--text)", fontFamily: "var(--font-body)", fontSize: 15, fontWeight: 700, cursor: "none" }}
             >
               {LINK_ICONS[l.kind]}
               {l.label}
@@ -182,9 +182,10 @@ export default function CreativeSection() {
   };
 
   return (
-    <section id="creative" className="min-h-screen flex items-center relative z-10" style={{ backgroundColor: "transparent" }}>
+    <section id="creative" className="relative z-10" style={{ backgroundColor: "transparent" }}>
       <div className="section-inner w-full">
-        <SectionHeader index="04" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} marginBottom={36} />
+        <SectionHeader index="03" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} marginBottom={36}
+          description="Games and web toys I built for fun. Every one of them is live, so go ahead and play." />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
           {SIDE_PROJECTS.map((p, i) => (

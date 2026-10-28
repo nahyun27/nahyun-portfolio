@@ -31,7 +31,7 @@ export function Eyebrow({ index, label }: { index: string; label: string }) {
           borderRadius: 999,
           background: "var(--fill-brand)",
           color: "var(--on-mint)",
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "var(--font-body)",
           fontSize: 11,
           fontWeight: 800,
           letterSpacing: "0.04em",
@@ -41,7 +41,7 @@ export function Eyebrow({ index, label }: { index: string; label: string }) {
       </span>
       <span
         style={{
-          fontFamily: "'Inter', sans-serif",
+          fontFamily: "var(--font-body)",
           fontSize: 12,
           fontWeight: 600,
           letterSpacing: "0.14em",
@@ -60,6 +60,8 @@ interface SectionHeaderProps {
   label: string;
   title: string;
   highlightWords?: string[];
+  /** one or two sentences under the title */
+  description?: React.ReactNode;
   /** css font-size for the title */
   size?: string;
   marginBottom?: number;
@@ -70,7 +72,8 @@ export default function SectionHeader({
   label,
   title,
   highlightWords = [],
-  size = "clamp(2rem, 5.4vw, 3.75rem)",
+  description,
+  size = "var(--fs-h2)",
   marginBottom = 48,
 }: SectionHeaderProps) {
   return (
@@ -84,6 +87,11 @@ export default function SectionHeader({
           delay={0.1}
         />
       </div>
+      {description && (
+        <p style={{ marginTop: 16, maxWidth: 560, fontFamily: "var(--font-body)", fontSize: "var(--fs-body)", lineHeight: 1.7, color: "var(--t3)" }}>
+          {description}
+        </p>
+      )}
     </div>
   );
 }

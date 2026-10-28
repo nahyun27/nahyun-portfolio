@@ -106,7 +106,7 @@ export default function SiteTerminal() {
             animate={{ opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 260, damping: 24 } }}
             exit={{ opacity: 0, y: 24, scale: 0.97, transition: { duration: 0.18 } }}
           >
-            <div className="flex items-center justify-between" style={{ marginBottom: 10, color: "rgba(215,247,222,0.75)", fontFamily: "'Inter', sans-serif", fontSize: 12 }}>
+            <div className="flex items-center justify-between" style={{ marginBottom: 10, color: "rgba(215,247,222,0.75)", fontFamily: "var(--font-body)", fontSize: 12 }}>
               <span>Site terminal. Esc to close, ` to toggle.</span>
               <button onClick={close} data-cursor-hover style={{ padding: "4px 12px", borderRadius: 999, border: "1px solid rgba(255,255,255,0.2)", cursor: "none" }}>
                 close

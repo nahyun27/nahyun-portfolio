@@ -114,7 +114,7 @@ export default function LiquidStage({ theme, icon, label }: { theme: SceneTheme;
         </div>
       </div>
 
-      <div style={{ position: "absolute", left: 22, bottom: 18, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: rgba(theme.fg, 0.55), fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ position: "absolute", left: 22, bottom: 18, fontSize: 12, letterSpacing: "0.14em", textTransform: "uppercase", color: rgba(theme.fg, 0.55), fontFamily: "var(--font-body)" }}>
         {label}
       </div>
     </div>
