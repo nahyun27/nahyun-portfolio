@@ -245,16 +245,20 @@ export default function Mascot() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
 
-  // fly to the seat while it is in view, back home once it is mostly gone (the gap between the two
-  // thresholds keeps it from flickering at the edge). Springs on the way, then pinned exactly to the
-  // seat on every scroll frame so it does not trail behind while you read.
+  // pop into the seat while it is in view, back home once it is mostly gone (the gap between the two
+  // thresholds keeps it from flickering at the edge). It shrinks away where it is and springs up in
+  // the new spot instead of flying across the page, so a fast scroll never leaves it chasing the
+  // seat. While seated it is pinned to the seat on every scroll frame.
   useEffect(() => {
     const seat = document.querySelector<HTMLElement>("[data-mascot-dock]");
     const home = homeRef.current;
     if (!seat || !home) return;
 
     let isDocked = false;
-    let settled = true;
+    // false while it is shrinking away; the position jumps once it is invisible
+    let placed = true;
+    // true while it is growing back in, so scroll updates leave the scale alone
+    let growing = false;
     let flight = 0;
     let raf = 0;
     let running: { stop: () => void }[] = [];
@@ -270,33 +274,42 @@ export default function Mascot() {
       };
     };
 
-    const fly = () => {
+    const pop = async () => {
       running.forEach((a) => a.stop());
-      const t = target();
+      const id = ++flight;
       if (reduce) {
+        const t = target();
         dockX.set(t.x);
         dockY.set(t.y);
         dockScale.set(t.scale);
-        settled = true;
+        placed = true;
         return;
       }
-      settled = false;
-      const id = ++flight;
-      const spring = { type: "spring", stiffness: 160, damping: 15, mass: 0.9 } as const;
-      running = [animate(dockX, t.x, spring), animate(dockY, t.y, spring), animate(dockScale, t.scale, spring)];
-      Promise.all(running).then(() => {
-        if (id === flight) settled = true;
-      });
+      placed = false;
+      growing = false;
+      const out = animate(dockScale, 0, { duration: 0.14, ease: "easeIn" });
+      running = [out];
+      await out;
+      // a newer dock or undock started meanwhile: let that one finish the job
+      if (id !== flight) return;
+      const t = target();
+      dockX.set(t.x);
+      dockY.set(t.y);
+      placed = true;
+      growing = true;
+      const grow = animate(dockScale, t.scale, { type: "spring", stiffness: 520, damping: 16 });
+      running = [grow];
+      await grow;
+      if (id === flight) growing = false;
     };
 
     const follow = () => {
       raf = 0;
-      if (!isDocked) return;
-      if (!settled) return fly();
+      if (!isDocked || !placed) return;
       const t = target();
       dockX.set(t.x);
       dockY.set(t.y);
-      dockScale.set(t.scale);
+      if (!growing) dockScale.set(t.scale);
     };
     const onScroll = () => {
       if (isDocked && !raf) raf = window.requestAnimationFrame(follow);
@@ -309,7 +322,7 @@ export default function Mascot() {
         else if (isDocked && r < 0.5) isDocked = false;
         else return;
         setDocked(isDocked);
-        fly();
+        pop();
       },
       // the top margin keeps the seat from counting as visible while it is under the nav pill
       { threshold: [0, 0.5, 0.95], rootMargin: "-80px 0px 0px 0px" },

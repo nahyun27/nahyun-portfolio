@@ -9,7 +9,6 @@ const HIGHLIGHTS = [
   { value: "2", label: "Patents filed" },
   { value: "3", label: "Papers" },
   { value: "10+", label: "Projects shipped" },
-  { value: "NRF", label: "Research fellow" },
 ];
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -135,9 +134,9 @@ export default function HeroSection() {
 
       {/* At a glance */}
       <motion.dl {...fade(1.25)} className="section-inner w-full relative z-10" style={{ paddingBottom: 36 }}>
-        <div className="tilt-group grid grid-cols-2 md:grid-cols-4 gap-3 max-w-[960px]">
+        <div className="tilt-group grid grid-cols-3 gap-2.5 sm:gap-3 max-w-[760px]">
           {HIGHLIGHTS.map((h) => (
-            <div key={h.label} className="glass glass-ring tilt flex flex-col gap-1.5 px-5 py-4" style={{ borderRadius: "var(--radius-md)" }}>
+            <div key={h.label} className="glass glass-ring tilt flex flex-col gap-1.5 px-3.5 sm:px-5 py-4" style={{ borderRadius: "var(--radius-md)" }}>
               <dt className="t-label">{h.label}</dt>
               <dd className="order-first" style={{ fontFamily: "var(--font-display)", fontWeight: 800, fontSize: "clamp(1.6rem, 3vw, 2.2rem)", letterSpacing: "-0.03em", lineHeight: 1, color: "var(--text)" }}>
                 {h.value}
