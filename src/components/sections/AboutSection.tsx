@@ -52,6 +52,14 @@ export default function AboutSection() {
               delay={0.07}
             />
 
+            {/* the mascot flies in and sits here like a profile photo (see Mascot.tsx) */}
+            <div
+              data-mascot-dock
+              aria-hidden
+              className="rounded-full shrink-0"
+              style={{ width: "clamp(104px, 11vw, 140px)", height: "clamp(104px, 11vw, 140px)", border: "2px dashed var(--w150)", background: "var(--w30)" }}
+            />
+
             <motion.div {...f(0.15)} className="flex flex-col gap-4" style={{ maxWidth: 520, fontFamily: "var(--font-body)", fontSize: "var(--fs-lead)", lineHeight: 1.75, color: "var(--t3)" }}>
               <p>
                 Ph.D. student in Computer Science at Hanyang University,{" "}

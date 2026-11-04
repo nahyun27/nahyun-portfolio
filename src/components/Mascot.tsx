@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from "framer-motion";
 import CharacterSvg from "@/components/mascot/CharacterSvg";
 
 /**
@@ -10,6 +10,9 @@ import CharacterSvg from "@/components/mascot/CharacterSvg";
  * breathes gently while idle. There's no drawn or emoji arm on the character itself - instead the
  * button carries `data-cursor-emoji="👋"`, which CustomCursor reads to turn the cursor itself
  * into a waving hand while it's over the avatar (see CustomCursor.tsx).
+ *
+ * When the About section's seat (an element with `data-mascot-dock`) comes into view, the avatar
+ * springs over and sits in it like a profile photo, then flies back to its corner once you leave.
  */
 
 const GREETINGS = ["Hi, I'm Nahyun 👋", "Thanks for stopping by!", "Feel free to look around ✨"];
@@ -48,6 +51,13 @@ export default function Mascot() {
   const hovering = useRef(false);
   const clickTimes = useRef<number[]>([]);
   const greetingIndex = useRef(0);
+
+  // docking into the About seat: an offset + scale from the avatar's home corner
+  const [docked, setDocked] = useState(false);
+  const homeRef = useRef<HTMLSpanElement>(null);
+  const dockX = useMotionValue(0);
+  const dockY = useMotionValue(0);
+  const dockScale = useMotionValue(1);
 
   // an expression (mouth shape or eye shape) holds for at least this long before the next
   // requested change is allowed to land - hovering in and out, or anything else that fires in a
@@ -235,6 +245,98 @@ export default function Mascot() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reduce]);
 
+  // fly to the seat while it is in view, back home once it is mostly gone (the gap between the two
+  // thresholds keeps it from flickering at the edge). Springs on the way, then pinned exactly to the
+  // seat on every scroll frame so it does not trail behind while you read.
+  useEffect(() => {
+    const seat = document.querySelector<HTMLElement>("[data-mascot-dock]");
+    const home = homeRef.current;
+    if (!seat || !home) return;
+
+    let isDocked = false;
+    let settled = true;
+    let flight = 0;
+    let raf = 0;
+    let running: { stop: () => void }[] = [];
+
+    const target = () => {
+      if (!isDocked) return { x: 0, y: 0, scale: 1 };
+      const s = seat.getBoundingClientRect();
+      const h = home.getBoundingClientRect();
+      return {
+        x: s.left + s.width / 2 - (h.left + h.width / 2),
+        y: s.top + s.height / 2 - (h.top + h.height / 2),
+        scale: s.width / h.width,
+      };
+    };
+
+    const fly = () => {
+      running.forEach((a) => a.stop());
+      const t = target();
+      if (reduce) {
+        dockX.set(t.x);
+        dockY.set(t.y);
+        dockScale.set(t.scale);
+        settled = true;
+        return;
+      }
+      settled = false;
+      const id = ++flight;
+      const spring = { type: "spring", stiffness: 160, damping: 15, mass: 0.9 } as const;
+      running = [animate(dockX, t.x, spring), animate(dockY, t.y, spring), animate(dockScale, t.scale, spring)];
+      Promise.all(running).then(() => {
+        if (id === flight) settled = true;
+      });
+    };
+
+    const follow = () => {
+      raf = 0;
+      if (!isDocked) return;
+      if (!settled) return fly();
+      const t = target();
+      dockX.set(t.x);
+      dockY.set(t.y);
+      dockScale.set(t.scale);
+    };
+    const onScroll = () => {
+      if (isDocked && !raf) raf = window.requestAnimationFrame(follow);
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const r = entry.intersectionRatio;
+        if (!isDocked && r >= 0.95) isDocked = true;
+        else if (isDocked && r < 0.5) isDocked = false;
+        else return;
+        setDocked(isDocked);
+        fly();
+      },
+      // the top margin keeps the seat from counting as visible while it is under the nav pill
+      { threshold: [0, 0.5, 0.95], rootMargin: "-80px 0px 0px 0px" },
+    );
+    io.observe(seat);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      window.cancelAnimationFrame(raf);
+      running.forEach((a) => a.stop());
+    };
+  }, [reduce, dockX, dockY, dockScale]);
+
+  // a little hello once it lands in the seat
+  useEffect(() => {
+    if (!docked) return;
+    const id = window.setTimeout(() => {
+      wink();
+      talk(900);
+    }, 450);
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [docked]);
+
   const greet = () => {
     talk(1100);
     greetingIndex.current = (greetingIndex.current + 1) % GREETINGS.length;
@@ -254,7 +356,8 @@ export default function Mascot() {
           stays short enough to fit under the HUD on common laptop heights (~720px) */}
       <div className="relative flex items-center" style={{ gap: 10 }}>
         <AnimatePresence>
-          {bubbleOpen && !dragging && (
+          {/* no bubble while seated in About: it would sit on top of the text */}
+          {bubbleOpen && !dragging && !docked && (
             <motion.div
               initial={{ opacity: 0, x: 8, scale: 0.94 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -277,6 +380,15 @@ export default function Mascot() {
           )}
         </AnimatePresence>
 
+        {/* untransformed stand-in for the avatar's home spot, measured to work out the dock offset */}
+        <span
+          ref={homeRef}
+          aria-hidden
+          className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none"
+          style={{ width: "clamp(72px, 8vw, 112px)", height: "clamp(72px, 8vw, 112px)" }}
+        />
+
+        <motion.div style={{ x: dockX, y: dockY, scale: dockScale }}>
         <motion.button
           type="button"
           onClick={() => {
@@ -341,6 +453,7 @@ export default function Mascot() {
             </div>
           </span>
         </motion.button>
+        </motion.div>
       </div>
     </div>
   );
