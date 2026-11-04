@@ -92,6 +92,10 @@
   --glass-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
   --glass-sheen: rgba(255, 255, 255, 0.08);
   --edge-mid: rgba(255, 255, 255, 0.06);
+  --glass-blur: 16px;
+  --glass-sat: 140%;
+  --glass-spot: rgba(255, 255, 255, 0.1);
+  --glass-shadow-hover: 0 32px 70px -26px rgba(0, 0, 0, 0.8);
   --ring-color: rgb(var(--mint-rgb));
   --ring-color-2: #38BDF8;
 
@@ -167,12 +171,17 @@
   --c-blue: #2563EB;
   --c-lilac: #C2185B;
 
-  --glass-bg: rgba(255, 255, 255, 0.55);
-  --glass-bg-strong: rgba(255, 255, 255, 0.74);
-  --glass-line: rgba(255, 255, 255, 0.9);
-  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(15, 30, 60, 0.04);
-  --glass-shadow: 0 24px 60px -26px rgba(40, 90, 160, 0.3);
-  --glass-sheen: rgba(255, 255, 255, 0.75);
+  /* clearer panes than before so the tinted backdrop reads through them */
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-bg-strong: rgba(255, 255, 255, 0.62);
+  --glass-line: rgba(255, 255, 255, 0.85);
+  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(15, 30, 60, 0.05);
+  --glass-shadow: 0 22px 50px -26px rgba(40, 90, 160, 0.32), 0 2px 6px -3px rgba(40, 90, 160, 0.1);
+  --glass-shadow-hover: 0 34px 70px -28px rgba(40, 90, 160, 0.42), 0 4px 10px -4px rgba(40, 90, 160, 0.12);
+  --glass-sheen: rgba(255, 255, 255, 0.8);
+  --glass-blur: 20px;
+  --glass-sat: 180%;
+  --glass-spot: rgba(255, 255, 255, 0.85);
   --edge-mid: rgba(255, 255, 255, 0.95);
   --ring-color-2: #3FB8FF;
 
@@ -184,10 +193,10 @@
   --orb-b: #9FD4FF;
   --orb-c: #5CC0FF;
   --orb-d: #A8F0DF;
-  --orb-a-o: 0.3;
-  --orb-b-o: 0.28;
-  --orb-c-o: 0.28;
-  --orb-d-o: 0.24;
+  --orb-a-o: 0.42;
+  --orb-b-o: 0.36;
+  --orb-c-o: 0.36;
+  --orb-d-o: 0.32;
   --grain-o: 0;
 }
 
@@ -383,49 +392,108 @@ section[id]:not(#hero) {
 /* ---------- glass ----------
    .glass       frosted container (cards, panels)
    .glass-chip  same material, lighter shadow, for small pills
-   .glass-ring  hairline gradient edge, set --ring-color to tint it per item */
-.glass,
-.glass-chip {
-  background: radial-gradient(120% 90% at 0% 0%, var(--glass-sheen), transparent 55%), var(--glass-bg);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--glass-line);
-  box-shadow: var(--glass-hi), var(--glass-shadow);
+   .glass-ring  hairline gradient edge, set --ring-color to tint it per item
+   .tilt        card leans toward the pointer (needs a perspective on its parent, see .tilt-group)
+   --gx/--gy, --ta/--tax/--tay are written by GlassPointer.tsx. Layered as components so
+   Tailwind utilities (absolute, rounded-*, ...) still win over these defaults. */
+
+/* registered so the hover highlight can fade instead of popping */
+@property --spot {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(255, 255, 255, 0);
 }
 
-.glass-chip {
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--glass-hi);
+@property --ring-spot {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rgba(255, 255, 255, 0);
 }
 
-.glass-strong {
-  background: radial-gradient(120% 90% at 0% 0%, var(--glass-sheen), transparent 55%), var(--glass-bg-strong);
-}
+@layer components {
+  .glass,
+  .glass-chip {
+    position: relative;
+    background:
+      radial-gradient(var(--spot-size, 280px) circle at var(--gx, 50%) var(--gy, 0%), var(--spot), transparent 70%),
+      radial-gradient(120% 90% at 0% 0%, var(--glass-sheen), transparent 55%),
+      var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+    border: 1px solid var(--glass-line);
+    box-shadow: var(--glass-hi), var(--glass-shadow);
+    transition: --spot 0.35s ease, --ring-spot 0.35s ease, box-shadow 0.35s ease, scale 0.2s ease, rotate 0.6s var(--ease-out);
+  }
 
-.glass-ring {
-  position: relative;
-  border-color: transparent;
-}
+  .glass-chip {
+    --spot-size: 90px;
+    -webkit-backdrop-filter: blur(10px) saturate(var(--glass-sat));
+    backdrop-filter: blur(10px) saturate(var(--glass-sat));
+    box-shadow: var(--glass-hi);
+  }
 
-.glass-ring::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--ring-color) 70%, transparent) 0%,
-    var(--edge-mid) 38%,
-    var(--edge-mid) 62%,
-    color-mix(in srgb, var(--ring-color-2) 55%, transparent) 100%
-  );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  .glass:hover,
+  .glass-chip:hover {
+    --spot: var(--glass-spot);
+    --ring-spot: var(--ring-color);
+  }
+
+  .glass:hover {
+    box-shadow: var(--glass-hi), var(--glass-shadow-hover);
+  }
+
+  /* a soft press, like pushing into the pane */
+  a.glass-chip:active,
+  button.glass-chip:active {
+    scale: 0.96;
+  }
+
+  .glass-strong {
+    background:
+      radial-gradient(var(--spot-size, 280px) circle at var(--gx, 50%) var(--gy, 0%), var(--spot), transparent 70%),
+      radial-gradient(120% 90% at 0% 0%, var(--glass-sheen), transparent 55%),
+      var(--glass-bg-strong);
+  }
+
+  .glass-ring {
+    border-color: transparent;
+  }
+
+  .glass-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    z-index: 2;
+    background:
+      radial-gradient(220px circle at var(--gx, 50%) var(--gy, 0%), var(--ring-spot), transparent 70%),
+      linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--ring-color) 70%, transparent) 0%,
+        var(--edge-mid) 38%,
+        var(--edge-mid) 62%,
+        color-mix(in srgb, var(--ring-color-2) 55%, transparent) 100%
+      );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+
+  .tilt-group {
+    perspective: 1400px;
+  }
+
+  /* individual `rotate` composes with framer's inline transform instead of fighting it */
+  .tilt {
+    rotate: var(--tax, 0) var(--tay, 1) 0 var(--ta, 0deg);
+    will-change: rotate;
+  }
+
+  .tilt.is-tilting {
+    transition-duration: 0.35s, 0.35s, 0.35s, 0.2s, 0.12s;
+  }
 }
 
 /* ---------- ambient backdrop (compositor-only animation, see AmbientBackground.tsx) ---------- */

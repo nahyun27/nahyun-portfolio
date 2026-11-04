@@ -34,7 +34,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       onMouseLeave={() => setLive(false)}
       onFocusCapture={() => setLive(true)}
       onBlurCapture={() => setLive(false)}
-      className={`glass glass-ring group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
+      className={`glass glass-ring tilt group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
       style={{ borderRadius: "var(--radius-lg)", ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
     >
       {/* the project's own colour blooms under the cursor */}
@@ -187,7 +187,7 @@ export default function CreativeSection() {
         <SectionHeader index="03" label="Web & Games" title="Interactive Side Projects." highlightWords={["Interactive"]} marginBottom={36}
           description="Games and web toys I built for fun. Every one of them is live, so go ahead and play." />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
+        <div className="tilt-group grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24 }}>
           {SIDE_PROJECTS.map((p, i) => (
             <Card key={p.id} p={p} index={i} featured={i === 0} onOpen={openScene} />
           ))}

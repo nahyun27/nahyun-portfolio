@@ -5,6 +5,7 @@ import CustomCursor from "@/components/CustomCursor";
 import AmbientBackground from "@/components/AmbientBackground"
 import SiteTerminal from "@/components/SiteTerminal"
 import Mascot from "@/components/Mascot"
+import GlassPointer from "@/components/GlassPointer"
 
 export const metadata: Metadata = {
   title: "Nahyun Kim | AI Security Researcher & Creative Developer",
@@ -36,14 +37,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0C0C0F" },
-    { media: "(prefers-color-scheme: light)", color: "#F4F2EC" },
-  ],
+  themeColor: "#F2F8FC",
 };
 
-// Runs before first paint: saved choice wins, otherwise follow the OS setting.
-const THEME_INIT = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="dark"}})()`;
+// Runs before first paint: a saved choice wins, otherwise the site opens in light.
+const THEME_INIT = `(function(){try{var t=localStorage.getItem("theme");document.documentElement.dataset.theme=t==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}})()`;
 
 export default function RootLayout({
   children,
@@ -51,13 +49,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       </head>
       <body className="antialiased min-h-screen flex flex-col relative">
         <AmbientBackground />
         <CustomCursor />
+        <GlassPointer />
         <NavBar />
         <SiteTerminal />
         <main className="flex-1 relative z-10">{children}</main>

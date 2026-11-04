@@ -49,7 +49,7 @@ export default function ResearchSection() {
           description="Adversarial attacks on speech, audio and video models, plus some earlier systems security work."
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="tilt-group grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {PAPERS.map((p, i) => (
             <motion.article
               key={p.id}
@@ -57,7 +57,7 @@ export default function ResearchSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ delay: i * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="glass glass-ring flex flex-col gap-4 p-6"
+              className="glass glass-ring tilt flex flex-col gap-4 p-6"
               style={{ borderRadius: "var(--radius-lg)" }}
             >
               <div className="flex items-center justify-between gap-3">

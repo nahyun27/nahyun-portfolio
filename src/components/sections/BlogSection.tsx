@@ -82,7 +82,7 @@ function SeriesCard({ series, index }: { series: typeof SERIES[0]; index: number
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ delay: index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="glass glass-ring flex flex-col"
+      className="glass glass-ring tilt flex flex-col"
       style={{ borderRadius: "var(--radius-lg)", padding: "28px 28px 18px", ["--ring-color" as string]: series.color, gap: 18 }}
     >
       <div className="flex items-start justify-between" style={{ gap: 16 }}>
@@ -228,7 +228,7 @@ export default function BlogSection() {
           description="Long-form series and paper reviews from my blog, mostly in Korean." />
 
         {/* Series */}
-        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20, marginBottom: 72 }}>
+        <div className="tilt-group grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20, marginBottom: 72 }}>
           {SERIES.map((s, i) => (
             <SeriesCard key={s.title} series={s} index={i} />
           ))}
