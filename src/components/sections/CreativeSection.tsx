@@ -34,13 +34,13 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       onMouseLeave={() => setLive(false)}
       onFocusCapture={() => setLive(true)}
       onBlurCapture={() => setLive(false)}
-      className={`glass glass-ring tilt group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
+      className={`gallery-piece glass glass-ring tilt group flex flex-col overflow-hidden ${featured ? "md:col-span-2" : ""}`}
       style={{ borderRadius: "var(--radius-lg)", ["--ring-color" as string]: p.theme.accent, ["--mx" as string]: "50%", ["--my" as string]: "30%" }}
     >
       {/* the project's own colour blooms under the cursor */}
       <span
         aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        className="gallery-bloom absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{ zIndex: 1, background: `radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, ${p.theme.accent} 20%, transparent), transparent 62%)` }}
       />
 
@@ -50,16 +50,16 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
         onClick={(e) => onOpen(index, e)}
         data-cursor-hover
         aria-label={`Open ${p.title}`}
-        className="relative block w-full overflow-hidden"
+        className="gallery-frame relative block w-full overflow-hidden"
         style={{ aspectRatio: featured ? "16 / 8" : "16 / 10", flex: "1 1 auto", background: p.theme.bg, cursor: "none", zIndex: 2 }}
       >
         {media?.video && (
-          <div className="absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]">
+          <div className="gallery-media absolute inset-0 transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]">
             <MediaClip src={media.video} poster={media.src} label={p.title} active={live} />
           </div>
         )}
         <span
-          className="glass-chip absolute grid place-items-center"
+          className="gallery-no glass-chip absolute grid place-items-center"
           style={{ left: 16, top: 16, height: 30, padding: "0 12px", borderRadius: 999, fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", color: "#fff", background: "rgba(0,0,0,0.28)", border: "1px solid rgba(255,255,255,0.22)" }}
         >
           {p.id}
@@ -94,7 +94,7 @@ function Card({ p, index, featured, onOpen }: { p: Project; index: number; featu
       <div className="relative flex flex-col flex-1" style={{ padding: featured ? "28px 30px 30px" : "24px 26px 26px", gap: 16, zIndex: 2 }}>
         <div className="flex items-center" style={{ gap: 14 }}>
           <span
-            className="blob-morph grid place-items-center shrink-0"
+            className="gallery-blob blob-morph grid place-items-center shrink-0"
             style={{
               width: 46,
               height: 46,

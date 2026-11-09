@@ -926,3 +926,90 @@ html.is-scrolling .orb {
       var(--glass-bg-strong);
   }
 }
+
+/* ---------- Creative at night: each project hangs like a work in a dark room ----------
+   works rest in near monochrome and the light comes on (full colour) when you step up to one */
+:root:not([data-theme="light"]) .gallery-piece {
+  --ring-color: #EEF1F5 !important;
+}
+
+:root:not([data-theme="light"]) .gallery-bloom {
+  background: radial-gradient(420px circle at var(--mx) var(--my), rgba(220, 228, 240, 0.08), transparent 62%) !important;
+}
+
+/* a mat around the picture, like a framed print */
+:root:not([data-theme="light"]) .gallery-frame {
+  margin: 12px 12px 0;
+  width: calc(100% - 24px);
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(225, 231, 240, 0.14), 0 18px 40px -18px rgba(0, 0, 0, 0.9);
+}
+
+/* the picture light above the frame */
+:root:not([data-theme="light"]) .gallery-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(70% 55% at 50% -8%, rgba(235, 240, 248, 0.16), transparent 70%);
+  opacity: 0.5;
+  transition: opacity 1s ease;
+}
+
+:root:not([data-theme="light"]) .gallery-piece:hover .gallery-frame::after,
+:root:not([data-theme="light"]) .gallery-piece:focus-within .gallery-frame::after {
+  opacity: 1;
+}
+
+:root:not([data-theme="light"]) .gallery-media {
+  filter: grayscale(0.85) brightness(0.72);
+  transition: filter 1.2s ease, transform 0.9s ease-out;
+}
+
+:root:not([data-theme="light"]) .gallery-piece:hover .gallery-media,
+:root:not([data-theme="light"]) .gallery-piece:focus-within .gallery-media {
+  filter: none;
+}
+
+:root:not([data-theme="light"]) .gallery-no {
+  grid-auto-flow: column;
+  column-gap: 4px;
+  white-space: nowrap;
+}
+
+:root:not([data-theme="light"]) .gallery-no::before {
+  content: "N°";
+}
+
+/* the project's colour blob becomes a polished steel bead */
+:root:not([data-theme="light"]) .gallery-blob {
+  border-radius: 50% !important;
+  animation: none !important;
+  color: #0B0D10 !important;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.95) 0 6%, transparent 24%),
+    linear-gradient(180deg, #F2F4F7 0%, #9AA1AB 46%, #2B2F36 52%, #C2C8D0 100%) !important;
+  box-shadow: inset -4px -6px 10px rgba(0, 0, 0, 0.35), 0 12px 24px -12px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* ---------- mascot at night: chrome bezel and a small plinth ---------- */
+:root:not([data-theme="light"]) .mascot-frame {
+  border-color: transparent !important;
+  background:
+    linear-gradient(180deg, var(--surface-2), var(--surface)) padding-box,
+    conic-gradient(from 210deg, #FFFFFF, #7D848E, #E9ECF0, #3E434B, #C9CED6, #FFFFFF) border-box !important;
+  box-shadow: 0 0 0 4px var(--bg), 0 22px 40px -16px rgba(0, 0, 0, 0.9) !important;
+}
+
+.mascot-plinth {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: calc(100% + 8px);
+  height: 12px;
+  pointer-events: none;
+  background: linear-gradient(90deg, #0B0C0F 0%, #22262C 40%, #2E323A 50%, #191B20 62%, #0A0B0D 100%);
+  border-top: 1px solid rgba(225, 231, 240, 0.3);
+  box-shadow: 0 14px 22px -8px rgba(0, 0, 0, 0.9);
+}

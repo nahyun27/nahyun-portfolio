@@ -401,7 +401,7 @@ export default function Mascot() {
           style={{ width: "clamp(72px, 8vw, 112px)", height: "clamp(72px, 8vw, 112px)" }}
         />
 
-        <motion.div style={{ x: dockX, y: dockY, scale: dockScale }}>
+        <motion.div className="relative" style={{ x: dockX, y: dockY, scale: dockScale }}>
         <motion.button
           type="button"
           onClick={() => {
@@ -445,7 +445,7 @@ export default function Mascot() {
         >
           <span
             ref={rootRef}
-            className="block overflow-hidden rounded-full"
+            className="mascot-frame block overflow-hidden rounded-full"
             style={{
               width: "clamp(72px, 8vw, 112px)",
               height: "clamp(72px, 8vw, 112px)",
@@ -466,6 +466,8 @@ export default function Mascot() {
             </div>
           </span>
         </motion.button>
+        {/* night only: the little one stands on a plinth like the rest of the collection */}
+        <span aria-hidden className="mascot-plinth night-only" />
         </motion.div>
       </div>
     </div>
