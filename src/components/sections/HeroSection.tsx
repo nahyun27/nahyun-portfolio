@@ -32,24 +32,6 @@ export default function HeroSection() {
       className="noise-overlay min-h-[100svh] flex flex-col relative overflow-hidden z-10"
       style={{ backgroundColor: "transparent" }}
     >
-      {/* night only: a chrome piece on a plinth, like the one object a gallery lights at closing time */}
-      <motion.figure {...fade(1.1)} className="sculpture night-only" data-pointer-vars aria-hidden>
-        <div className="sc-stage">
-          <div className="sc-space">
-            <span className="sc-ring sc-ring-b"><i /></span>
-            <span className="sc-orb" />
-            <span className="sc-ring sc-ring-a"><i /></span>
-          </div>
-        </div>
-        <span className="sc-shadow" />
-        <span className="sc-plinth" />
-        <figcaption className="sc-label">
-          N° 00
-          <em>Night study, 2026</em>
-          Chrome, light, patience
-        </figcaption>
-      </motion.figure>
-
       <div className="section-inner w-full flex-1 flex flex-col justify-center relative z-10" style={{ paddingTop: 120, paddingBottom: 40 }}>
         {/* Affiliation */}
         <motion.div
