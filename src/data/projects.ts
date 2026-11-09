@@ -68,6 +68,8 @@ export interface Project {
   theme: SceneTheme;
   stage: StageKind;
   transition: TransitionKind;
+  /** a live site that can run inside the scene; verb labels the button ("Play", "Try", ...) */
+  play?: { href: string; verb?: string };
 }
 
 const PROJECT_DATA: Omit<Project, "id">[] = [

@@ -11,6 +11,7 @@ import { Transition, COVER_AT, contentDelay } from "@/components/transitions";
 import SsdScene from "@/components/scenes/SsdScene";
 import PapersScene from "@/components/scenes/PapersScene";
 import NshTerminal from "@/components/scenes/NshTerminal";
+import PlayableStage from "@/components/scenes/PlayableStage";
 import type { Project, ProjectMedia, SceneTheme, TransitionKind } from "@/data/projects";
 
 export interface SceneOrigin {
@@ -204,6 +205,7 @@ function Stage({ p }: { p: Project }) {
         ]}
       />
     );
+  if (p.play) return <PlayableStage href={p.play.href} verb={p.play.verb} title={p.title} media={media[0]} theme={t} />;
   if (p.stage === "media" && screens) return screens.node;
   const liquid = <LiquidStage theme={t} icon={p.icon} label={p.title} />;
   return screens ? <StageTabs theme={t} tabs={[{ label: "Scene", node: liquid }, screens]} /> : liquid;

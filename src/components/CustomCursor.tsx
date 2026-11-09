@@ -106,7 +106,7 @@ export default function CustomCursor() {
     <>
       <motion.div
         ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border"
+        className="custom-cursor fixed top-0 left-0 pointer-events-none z-[9999] rounded-full border"
         style={{
           x: ringX,
           y: ringY,
@@ -125,7 +125,7 @@ export default function CustomCursor() {
         }}
       />
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
+        className="custom-cursor fixed top-0 left-0 pointer-events-none z-[9999] rounded-full"
         style={{
           x: dotX,
           y: dotY,
@@ -143,7 +143,7 @@ export default function CustomCursor() {
           little swap-out for the ring/dot rather than something layered on top of them */}
       <motion.div
         aria-hidden
-        className="fixed top-0 left-0 pointer-events-none z-[9999] select-none"
+        className="custom-cursor fixed top-0 left-0 pointer-events-none z-[9999] select-none"
         style={{
           x: dotX,
           y: dotY,

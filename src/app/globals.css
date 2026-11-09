@@ -848,3 +848,9 @@ html.is-scrolling .orb {
   border-top: 1px solid rgba(225, 231, 240, 0.3);
   box-shadow: 0 14px 22px -8px rgba(0, 0, 0, 0.9);
 }
+
+/* over an embedded game the page cursor would freeze at the frame edge (the iframe eats the
+   pointer events), so hide it there and let the game's own cursor show */
+html.cursor-native .custom-cursor {
+  opacity: 0 !important;
+}
