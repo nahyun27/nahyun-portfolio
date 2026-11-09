@@ -34,7 +34,7 @@ export default function GlassPointer() {
       const target = e?.target;
       if (!e || !(target instanceof Element)) return;
 
-      // the night spotlight and the sculpture's highlight; only these elements, never <html>
+      // the night spotlight; only on these elements, never <html>
       const nx0 = e.clientX / window.innerWidth;
       const ny0 = e.clientY / window.innerHeight;
       document.querySelectorAll<HTMLElement>("[data-pointer-vars]").forEach((el) => {
