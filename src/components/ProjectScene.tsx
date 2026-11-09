@@ -12,6 +12,8 @@ import SsdScene from "@/components/scenes/SsdScene";
 import PapersScene from "@/components/scenes/PapersScene";
 import NshTerminal from "@/components/scenes/NshTerminal";
 import PlayableStage from "@/components/scenes/PlayableStage";
+import TennisScene from "@/components/scenes/TennisScene";
+import { KcpecCounseling, KcpecPayment, PersiConversation, PersiPipeline, DevPipeline, InvadersFormation, AcePipeline, AceMap, NshTree, PaperChunking } from "@/components/scenes/ProjectStages";
 import type { Project, ProjectMedia, SceneTheme, TransitionKind } from "@/data/projects";
 
 export interface SceneOrigin {
@@ -194,13 +196,20 @@ function Stage({ p }: { p: Project }) {
   const media = p.media ?? [];
   const screens = media.length ? { label: p.stage === "ssd" ? "Measured on FEMU" : p.stage === "shell" ? "Screenshot" : media.length === 1 ? media[0].label : "Screens", node: <SceneMedia media={media} theme={t} /> } : null;
   if (p.stage === "ssd") return <StageTabs theme={t} tabs={[{ label: "Live model", node: <SsdScene theme={t} /> }, ...(screens ? [screens] : [])]} />;
-  if (p.stage === "papers") return <StageTabs theme={t} tabs={[{ label: "Live graph", node: <PapersScene theme={t} /> }, ...(screens ? [{ ...screens, label: "Real demos" }] : [])]} />;
+  if (p.stage === "papers")
+    return <StageTabs theme={t} tabs={[{ label: "Live graph", node: <PapersScene theme={t} /> }, { label: "Chunking", node: <PaperChunking theme={t} /> }, ...(screens ? [{ ...screens, label: "Real demos" }] : [])]} />;
+  if (p.stage === "tennis") return <StageTabs theme={t} tabs={[{ label: "Court assignment", node: <TennisScene theme={t} tab="courts" /> }, { label: "Ranking", node: <TennisScene theme={t} tab="ranking" /> }, ...(screens ? [screens] : [])]} />;
+  if (p.stage === "kcpec") return <StageTabs theme={t} tabs={[{ label: "Counseling", node: <KcpecCounseling theme={t} /> }, { label: "Payments", node: <KcpecPayment theme={t} /> }]} />;
+  if (p.stage === "persi") return <StageTabs theme={t} tabs={[{ label: "Conversation", node: <PersiConversation theme={t} /> }, { label: "Pipeline", node: <PersiPipeline theme={t} /> }, ...(screens ? [screens] : [])]} />;
+  if (p.stage === "cicd") return <StageTabs theme={t} tabs={[{ label: "CI pipeline", node: <DevPipeline theme={t} /> }, { label: "The game", node: <InvadersFormation theme={t} /> }, ...(screens ? [{ ...screens, label: "Diagrams" }] : [])]} />;
+  if (p.stage === "acelab") return <StageTabs theme={t} tabs={[{ label: "Visitor map", node: <AceMap theme={t} /> }, { label: "Privacy flow", node: <AcePipeline theme={t} /> }]} />;
   if (p.stage === "shell")
     return (
       <StageTabs
         theme={t}
         tabs={[
           { label: "Try it", node: <NshTerminal chips={SHELL_CHIPS} autoDemo={SHELL_CHIPS[0]} height={400} palette={{ bg: rgba("#000000", 0.55) }} /> },
+          { label: "Process tree", node: <NshTree theme={t} /> },
           ...(screens ? [screens] : []),
         ]}
       />

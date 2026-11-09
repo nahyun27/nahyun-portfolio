@@ -52,7 +52,7 @@ export interface SceneTheme {
 }
 
 /** which interactive stage a project scene shows next to the text */
-export type StageKind = "ssd" | "papers" | "shell" | "liquid" | "media";
+export type StageKind = "ssd" | "papers" | "shell" | "liquid" | "media" | "tennis" | "kcpec" | "persi" | "cicd" | "acelab";
 
 export interface Project {
   id: string;
@@ -139,7 +139,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
       },
     ],
     theme: { bg: "#0E3B2E", fg: "#F4FFE0", accent: "#D7F23B", accent2: "#7CE0B0" },
-    stage: "liquid",
+    stage: "tennis",
     transition: "tennis",
   },
   {
@@ -167,7 +167,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
       { label: "GitHub", href: "https://github.com/nahyun27/kcpec-platform", kind: "github" },
     ],
     theme: { bg: "#12233F", fg: "#F3F0E6", accent: "#F2B544", accent2: "#5EC3E8" },
-    stage: "liquid",
+    stage: "kcpec",
     transition: "stamp",
   },
   {
@@ -255,7 +255,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     tags: ["React Native", "FastAPI", "PyTorch", "wav2vec2", "pyannote", "GCP", "MongoDB"],
     links: [{ label: "GitHub", href: "https://github.com/PerSI-Org", kind: "github" }],
     theme: { bg: "#FF7A59", fg: "#2A0F08", accent: "#FFE29A", accent2: "#FFFFFF" },
-    stage: "liquid",
+    stage: "persi",
     transition: "wave",
   },
   {
@@ -332,7 +332,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
       { label: "Release v1.1.0", href: "https://github.com/Software-Development-Practices/gradle-invaders/releases/tag/v1.1.0", kind: "github" },
     ],
     theme: { bg: "#17181C", fg: "#EDEDED", accent: "#7EE787", accent2: "#79C0FF" },
-    stage: "media",
+    stage: "cicd",
     transition: "stack",
   },
   {
@@ -349,7 +349,7 @@ const PROJECT_DATA: Omit<Project, "id">[] = [
     tags: ["React", "Supabase", "i18n", "styled-components"],
     links: [{ label: "Live Site", href: "https://ace.hanyang.ac.kr", kind: "web" }],
     theme: { bg: "#0A2E33", fg: "#E6FBFA", accent: "#5EEAD4", accent2: "#38BDF8" },
-    stage: "liquid",
+    stage: "acelab",
     transition: "liquid",
   },
 ];
