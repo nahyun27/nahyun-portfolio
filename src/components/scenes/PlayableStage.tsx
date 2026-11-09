@@ -20,7 +20,7 @@ function on(hex: string) {
  * the real site loads on the first click, so opening a scene costs nothing extra. Small or touch
  * screens get a new tab instead, since a 3D game inside a phone-sized frame is not a good time.
  */
-export default function PlayableStage({ href, title, media, theme, verb = "Play" }: { href: string; title: string; media?: ProjectMedia; theme: SceneTheme; verb?: string }) {
+export default function PlayableStage({ href, title, media, theme, verb = "Play", portrait = false }: { href: string; title: string; media?: ProjectMedia; theme: SceneTheme; verb?: string; portrait?: boolean }) {
   const [live, setLive] = useState(false);
   const [inline, setInline] = useState(true);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -76,9 +76,10 @@ export default function PlayableStage({ href, title, media, theme, verb = "Play"
         onMouseLeave={() => document.documentElement.classList.remove("cursor-native")}
         style={{
           position: "relative",
-          width: "100%",
-          aspectRatio: "16 / 10",
-          maxHeight: "72vh",
+          // portrait: a phone shaped frame, as tall as the screen allows, centred in the stage
+          ...(portrait
+            ? { height: "min(80vh, 820px)", aspectRatio: "9 / 16", maxWidth: "100%", margin: "0 auto" }
+            : { width: "100%", aspectRatio: "16 / 10", maxHeight: "72vh" }),
           borderRadius: 24,
           overflow: "hidden",
           background: t.bg,
@@ -130,7 +131,7 @@ export default function PlayableStage({ href, title, media, theme, verb = "Play"
         )}
       </div>
 
-      <div className="flex flex-wrap items-center" style={{ gap: 8, marginTop: 14 }}>
+      <div className={`flex flex-wrap items-center ${portrait ? "justify-center" : ""}`} style={{ gap: 8, marginTop: 14 }}>
         {live && (
           <>
             <button type="button" onClick={fullscreen} data-cursor-hover style={btn}>

@@ -30,7 +30,7 @@ const DATA: Omit<Project, "id">[] = [
       { label: "GitHub", href: "https://github.com/nahyun27/rise-of-halfmoon", kind: "github" },
     ],
     theme: { bg: "#16140A", fg: "#FFF8DC", accent: "#F6C90E", accent2: "#FFE58A" },
-    play: { href: "https://rise-of-halfmoon.vercel.app/", verb: "Play" },
+    play: { href: "https://rise-of-halfmoon.vercel.app/", verb: "Play", portrait: true },
     stage: "media",
     transition: "eclipse",
   },

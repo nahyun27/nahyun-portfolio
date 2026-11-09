@@ -69,7 +69,7 @@ export interface Project {
   stage: StageKind;
   transition: TransitionKind;
   /** a live site that can run inside the scene; verb labels the button ("Play", "Try", ...) */
-  play?: { href: string; verb?: string };
+  play?: { href: string; verb?: string; /** a tall, phone shaped frame instead of 16:10 */ portrait?: boolean };
 }
 
 const PROJECT_DATA: Omit<Project, "id">[] = [

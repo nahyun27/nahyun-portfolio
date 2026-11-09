@@ -214,7 +214,7 @@ function Stage({ p }: { p: Project }) {
         ]}
       />
     );
-  if (p.play) return <PlayableStage href={p.play.href} verb={p.play.verb} title={p.title} media={media[0]} theme={t} />;
+  if (p.play) return <PlayableStage href={p.play.href} verb={p.play.verb} portrait={p.play.portrait} title={p.title} media={media[0]} theme={t} />;
   if (p.stage === "media" && screens) return screens.node;
   const liquid = <LiquidStage theme={t} icon={p.icon} label={p.title} />;
   return screens ? <StageTabs theme={t} tabs={[{ label: "Scene", node: liquid }, screens]} /> : liquid;
