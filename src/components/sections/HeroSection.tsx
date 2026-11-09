@@ -32,6 +32,24 @@ export default function HeroSection() {
       className="noise-overlay min-h-[100svh] flex flex-col relative overflow-hidden z-10"
       style={{ backgroundColor: "transparent" }}
     >
+      {/* night only: a chrome piece on a plinth, like the one object a gallery lights at closing time */}
+      <motion.figure {...fade(1.1)} className="sculpture night-only" data-pointer-vars aria-hidden>
+        <div className="sc-stage">
+          <div className="sc-space">
+            <span className="sc-ring sc-ring-b"><i /></span>
+            <span className="sc-orb" />
+            <span className="sc-ring sc-ring-a"><i /></span>
+          </div>
+        </div>
+        <span className="sc-shadow" />
+        <span className="sc-plinth" />
+        <figcaption className="sc-label">
+          N° 00
+          <em>Night study, 2026</em>
+          Chrome, light, patience
+        </figcaption>
+      </motion.figure>
+
       <div className="section-inner w-full flex-1 flex flex-col justify-center relative z-10" style={{ paddingTop: 120, paddingBottom: 40 }}>
         {/* Affiliation */}
         <motion.div
@@ -63,12 +81,12 @@ export default function HeroSection() {
           }}
         >
           {WORDS.map((word, wi) => (
-            <span key={word} className="flex" style={{ marginRight: wi < WORDS.length - 1 ? "0.24em" : 0 }}>
+            <span key={word} className={wi === WORDS.length - 1 ? "flex night-serif" : "flex"} style={{ marginRight: wi < WORDS.length - 1 ? "0.24em" : 0 }}>
               {[...word, ...(wi === WORDS.length - 1 ? ["."] : [])].map((letter, li) => (
                 // padding + negative margin keep descenders (the y) from being clipped by the reveal mask
                 <span key={li} style={{ overflow: "hidden", display: "inline-flex", lineHeight: 1, padding: "0 0 0.24em", marginBottom: "-0.24em" }}>
                   <motion.span
-                    className="inline-block"
+                    className="inline-block night-chrome"
                     initial={{ y: "115%" }}
                     animate={inView ? { y: 0 } : { y: "115%" }}
                     transition={{ delay: 0.3 + wi * 0.22 + li * 0.045, duration: 0.7, ease: EASE }}

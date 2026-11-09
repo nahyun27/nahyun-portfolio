@@ -34,6 +34,16 @@ export default function GlassPointer() {
       const target = e?.target;
       if (!e || !(target instanceof Element)) return;
 
+      // the night spotlight and the sculpture's highlight; only these elements, never <html>
+      const nx0 = e.clientX / window.innerWidth;
+      const ny0 = e.clientY / window.innerHeight;
+      document.querySelectorAll<HTMLElement>("[data-pointer-vars]").forEach((el) => {
+        el.style.setProperty("--px", `${e.clientX}px`);
+        el.style.setProperty("--py", `${e.clientY}px`);
+        el.style.setProperty("--pxn", nx0.toFixed(3));
+        el.style.setProperty("--pyn", ny0.toFixed(3));
+      });
+
       let pane = target.closest<HTMLElement>(GLASS);
       while (pane) {
         const r = pane.getBoundingClientRect();
@@ -56,7 +66,9 @@ export default function GlassPointer() {
       card.classList.add("is-tilting");
       card.style.setProperty("--tax", String(-ny));
       card.style.setProperty("--tay", String(nx));
-      card.style.setProperty("--ta", `${Math.min(1, Math.hypot(nx, ny)) * maxTilt(r.width)}deg`);
+      // night pieces are heavier: they lean half as far
+      const weight = document.documentElement.dataset.theme === "light" ? 1 : 0.5;
+      card.style.setProperty("--ta", `${Math.min(1, Math.hypot(nx, ny)) * maxTilt(r.width) * weight}deg`);
     };
 
     const onMove = (e: PointerEvent) => {

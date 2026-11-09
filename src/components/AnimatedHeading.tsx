@@ -39,7 +39,7 @@ export default function AnimatedHeading({ text, className = "", style = {}, dela
               return (
                 <span key={wordIndex} className="inline-block" style={{ overflow: "hidden", padding: "0.2em 0", margin: "-0.2em 0.22em 0 0", verticalAlign: "bottom", lineHeight: 1 }}>
                   <motion.span
-                    className="inline-block"
+                    className={isHighlighted ? "inline-block hl-word" : "inline-block"}
                     style={
                       isHighlighted
                         ? (gradientHighlight

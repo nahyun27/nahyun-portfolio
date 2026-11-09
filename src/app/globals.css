@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap');
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
 @import "tailwindcss";
@@ -23,25 +23,30 @@
 
   /* rhythm and shape */
   --space-section: clamp(88px, 11vw, 152px);
-  --radius-lg: 28px;
-  --radius-md: 18px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* dark = "night gallery": cool steel and chrome, almost no colour, sharper corners, slower motion.
+     light (below) stays the airy, bouncy daytime version of the same site */
+  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+  --chrome-text: linear-gradient(180deg, #FFFFFF 0%, #DDE1E7 30%, #8C939D 49%, #3E434B 52%, #B9BFC8 70%, #F2F4F7 100%);
+  --radius-lg: 10px;
+  --radius-md: 6px;
+
   /* surfaces */
-  --bg: #0C0C0F;
-  --bg-rgb: 12, 12, 15;
-  --surface: #0D0D10;
-  --surface-2: #111116;
+  --bg: #08090B;
+  --bg-rgb: 8, 9, 11;
+  --surface: #0D0E11;
+  --surface-2: #121419;
 
   /* text */
-  --text: #F0EDE6;
-  --text-soft: #E0D9D0;
-  --t2: #888;
-  --t3: #777;
-  --t4: #666;
-  --t5: #555;
-  --t6: #444;
-  --t7: #3a3a3a;
+  --text: #ECEEF1;
+  --text-soft: #D3D7DD;
+  --t2: #A3A9B2;
+  --t3: #8D939C;
+  --t4: #767C85;
+  --t5: #61666E;
+  --t6: #4A4E55;
+  --t7: #34373C;
 
   /* neutral alpha scale (white on dark, ink on light). Name = alpha x 1000 */
   --w15: rgba(255, 255, 255, 0.015);
@@ -59,66 +64,68 @@
   --w250: rgba(255, 255, 255, 0.25);
   --w400: rgba(255, 255, 255, 0.4);
 
-  /* accents */
-  --mint: #00C9A7;
-  --mint-rgb: 0, 201, 167;
-  --on-mint: #0C0C0F;
-  --fill-brand: linear-gradient(#00C9A7, #00C9A7);
-  --drop-o: 0.3;
-  --water-o: 0.34;
-  --sel-bg: #00C9A7;
-  --sel-fg: #0C0C0F;
-  --hl-fill: linear-gradient(#00C9A7, #00C9A7);
-  --hl-fill-2: linear-gradient(135deg, #00C9A7 0%, #B388FF 100%);
-  --violet: #B388FF;
-  --violet-rgb: 179, 136, 255;
+  /* accents: "mint" is the accent slot; at night it is polished silver */
+  --mint: #C9CED6;
+  --mint-rgb: 201, 206, 214;
+  --on-mint: #08090B;
+  --fill-brand: linear-gradient(180deg, #FFFFFF 0%, #D5DAE1 45%, #A9B0BA 55%, #E9ECF0 100%);
+  --drop-o: 0.22;
+  --water-o: 0.26;
+  --sel-bg: #D5DAE1;
+  --sel-fg: #08090B;
+  --hl-fill: var(--chrome-text);
+  --hl-fill-2: var(--chrome-text);
+  --violet: #9AA3B0;
+  --violet-rgb: 154, 163, 176;
 
-  /* per project / category accents */
-  --c-yellow: #F6C90E;
-  --c-cyan: #00E5FF;
-  --c-purple: #B388FF;
-  --c-red: #FF5252;
-  --c-teal: #4ECDC4;
-  --c-rose: #F87171;
-  --c-amber: #FBBF24;
-  --c-blue: #60A5FA;
-  --c-lilac: #A78BFA;
+  /* per project / category accents, muted so they read as tinted metal rather than paint */
+  --c-yellow: #CFC08E;
+  --c-cyan: #9CC3CC;
+  --c-purple: #ABA8C9;
+  --c-red: #C99A98;
+  --c-teal: #9CC2BB;
+  --c-rose: #CFA0A3;
+  --c-amber: #CDB590;
+  --c-blue: #9DB2CF;
+  --c-lilac: #B3A9CC;
 
-  /* glass */
-  --glass-bg: rgba(255, 255, 255, 0.045);
-  --glass-bg-strong: rgba(255, 255, 255, 0.07);
-  --glass-line: rgba(255, 255, 255, 0.1);
-  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
-  --glass-sheen: rgba(255, 255, 255, 0.08);
-  --edge-mid: rgba(255, 255, 255, 0.06);
-  --glass-blur: 16px;
-  --glass-sat: 140%;
-  --glass-spot: rgba(255, 255, 255, 0.1);
-  --glass-shadow-hover: 0 32px 70px -26px rgba(0, 0, 0, 0.8);
-  --ring-color: rgb(var(--mint-rgb));
-  --ring-color-2: #38BDF8;
+  /* glass: darker, thinner panes with a cold chrome edge */
+  --glass-bg: rgba(255, 255, 255, 0.025);
+  --glass-bg-strong: rgba(255, 255, 255, 0.05);
+  --glass-line: rgba(220, 226, 235, 0.1);
+  --glass-hi: inset 0 1px 0 rgba(235, 240, 248, 0.12);
+  --glass-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  --glass-sheen: rgba(230, 236, 245, 0.04);
+  --edge-mid: rgba(220, 226, 235, 0.07);
+  --glass-blur: 12px;
+  --glass-sat: 110%;
+  --glass-spot: rgba(225, 232, 242, 0.08);
+  --glass-shadow-hover: 0 40px 80px -30px rgba(0, 0, 0, 0.9);
+  --ring-color: #EEF1F5;
+  --ring-color-2: #5D636C;
 
   /* depth */
   --shadow-rgb: 0, 0, 0;
   --shadow-k: 1;
 
-  /* ambient background */
-  --orb-a: #00C9A7;
-  --orb-b: #7000FF;
-  --orb-c: #00C9A7;
-  --orb-d: #0EA5E9;
-  --orb-d-o: 0.1;
-  --orb-a-o: 0.2;
-  --orb-b-o: 0.12;
+  /* ambient background: cold steel haze, kept faint so the spotlight does the work */
+  --orb-a: #8D96A3;
+  --orb-b: #2A2F37;
+  --orb-c: #49505B;
+  --orb-d: #B4BCC8;
+  --orb-d-o: 0.05;
+  --orb-a-o: 0.12;
+  --orb-b-o: 0.35;
   --orb-c-o: 0.16;
-  --grain-o: 0.025;
+  --grain-o: 0.04;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
   /* fresh, airy: cool aqua white, navy ink, vivid mint to sky accents */
+  --radius-lg: 28px;
+  --radius-md: 18px;
   --bg: #F2F8FC;
   --bg-rgb: 242, 248, 252;
   --surface: #FFFFFF;
@@ -617,5 +624,305 @@ html.is-scrolling .orb {
   .drop-float,
   .blob-morph {
     animation: none !important;
+  }
+}
+
+/* ---------- night gallery (dark theme only) ----------
+   Anything that should exist only at night is marked .night-only; type swaps are opt-in classes
+   (.night-serif, .night-chrome, .hl-word) so the daytime layout never changes. */
+:root[data-theme="light"] .night-only {
+  display: none !important;
+}
+
+:root:not([data-theme="light"]) .night-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* italic glyphs lean past their box; give the reveal masks a little room on the right */
+:root:not([data-theme="light"]) .night-serif > span {
+  padding-right: 0.05em !important;
+}
+
+:root:not([data-theme="light"]) .night-chrome {
+  background: var(--chrome-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+:root:not([data-theme="light"]) .hl-word {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  padding-right: 0.06em;
+}
+
+:root:not([data-theme="light"]) .t-label {
+  letter-spacing: 0.24em;
+}
+
+/* heavier, slower material at night */
+:root:not([data-theme="light"]) .glass,
+:root:not([data-theme="light"]) .glass-chip {
+  transition: --spot 0.7s ease, --ring-spot 0.7s ease, box-shadow 0.7s ease, scale 0.3s ease, rotate 1.1s var(--ease-out);
+}
+
+/* the gallery light: a soft cold pool that follows the pointer, and a vignette around the room.
+   --px/--py are written onto .ambient only (not <html>) so moving the mouse never restyles the page */
+:root:not([data-theme="light"]) .ambient::before,
+:root:not([data-theme="light"]) .ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+:root:not([data-theme="light"]) .ambient::after {
+  background: radial-gradient(520px circle at var(--px, 70%) var(--py, 30%), rgba(215, 225, 240, 0.075), transparent 70%);
+}
+
+:root:not([data-theme="light"]) .ambient::before {
+  z-index: 1;
+  background: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 45%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ---------- hero sculpture: a chrome sphere, two orbiting rings, a plinth ---------- */
+.sculpture {
+  position: absolute;
+  top: 50%;
+  right: clamp(24px, 6vw, 140px);
+  translate: 0 -46%;
+  width: clamp(220px, 24vw, 380px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sc-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  perspective: 900px;
+  animation: sc-float 8s ease-in-out infinite;
+}
+
+.sc-space {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-6deg);
+}
+
+.sc-orb {
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  transform: translateZ(0);
+  /* a specular hot spot that drifts with the pointer, over a chrome ball reflecting a dark room
+     and a bright horizon */
+  background:
+    radial-gradient(circle at calc(28% + var(--pxn, 0.5) * 30%) calc(18% + var(--pyn, 0.3) * 20%), rgba(255, 255, 255, 0.95) 0 2.5%, rgba(255, 255, 255, 0) 13%),
+    linear-gradient(180deg, #050608 0%, #2E333B 28%, #C9CFD8 45%, #FFFFFF 48%, #15171B 51%, #3F454E 66%, #A6ADB8 88%, #D9DEE5 100%);
+  box-shadow:
+    inset -22px -30px 50px rgba(0, 0, 0, 0.65),
+    inset 14px 10px 30px rgba(255, 255, 255, 0.12);
+}
+
+.sc-ring {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.sc-ring > i {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  animation: sc-spin linear infinite;
+}
+
+/* a bead riding the ring, so the spin is visible and it slips behind the sphere */
+.sc-ring > i::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F4F6F9;
+  box-shadow: 0 0 12px rgba(230, 238, 250, 0.9);
+}
+
+.sc-ring-a {
+  inset: 6%;
+  transform: rotateX(75deg) rotateY(-12deg);
+}
+
+.sc-ring-a > i {
+  border: 1.5px solid rgba(225, 231, 240, 0.7);
+  animation-duration: 26s;
+}
+
+.sc-ring-b {
+  inset: -2%;
+  transform: rotateX(66deg) rotateY(26deg);
+}
+
+.sc-ring-b > i {
+  border: 1px dashed rgba(200, 207, 217, 0.35);
+  animation-duration: 44s;
+  animation-direction: reverse;
+}
+
+.sc-ring-b > i::after {
+  width: 5px;
+  height: 5px;
+  top: -3px;
+  left: calc(50% - 2.5px);
+}
+
+.sc-shadow {
+  width: 46%;
+  height: 14px;
+  margin-top: -6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.85), transparent);
+  animation: sc-shadow 8s ease-in-out infinite;
+}
+
+.sc-plinth {
+  width: 52%;
+  height: clamp(56px, 7vw, 100px);
+  margin-top: 4px;
+  background: linear-gradient(90deg, #0B0C0F 0%, #1F2228 38%, #2A2E35 50%, #15171B 64%, #090A0C 100%);
+  border-top: 1px solid rgba(225, 231, 240, 0.28);
+  box-shadow: 0 40px 60px -20px rgba(0, 0, 0, 0.9);
+}
+
+.sc-label {
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  color: var(--t5);
+}
+
+.sc-label em {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--t2);
+}
+
+@keyframes sc-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -14px; }
+}
+
+@keyframes sc-shadow {
+  0%, 100% { scale: 1; opacity: 1; }
+  50% { scale: 0.82; opacity: 0.6; }
+}
+
+@keyframes sc-spin {
+  to { rotate: 360deg; }
+}
+
+@media (max-width: 1023px) {
+  .sculpture {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-stage,
+  .sc-shadow,
+  .sc-ring > i {
+    animation: none;
+  }
+}
+
+/* ---------- theme switch: banks of lights going off (to night) or on (to day) ---------- */
+.lights {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  pointer-events: none;
+  transition: opacity 0.7s ease;
+}
+
+.lights > span {
+  background: #08090B;
+  opacity: 0;
+  transition: opacity 0.34s ease calc(var(--i) * 80ms);
+}
+
+.lights[data-to="light"] > span {
+  background: #F2F8FC;
+}
+
+.lights.is-in > span {
+  opacity: 1;
+}
+
+.lights.is-out {
+  opacity: 0;
+}
+
+.lights > b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 48px);
+  color: #C9CED6;
+  opacity: 0;
+  transition: opacity 0.4s ease 0.3s;
+}
+
+.lights[data-to="light"] > b {
+  color: #44546B;
+}
+
+.lights.is-in > b {
+  opacity: 1;
+}
+
+/* brushed steel at night: fine hairline grain plus a cold diagonal sheen, under the pointer highlight */
+@layer components {
+  :root:not([data-theme="light"]) .glass,
+  :root:not([data-theme="light"]) .glass-chip {
+    background:
+      radial-gradient(var(--spot-size, 280px) circle at var(--gx, 50%) var(--gy, 0%), var(--spot), transparent 70%),
+      linear-gradient(115deg, transparent 28%, rgba(235, 240, 248, 0.045) 44%, transparent 58%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+      var(--glass-bg);
+  }
+
+  :root:not([data-theme="light"]) .glass-strong {
+    background:
+      radial-gradient(var(--spot-size, 280px) circle at var(--gx, 50%) var(--gy, 0%), var(--spot), transparent 70%),
+      linear-gradient(115deg, transparent 28%, rgba(235, 240, 248, 0.05) 44%, transparent 58%),
+      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.02) 0 1px, transparent 1px 3px),
+      var(--glass-bg-strong);
   }
 }
